@@ -1,0 +1,62 @@
+\chapter{Refactoring}
+\label{ch:refactoring}
+\section{Ejecuci\'on de la rutina}
+\section{Manejo de datos de entrada}
+Toda la informaci\'on de entrada es manipulada y procesada en la clase DataPicker. Esta clase se inicializa recibiendo un path hacia un archivo de configuraci\'on (el cual contiene las rutas a los archivos as\'i como los nombres de sus archivos en t\'erminos de expresiones regulares \ref{subs:a1}), semestre a los que corresponde la secuencia de observaciones (los dos \'ultimos d\'igitos del a\~no concatenados con la letra A en caso de corresponder al primer semestre o B al segundo), el campo (representado como un n\'umero de dos d\'igitos, comenzando con cero para valores menores a 10) y el CCD (cadena de tres car\'acteres donde el primero de ellos es una letra N para indicar que el chip se encuentra en el grupo de CCDs que apuntan hacia el norte del campo visual, o S para indicar que el chip corresponde al grupo de CCDs que apuntan hacia el lado sur; adem\'as de un par de d\'igitos identificadores que van de 01 a 36) como string.
+\bigskip
+
+\begin{itemize}
+\item \textbf{\texttt{maskDir}}: Directorio donde se almacenan las im\'agenes m\'ascara (im\'agenes que identifican p\'ixeles).
+\item \textbf{\texttt{scienceDir}}: Directorio donde se almacenan las im\'agenes cient\'ificas 
+\item \textbf{\texttt{diffDir}}: Directorio donde se almacenan las im\'agenes de diferencia 
+\item \textbf{\texttt{psfDir}}: Directorio donde se encuentran los modelos de psf usados para la determinaci\'on del flujo.
+\item \textbf{\texttt{invDir}}: Directorio 
+\item \textbf{\texttt{afluxDir}}:
+\item \textbf{\texttt{maskRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes m\'ascara en disco siguiendo el path \texttt{maskDir}.
+\item \textbf{\texttt{scienceRegEx}}: Expresi\'on regular con la que es posible identificar el el nombre de las im\'agenes cient\'ificas en disco siguiendo el path \texttt{scienceDir}.
+\item \textbf{\texttt{diffRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes de diferencia en disco siguiendo el path \texttt{diffDir}.
+\item \textbf{\texttt{invRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes m\'ascara en disco siguiendo el path \texttt{invDir}.
+\item \textbf{\texttt{afluxRegEx}}: Expresi\'on regular con la que es posible identificar el el nombre de las im\'agenes m\'ascara en disco siguiendo el path \texttt{afluxDir}.
+\item \textbf{\texttt{psfRegEx}}:
+\item \textbf{\texttt{imgHeight}}: Valor entero que indica alto de la imagen.
+\item \textbf{\texttt{imgWidth}}: Valor entero que indica ancho de la imagen.
+\item \textbf{\texttt{only\_HiTS\_SN}}: 
+\item \textbf{\texttt{results}}: Directorio donde se ir\'an almacenando los resultados tanto de las observaciones como de las predicciones realizadas con los filtros de Kalman de los potenciales candidatos a supernova.
+\end{itemize}
+
+DataPicker maneja dos tipos de procesos diferentes. Uno de ellos corresponde a la lectura y preparaci\'on de las im\'agenes a ser analizadas, mientras que el segundo proceso corresponde a la lectura de resultados anteriores (guardados en un archivo de texto plano) los cuales tienen el registro de las estimaciones y observaciones pasadas que se ir\'an actualizando, con la finalidad de hacer el programa un proceso en l\'inea.
+\bigskip
+  
+\subsection{Lectura y preparaci\'on de im\'agenes}
+A continuaci\'on se enumeran los diferentes m\'etodos que intervienen en la recolecci\'on de los datos a ser le\'idos:
+
+\begin{itemize}
+\item \textbf{\texttt{config\_reg\_expressions(semester, field, ccd)}}\\
+Este m\'etodo recibe como par\'ametros el semestre (\texttt{semester}), el campo (\texttt{field}) y el ccd que la misma clase recibe de entrada. Con estos strings se establecen las rutas de los directorios de las im\'agenes y las expresiones regulares de los nombres de las mismas.
+\item \textbf{\texttt{collect\_data()}}\\
+Esta funci\'on se encarga de recolectar la ruta completa de las diferentes im\'agenes (m\'ascarac, cient\'ificas, de diferencia, etc.). Para esta finalidad se hace uso del m\'etodo \texttt{walking\_through\_files}. 
+\item \textbf{\texttt{walking\_through\_files(regex, dir)}}\\
+M\'etodo con el cual se recorren las rutas definidas en los pasos anteriores y se agrupan los nombres completos (directorio incluido) de las im\'agenes ubicadas en el directorio \texttt{dir} y posean un nombre de patr\'on que siga la expresi\'on regular \texttt{regex}.
+\item \textbf{\texttt{filter\_science\_images()}}\\
+Filtra im\'agenes cient\'ificas de acuerdo a su airmass 
+\item \textbf{\texttt{select\_fits(dir)}}\\
+Ordena la lista de im\'agenes de formato fits del directorio \texttt{dir} en orden cronol\'ogico.
+\item \textbf{\texttt{select\_npys(dir, ref\_dir, init\_index, n\_pos, rest\_len)}}:\\
+\end{itemize}
+
+\subsection{Resultados guardados}
+\section{Determinaci\'on de flujos}
+El proceso de la obtenci\'on del flujo se simplific\'o, eliminando la clase FitsHandler del programa original. Debido a la posibilidad de hacer los m\'etodos de esta clase est\'aticos se implement\'o un script Python denominada \texttt{utils} para contener estas rutinas e implementarlas est\'aticamente.
+\bigskip
+
+Los m\'etodos que participan en la rutina de calculo de flujo son: 
+
+\begin{itemize}
+\item \textbf{\texttt{naylor\_photometry(invvar, diff, psf)}:}
+\item \textbf{\texttt{calc\_fluxes(diff, psf, invvar, aflux)}:}
+\end{itemize} 
+\section{Filtros originales}
+A continuaci\'on se detallan las modificaciones realizadas en la implementaci\'on del filtro original.
+\subsection{Filtro b\'asico}
+\subsection{Filtro de m\'axima correntrop\'ia}
+\section{Detecci\'on de candidatos}

@@ -1,0 +1,47 @@
+\chapter{Introducción}
+\label{ch:introduction}
+
+\section{Motivaci\'on}
+La astronomía es uno de los campos científicos que más se ha visto afectado por el rápido crecimiento en la generación de datos debido al fuerte desarrollo de nuevas tecnologías de la información y  de nuevos instrumentos destinados a la observación. Este crecimiento ha gatillado un aumento importante en la demanda de una nueva generaci\'on de m\'etodos que puedan procesar esta oleada de informaci\'on o big data astron\'omico.
+\bigskip
+
+Ejemplos de proyectos que actualmente producen una gran cantidad de datos a trav\'es de telescopios en diferentes partes del mundo son: el Panoramic Survey Telescope and Rapid Response System (Pan-STARRS), el Visible and Infrarred Survey Telescope (VISTA), el VLT Survey Telescope (VST), el Dark Energy Camera Legacy Survey (DECaLS) y el Hyper Suprime-Cam Subaru Strategic Program (HSC SSP). Estos surveys est\'an caracterizados por un amplio \textit{\'etendue} (producto entre el \'area del espejo de un telescopio y su \'angulo s\'olido proyectado en el cielo).
+\bigskip
+
+En el futuro, telescopios como el Large Synoptic Survey Telescope (LSST)~\cite{lsst} (que entrará en funcionamiento a mediados del 2022) continuar\'an revolucionando la era del big data en astronom\'ia con etendues y c\'amaras CCD mucho m\'as grandes de lo que hasta el d\'ia de hoy se utiliza. En particular se espera que el LSST produzca un n\'umero de alertas trasientes (avisos de objetos encontrados y su consecuente seguimiento) del orden del mill\'on cada noche. La capacidad de detectar nuevos objetos de inter\'es depender\'a de la calidad de los datos y de los algoritmos de tiempo real  destinados a generar las alertas mencionadas. 
+\bigskip
+
+Actualmente existen sondeos como el High Cadence Transient Survey (HiTS)~\cite{hits} cuya finalidad es la b\'usqueda de fen\'omenos trasientes r\'apidos con escalas de tiempo que van desde las horas a d\'ias, utilizando secuencias de observaciones de la c\'amara DECam del telescopio Blanco (en Cerro Tololo) para la detecci\'on y posterior reporte de objetos candidatos a supernova. En su trabajo proponen un m\'etodo de detecci\'on de potenciales candidatos a supernova a trav\'es de la discriminaci\'on de p\'ixeles que involucren un incremento trasiente de intensidad.
+\bigskip
+
+Esta discriminaci\'on comienza con la determinaci\'on del flujo a trav\'es de la intensidad de los p\'ixeles que puedan corresponder a una estrella y a la variaci\'on de cada uno de ellos usando m\'etodos iterativos de filtrado en secuencias de im\'agenes de largo arbitrario. Los filtros usados en HiTS corresponden a miembros de una familia de filtros conocidos como \textit{filtros de Kalman}. En particular se hace uso de los filtros de Kalman b\'asico \cite{kalman} y de correntrop\'ia m\'axima \cite{chen}.
+
+...
+
+%En el reciente trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.) guiado por Pablo Est\'evez  (PhD) y Francisco Förster (PhD), se propone el uso de un filtro basado en el Filtro de Kalman de m\'axima correntrop\'ia con el cual se logró mejorar resultados en la clasificación de candidatos a supernova al disminuir la tasa de falsos positivos. Sin embargo, los resultados de verdaderos positivos, de supernovas conocidas, no mejoraron, por lo que se plantea la posibilidad de o mejorar los umbrales prestablecidos en el trabajo original o dise\~nar alg\'un otro criterio de filtrado.
+%\bigskip
+
+En el presente trabajo se pretende desarrollar un nuevo m\'odulo de filtro de Kalman que sea robusto a sistemas no-lineales para la detecci\'on de potenciales candidatos a supernova, para posteriormente ser embebido en un programa que pueda funcionar en l\'inea generando alarmas de detecci\'on. Por otro lado se busca implementar un software que contenga los m\'etodos de filtrados orginales (versiones cl\'asica y de m\'axima correntrop\'ia del filtro de Kalman) a trav\'es de un refactoring del programa  base. Paralelamente, se desea encontrar rangos apropiados para los par\'ametros requeridos en cada caso.
+
+
+\section{Trabajo anterior}
+
+
+
+\section{Organizaci\'on de la tesis}
+%Este documento sigue los siguientes cap\'itulos: en el cap\'itulo \ref{ch:background} se exponen tanto conceptos astron\'omicos (qu\'e es una supernova, aspectos b\'asicos de la fotometr\'ia realizada sobre las im\'agenes y t\'ecnicas aplicadas) como el background matem\'atico de los m\'etodos de filtrado, as\'i como definiciones de variables o par\'ametros que deben ser declaradas en el desarrollo del software.
+\bigskip
+
+%En el cap\'itulo \ref{ch:desarrollo} se describe la implementaci\'on del programa desde el refactoring del c\'odigo original hasta la implementaci\'on del nuevo m\'odulo en conjunto junto con las nuevas funcionalidades propias de un sistema que funciona en l\'inea. Igualmente se describen las pruebas que se realizar\'an para analizar el rendimiento de las detecciones para cada filtro y conjunto de par\'ametros.  %los tests (\texttt{unit tests}) que se van realizando por cada funcionalidad esencial.
+\bigskip
+
+Posteriormente, en el cap\'itulo \ref{ch:resultados}, se describen los resultados obtenidos de las pruebas descritas en el cap\'itulo anterior comparando tasas de verdaderos positivos y falsos negativos, as\'i como analizando las estad\'isticas de los grupos de p\'ixeles candidatos (tanto descartados como confirmados).  
+\bigskip
+
+Finalmente las conclusiones, contenidas en el cap\'itulo \ref{ch:conclusion}, resumen el aprendizaje obtenido durante este trabajo as\'i como los resultados relevantes obtenidos durante las pruebas establecidas. Adem\'as se plantean nuevas l\'ineas de trabajo futuro.
+
+
+%\fillup{1}
+
+%\todo{todo 1} asdfasfsdfsadafs \missingref{me faltaría una ref!}.
+%\todo[inline]{todo 2}
