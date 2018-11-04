@@ -1,0 +1,21 @@
+Loading photometry: 309.98233700000014
+
+Updating filter: 628.8270120000001
+
+Drawing groups: 37.8023089999999
+
+Updating candidates: 0.008027999999818292
+
+Total time first routine: 347.800702
+
+---- HiTS end -----
+
+Loading photometry: 306.2224669999987
+
+Updating filter: 610.5555029999999
+
+Drawing groups: 36.36663000000044
+
+Retrieving data to be plotted: 0.036199000000806336
+
+Total time: 690.434026

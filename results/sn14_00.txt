@@ -1,0 +1,23 @@
+Loading photometry: 320.98458600000004
+
+Updating filter: 29.3934470000002
+
+Drawing groups: 38.98052899999998
+
+Updating candidates: 0.01160399999995576
+
+Total time first routine: 359.988323
+
+SN found 
+---- End HITS ----
+Number of unidentified objects: 30
+
+Loading photometry: 333.5911270000002
+
+Updating filter: 36.129687999999646
+
+Drawing groups: 42.21634499999999
+
+Retrieving data to be plotted: 0.09624499999978298
+
+Total time: 735.903644

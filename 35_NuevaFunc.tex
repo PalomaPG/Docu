@@ -1,0 +1,52 @@
+\chapter{Nueva funcionalidad}
+\label{ch:news}
+Se detallan en las siguientes secciones la nueva funcionalidad agregada (no incluye el manejo de los datos en \textsc{DataPicker} ya que se describe como parte del refactoring), con la que se pretende implementar la funcionalidad en l\'inea de  este programa. 
+\section{Manejo de la rutina: \textsc{RoutineHandler}}
+La \textbf{rutina} se entiende como la ejecuci\'on completa del programa, con la cual se procesan todas las observaciones de acuerdo a una lista de CCDs y campos. Para esta finalidad se cre\'o una clase llamada \textsc{RoutineHandler} la cual maneja los archivos de entrada de:
+\begin{itemize}
+\item Lista de campos, CCD y semestre en un archivo CSV (en este mismo orden) y con el encabezado \texttt{Field, CCD, Semester}.  
+\item Diccionario de directorios y expresiones regulares de las ubicaciones de los archivos y sus nombres, respectivamente (archivo TXT). 
+\item Diccionario de umbrales y valores relevantes en la ejecuci\'on del programa, as\'i como el tipo de filtro a usar (archivo TXT).
+\end{itemize}
+\bigskip
+
+Esta clase contiene los siguientes m\'etodos:
+\begin{itemize}
+\item \texttt{process\_settings():}\\
+En este m\'etodo se lee el archivo de diccionario de umbrales y valores con los que se configurar\'a la ejecuci\'on completa del programa.
+\bigskip
+
+\item \texttt{retrieve\_kalman\_filter(kalman\_string):}\\
+Corresponde a un m\'etodo auxiliar que es invocado desde \texttt{process\_settings} con el que se crea una instancia del filtro de Kalman a partir de la lectura del archivo de valores, de acuerdo al valor defindo por el usuario. Los tres strings v\'alidos para la construcci\'on de una instancia son: 'Basic', 'MCC' y 'UKF'. Si se entrega otro tipo de string, se levanta un error.
+\bigskip
+  
+\item \texttt{iterate\_over\_sequences():}\\
+Recorre la lista de campos, CCDs y semestres entregada al programa con la consiguiente llamada a \texttt{routine}
+\bigskip
+
+\item \texttt{routine(semester, field, ccd, results\_path, last\_mjd):}\\
+Corresponde a la rutina que comprende el an\'alisis de las observaciones de un semestre, campo y CCD espec\'ifico. 
+\end{itemize}  
+\bigskip
+
+\section{Detecci\'on de fen\'omenos trasientes: \textbf{TPDetector}}
+Es una peque\~na clase con la que se apoya el proceso de reconocimiento o detecci\'on de alg\'un fen\'omeno trasiente en el comportamiento de la intensidad de los pixeles calculados despu\'es la ejecuci\'on de \texttt{routine} (es decir, una vez que se han obtenido los resultados con \texttt{routine} de \textsc{RoutineHandler}).
+\bigskip
+
+Esta clase posee los siguientes m\'etodos:
+
+\begin{itemize}
+\item \texttt{look\_candidates(results\_path, field, ccd, semester)}:\\
+Con este m\'etodo se agrupan los resultados obtenidos por campo, CCD y semestre en la ruta de los resultados (\texttt{results\_path}), y carga los arreglos de los candidatos encontrados (de acuerdo a su coordenada central) y cuenta las veces que aparece cada uno en los archivos (un archivo por \'epoca u observaci\'on) con la finalidad de registrar \textit{las veces que ha sido candidato}.  
+\bigskip
+
+\item \texttt{list\_candidates(cand\_mid\_coords)}\\
+Con finalidades exploratorias, este m\'etodo registra los candidatos (por pares de pixeles que describen el centro de los grupos encontrados) sin repetici\'on, independiente de las veces que han aparecido.
+\end{itemize}
+
+  
+\section{\textsc{DataContent}}
+\textsc{DataContent} es una clase auxiliar que es usada principalmente para encapsular los resultados obtenidos durante el proceso de detecci\'on, tanto de los pixeles de los grupos encontrados por \'epoca, la lista de pixeles centrales de estos grupos, las matrices de etiquetas (para realizar seguimiento de las causas del descarte de los pixeles o grupo de pixeles), as\'i como tambi\'en los estados encontrados por el filtro usado. Para guardar estos resultados se utiliza la funci\'on \texttt{savez} de la librer\'ia \textsc{Numpy}, los archivos guardados son registrados en un archivo de extensi\'on NPZ.
+\bigskip
+
+Para el guardado de los datos se implement\'o la funci\'on \texttt{save\_results} que recibe como par\'ametros la ruta donde se quiere almacenar los resultados, el campo de observaci\'on, el CCD, el MJD y la matriz de estados junto con la covarianza de estados. El resto de los arreglos son definidos en las funciones \texttt{set\_mid\_coords} y \texttt{group\_info}.

@@ -1,0 +1,13 @@
+\chapter{¿Qué se entiende por \textit{linealidad}?}
+\label{ch:linear}
+
+De acuerdo a la secci\'on del cap\'itulo anterior, referente a las supernovas de tipo II\ref{sec:sn}, se detall\'o el comportamiento de la luminosidad (o flujo) de este tipo de objetos. Esta curva de luz sin embargo no describe un comportamiento lineal\ref{fig:f1}, por otro lado es posible linealmente \textit{por trozos}, es decir, localmente.
+\bigskip
+
+En este trabajo, y en el trabajo de P. Huentelemu\cite{huentelemu} se asume esta linealidad local, sin embargo esta asunci\'on puede  
+
+\section{El filtro de Kalman para un sistema localmente lineal} 
+El filtro de Kalman tradicional o b\'asico es derivado usando el MMSE (minimum mean square error) el cual funciona bien bajo condiciones de gaussianidad. Sin embargo cuando las se\~nales son no-gaussianas o cuando el sistema estudiado es perturbado por impulsos de distribuci\'on de cola pesada el desempe\~no del filtro de Kalman b\'asico se deteriora visiblemente, ya que el MMSE s\'olo captura el error hasta un segundo orden y es sensible a outliers\cite{badong}. 
+\bigskip
+
+Por este motivo se desarroll\'o en conjunto al filtro tradicional, un filtro de Kalman basado en correntrop\'ia m\'axima, que fuese insensible a outliers y robusto condiciones de no-gaussianidad. 

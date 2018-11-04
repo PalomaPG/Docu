@@ -14,25 +14,33 @@ En el futuro, telescopios como el Large Synoptic Survey Telescope (LSST)~\cite{l
 Actualmente existen sondeos como el High Cadence Transient Survey (HiTS)~\cite{hits} cuya finalidad es la b\'usqueda de fen\'omenos trasientes r\'apidos con escalas de tiempo que van desde las horas a d\'ias, utilizando secuencias de observaciones de la c\'amara DECam del telescopio Blanco (en Cerro Tololo) para la detecci\'on y posterior reporte de objetos candidatos a supernova. En su trabajo proponen un m\'etodo de detecci\'on de potenciales candidatos a supernova a trav\'es de la discriminaci\'on de p\'ixeles que involucren un incremento trasiente de intensidad.
 \bigskip
 
-Esta discriminaci\'on comienza con la determinaci\'on del flujo a trav\'es de la intensidad de los p\'ixeles que puedan corresponder a una estrella y a la variaci\'on de cada uno de ellos usando m\'etodos iterativos de filtrado en secuencias de im\'agenes de largo arbitrario. Los filtros usados en HiTS corresponden a miembros de una familia de filtros conocidos como \textit{filtros de Kalman}. En particular se hace uso de los filtros de Kalman b\'asico \cite{kalman} y de correntrop\'ia m\'axima \cite{chen}.
-
-...
-
-%En el reciente trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.) guiado por Pablo Est\'evez  (PhD) y Francisco Förster (PhD), se propone el uso de un filtro basado en el Filtro de Kalman de m\'axima correntrop\'ia con el cual se logró mejorar resultados en la clasificación de candidatos a supernova al disminuir la tasa de falsos positivos. Sin embargo, los resultados de verdaderos positivos, de supernovas conocidas, no mejoraron, por lo que se plantea la posibilidad de o mejorar los umbrales prestablecidos en el trabajo original o dise\~nar alg\'un otro criterio de filtrado.
-%\bigskip
-
-En el presente trabajo se pretende desarrollar un nuevo m\'odulo de filtro de Kalman que sea robusto a sistemas no-lineales para la detecci\'on de potenciales candidatos a supernova, para posteriormente ser embebido en un programa que pueda funcionar en l\'inea generando alarmas de detecci\'on. Por otro lado se busca implementar un software que contenga los m\'etodos de filtrados orginales (versiones cl\'asica y de m\'axima correntrop\'ia del filtro de Kalman) a trav\'es de un refactoring del programa  base. Paralelamente, se desea encontrar rangos apropiados para los par\'ametros requeridos en cada caso.
-
-
-\section{Trabajo anterior}
-
-
-
-\section{Organizaci\'on de la tesis}
-%Este documento sigue los siguientes cap\'itulos: en el cap\'itulo \ref{ch:background} se exponen tanto conceptos astron\'omicos (qu\'e es una supernova, aspectos b\'asicos de la fotometr\'ia realizada sobre las im\'agenes y t\'ecnicas aplicadas) como el background matem\'atico de los m\'etodos de filtrado, as\'i como definiciones de variables o par\'ametros que deben ser declaradas en el desarrollo del software.
+Esta discriminaci\'on comienza con la determinaci\'on del flujo a trav\'es de la intensidad de los p\'ixeles que puedan corresponder a una estrella y a la variaci\'on de cada uno de ellos usando m\'etodos iterativos de filtrado en secuencias de im\'agenes de largo arbitrario. Los filtros pensados para HiTS corresponden a miembros de una familia de filtros conocidos como \textit{filtros de Kalman}. En particular se hace uso de los filtros de Kalman b\'asico \cite{kalman} y de correntrop\'ia m\'axima \cite{chen}.
 \bigskip
 
-%En el cap\'itulo \ref{ch:desarrollo} se describe la implementaci\'on del programa desde el refactoring del c\'odigo original hasta la implementaci\'on del nuevo m\'odulo en conjunto junto con las nuevas funcionalidades propias de un sistema que funciona en l\'inea. Igualmente se describen las pruebas que se realizar\'an para analizar el rendimiento de las detecciones para cada filtro y conjunto de par\'ametros.  %los tests (\texttt{unit tests}) que se van realizando por cada funcionalidad esencial.
+
+El reciente trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.) guiado por Pablo Est\'evez  (PhD) y Francisco Förster (PhD), propone el uso de estos filtros cuyos resultados de verdaderos positivos de supernovas conocidas se pretenden mejorar (hasta ahora alcanza alrededor de un 44\%), por lo que se plantea la posibilidad de dise\~nar alg\'un otro criterio de filtrado y de estudiar los umbrales y par\'ametros del programa.
+\bigskip
+
+En el presente trabajo se pretende desarrollar un nuevo m\'odulo de filtro de Kalman que sea robusto a sistemas no-lineales para la detecci\'on de potenciales candidatos a supernova, para posteriormente ser embebido en un programa que pueda funcionar en l\'inea generando alarmas de detecci\'on. Por otro lado se busca implementar un software que contenga los m\'etodos de filtrados originales (versiones cl\'asica y de m\'axima correntrop\'ia del filtro de Kalman) a trav\'es de un refactoring del programa  base. Paralelamente, se desea encontrar rangos apropiados para los umbrales requeridos para el filtrado.
+
+
+%\section{Trabajo anterior}
+
+\section{Organizaci\'on de la tesis}
+
+Este documento sigue los siguientes cap\'itulos: en el cap\'itulo \ref{ch:background} se describe en qu\'e consiste una supernova, el proyecto HiTS, la relevancia de la linealidad de un sistema (y su impacto en la estad\'istica del mismo en la aplicaci\'on de un m\'etodo de filtrado como el filtro de Kalman)  as\'i como el background matem\'atico de los m\'etodos de filtrado usados en el trabajo original (filtros de Kalman b\'asico y de m\'axima correntrop\'ia) y el filtro a implementar (filtro de Kalman unscented).
+\bigskip
+
+%El siguiente cap\'itulo, \ref{ch:linear} est\'a destinado para explicitar la relevancia de la linealidad de un modelo y que ocurre en casos de que este no sea, al aplicar un filtro de Kalman.
+%\bigskip
+
+El siguiente cap\'itulo, \ref{ch:prev_work}, se estudian los resultados obtenidos con el c\'odigo original del programa sobre el cual se trabajar\'a, estableci\'endose una breve discusi\'on sobre estos resultados. 
+\bigskip
+
+Posteriormente, en el cap\'itulo \ref{ch:refactoring} se describe el refactoring del programa  del c\'odigo original: se enlistan nuevos m\'etodos para el manejo de archivos y cambios realizados en la implementaci\'on de los m\'etodos iniciales. 
+\bigskip
+
+En el cap\'itulo \ref{ch:news} se exponen los pasos del desarrollo del nuevo filtro as\'i como nueva funcionalidad relacionada con la carga de resultados previamente guardados en pos de hacer este programa un proceso on-line.
 \bigskip
 
 Posteriormente, en el cap\'itulo \ref{ch:resultados}, se describen los resultados obtenidos de las pruebas descritas en el cap\'itulo anterior comparando tasas de verdaderos positivos y falsos negativos, as\'i como analizando las estad\'isticas de los grupos de p\'ixeles candidatos (tanto descartados como confirmados).  

@@ -30,7 +30,9 @@
 
 \PrerenderUnicode{áéíóúÁÉÍÓÚüÜ}
 \decimalpoint
-
+\usepackage{caption}
+\captionsetup[subfloat]{labelfont={bf,small},textfont={it,small},
+subrefformat=parens} %<-----designing subcaption
 % clrscode3e - Typeset pseudo-code "Intro to Algorithms" style
 %\usepackage{packages/clrscode3e}
 %\usepackage{packages/algorithmic}
