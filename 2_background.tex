@@ -1,14 +1,15 @@
 \chapter{Antecedentes}
 \label{ch:background}
+En el presente Cap\'itulo se exponen conceptos cruciales para la comprensi\'on y desarrollo de este trabajo. Se describe en particular los objetos de inter\'es que estimularon el desarrollo del Survey HiTS y al mismo proyecto: las supernovas de tipo II y el evento de short-breakout asociado a estas. De la misma forma, se describe la base matem\'atica en la que se basan las diferentes versiones del filtro de Kalman implementadas en el software original, es decir, los filtros de Kalman \textit{b\'asico} y de \textit{m\'axima correntrop\'ia} as\'i como una nueva versi\'on del m\'etodo conocida como \textit{unscented} que permitir\'ia la introducci\'on de modelos no lineales en el proceso de filtrado.  
 
 \section{Supernova tipo II}\label{sec:sn}
-Una supernova de tipo II corresponde a un evento estelar con el que finaliza una estrella masiva (aquellas que en su proceso de formaci\'on poseen una masa superior a 10 masas solares \footnote{$M_{\odot} = (1.98847 \pm 0.00007) \times 10^{30}$ Kg}). Al ya no contar con combustible necesario para llevar a cabo reacciones nucleares que puedan contrarrestar su propia gravedad (su n\'ucleo ya no puede formar elementos m\'as pesados que el hierro o el n\'iquel), y si la presi\'on degenerada de los electrones del plasma de la estrella no es suficiente para soportar este peso, la estrella se contrae abruptamente incrementando el peso de su centro a $10^{10}$ K.
+Una supernova de tipo II corresponde a un evento estelar con el que finaliza la vida de una estrella masiva (aquellas que en su proceso de formaci\'on poseen una masa superior a 10 masas solares \footnote{$M_{\odot} = (1.98847 \pm 0.00007) \times 10^{30}$ Kg}). Al ya no contar con combustible necesario para llevar a cabo reacciones nucleares que puedan contrarrestar su propia gravedad (su n\'ucleo ya no puede formar elementos m\'as pesados que el hierro o el n\'iquel), y si la presi\'on degenerada de los electrones del plasma de la estrella no es suficiente para soportar este peso, la estrella se contrae abruptamente incrementando la temperatura de su centro a $10^{10}$ K.
 \bigskip
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=.25]{images/sncore}
-\caption{Representaci\'on simple y no a escala de la estructura de una estrella masiva previo a su explosi\'on como supernova. Los elementos m\'as pesados se alojan en el centro, mientras que  los m\'as livianos, como el hidr\'ogeno o el helio lo hacen en la capa m\'as externa.}
+\caption{Esquema no a escala de la estructura de una estrella masiva previo a su explosi\'on como supernova. Los elementos m\'as pesados se alojan en el centro, mientras que  los m\'as livianos, como el hidr\'ogeno o el helio lo hacen en la capa m\'as externa. \textit{Imagen publicada por R. J. Hall en WikiMedia Commons, 15 de agosto de 2007.}}
 \label{fig:f0}
 \end{figure}
 
@@ -24,7 +25,7 @@ Las supernovas de tipo I presentan un decaimiento casi continuo una vez alcanzad
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=.8]{images/clear}
-\caption{Curvas t\'ipicas de supernovas I (enana blanca) y II (estrella masiva).}
+\caption{Curvas t\'ipicas de supernovas I (enana blanca) y II (estrella masiva). \textit{\textcopyright 2004 Pearson Education Inc., publishing as Addison-Wesley The Bizarre Stellar Graveyard.}}
 \label{fig:f1}
 \end{figure}
 
@@ -36,10 +37,10 @@ El High Cadence Transient Survey\cite{hits} (desde ahora, HiTS) es un survey cuy
 %\ref{fig:f2}\footnote{\url{https://www.nasa.gov/feature/ames/Kepler/caught-for-the-first-time-the-early-flash-of-an-exploding-star}}
 
 
-\begin{figure}
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=.25]{images/breakout}
-\caption{Diagrama que ilustra la evoluci\'on del brillo de una supernova en t\'erminos de luminosidad solar ($L_{\odot}$) durante d\'ias. Se resalta el fen\'omeno de shock breakout apenas comienza el incremento de la luminosidad de la supernova. Esta imagen fue publicada en la p\'agina de la NASA destacando la primera vez que un evento como este es \textit{capturado} en la banda visible (por el telescopio espacial Kepler).}
+\caption{Diagrama que ilustra la evoluci\'on del brillo de una supernova en t\'erminos de luminosidad solar ($L_{\odot}$) durante d\'ias. Se resalta el fen\'omeno de shock breakout apenas comienza el incremento de la luminosidad de la supernova. Esta imagen fue publicada en la p\'agina de la NASA destacando la primera vez que un evento como este es \textit{capturado} en la banda visible (por el telescopio espacial Kepler).\textit{NASA Ames/W. Stenzel. 2016}}
 \label{fig:f2}
 \end{figure}
 
@@ -49,29 +50,29 @@ HiTS utiliza la Dark Energy Camera (DECam, figura \ref{fig:f3}) para la obtenci\
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=.5]{images/CCDs.jpg}
-\caption{A la izquierda, estructura de la c\'amara DECam poblada con 62 chips CCDs. A la derecha, imagen \textit{flat field} desde DECam.}
+\caption{A la izquierda, estructura de la c\'amara DECam poblada con 62 chips CCDs. A la derecha, imagen \textit{flat field} desde DECam. \textit{Im\'agenes tomadas desde la p\'agina del Dark Energy Survey (\url{www.darkenergysurvey.org/the-des-project/instrument/the-camera}).}}
 \label{fig:f3}
 \end{figure}
 
-Durante este proyecto se han realizado tres campa\~nas de observaci\'on en los a\~nos 2013, 2014 y 2015 durante el primer semestre de cada a\~no. Se escogieron 40 campos y 4 \'epocas por noche (tambi\'en por campo) para observaciones para el a\~no 2013 y en el 2014. Para la campa\~na del a\~no 2015 se escogieron 50 campos. Dentro de estas campa\~nas obtuvieron m\'as de 120 candidatos j\'ovenes a supernova. Sin embargo, no se logr\'o encontrar en estas rastros de SBO (figura \ref{fig:f2}) evento que comprende uno de los principales objetivos de HiTS (raz\'on por la cual buscan desarrollar una herramienta que les permita la detecci\'on temprana de supernovas de tipo II).  
+Durante este proyecto se han realizado tres campa\~nas de observaci\'on en los a\~nos 2013, 2014 y 2015 durante el primer semestre de cada a\~no. Se escogieron 40 campos y 4 \'epocas por noche (tambi\'en por campo) para observaciones para el a\~no 2013 y en el 2014. Para la campa\~na del a\~no 2015 se escogieron 50 campos. Dentro de estas campa\~nas obtuvieron m\'as de 120 candidatos a supernova. Sin embargo, no se logr\'o encontrar en estas rastros de SBO (figura \ref{fig:f2}) evento que comprendi\'o uno de los principales objetivos de HiTS. 
 
-\begin{figure}
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=.75]{images/decam}
-\caption{Orientaciones sobre el cielo y la huella espacial del arreglo de detectores en el plano focal. Se destacan los CCD cuya etiqueta comienzan con S o N, ya que estos corresponden a los detectores encargados de obtener las im\'agenes cient\'ificas. El etiquetado de estas componentes puede ser enga\~noso debido a que las iniciales de norte (North) y sur (South) est\'an invertidas en relaci\'on a la orientaci\'on del cielo.}
+\caption{Orientaciones sobre el cielo y la huella espacial del arreglo de detectores en el plano focal. Se destacan los CCD cuya etiqueta comienzan con S o N, ya que estos corresponden a los detectores encargados de obtener las im\'agenes cient\'ificas. El etiquetado de estas componentes puede ser enga\~noso debido a que las iniciales de norte (North) y sur (South) est\'an invertidas en relaci\'on a la orientaci\'on del cielo. \textit{Imagen publicada en el sitio del CTIO (\url{http://www.ctio.noao.edu/noao/node/2250})}.}
 \label{fig:f4}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[scale=.5]{images/fields}
-\caption{Distribuci\'on espacial de los campos observados durante los primeros semestres de los a\~nos 2013 (gris), 2014 (azul) y 2015 (naranjo). En tono rojo, los mismos campos del a\~no 2015 y 2014 (superposici\'on).}
+\caption{Distribuci\'on espacial de los campos observados durante los primeros semestres de los a\~nos 2013 (gris), 2014 (azul) y 2015 (naranjo). En tono rojo, los mismos campos del a\~no 2015 y 2014 (superposici\'on). \textit{F. F\"orster et al., 2015. HiTS real-time supernova detections.}}
 \end{figure}
 
 
 
 \section{El filtro de Kalman}
-La evoluci\'on determin\'istica de un sistema f\'isico en el tiempo es conocido s\'i el estado del sistema es medido con absoluta precisi\'on en cada instante de tiempo (i.e. en un entorno donde es posible despreciar fen\'omenos cu\'anticos). Sin embargo toda medici\'on est\'a sujeta a incertezas finitas. Para sistemas los cuales son observados entre int\'ervalos prolongados de tiempo, se prevee que las diferencias entre los estados estimados y los medidos se incrementen con el tiempo. Para la obtenci\'on de predicciones lo m\'as confiables posible se requiere que el sistema sea regularmente monitoreado y sus estados estimados futuros puedan ser considerados confiables en un lapso de tiempo en apropiado. 
+La evoluci\'on determin\'istica de un sistema f\'isico en el tiempo es conocido si el estado del sistema es medido con absoluta precisi\'on en cada instante de tiempo (i.e., en un entorno donde es posible despreciar fen\'omenos cu\'anticos). Sin embargo toda medici\'on est\'a sujeta a incertezas finitas. Para sistemas los cuales son observados entre int\'ervalos prolongados de tiempo, se prevee que las diferencias entre los estados estimados y los medidos se incrementen con el tiempo. Para la obtenci\'on de predicciones lo m\'as confiables posible se requiere que el sistema sea regularmente monitoreado y sus estados estimados puedan ser considerados confiables en un lapso de tiempo en apropiado. 
 \bigskip
 
 Los filtros de Kalman son m\'etodos que proveen un trade-off entre los valores esperados del estado actual de un sistema y las mediciones que proporcionan informaci\'on de su estado real. La aplicaci\'on de un filtro de Kalman est\'a pensada como un proceso de dos fases:
@@ -87,7 +88,7 @@ T\'ipicamente estas fases de predicci\'on y correcci\'on se van alternando mient
 El filtro de Kalman B\'asico asume un comportamiento de sistema lineal y que las mediciones y las predicciones siguen una distribuci\'on Gaussiana. 
 \bigskip
 
-A continuaci\'on se describen las componentes m\'as importantes en el desarrollo matem\'atico del filtro:
+A continuaci\'on se describen las componentes del desarrollo matem\'atico del filtro:
 
 \begin{itemize}
 \item \textbf{$F_k$:} Matriz de transici\'on de estado, de dimensiones $N\times N$ (N es el n\'umero de variables de estado).
@@ -97,12 +98,12 @@ A continuaci\'on se describen las componentes m\'as importantes en el desarrollo
 \item \textbf{$B_k$:} Matriz de control de entrada (contiene alteraciones que se querr\'ian agregar al sistema de manera deliberada, por ejemplo, como la condici\'on de parada de un veh\'iculo en movimiento). Esta matriz es de dimensiones $N\times L$, donde $L$ es la dimensi\'on del vector de control de entrada $u_k$.
 \end{itemize}
 \bigskip
-A continuaci\'on se har\'a uso de la notaci\'on en sub\'indices $m|n$, en las estimaciones de estado y covarianzas, para explicitar al instante de tiempo al cual pertenecen:  $m$; y al instante de tiempo de donde se extrae la informaci\'on: $n$.
+Se har\'a uso de la notaci\'on en sub\'indices $m|n$, en las estimaciones de estado y covarianzas, para explicitar el instante de tiempo al cual pertenecen:  $m$; y al instante de tiempo de donde se extrae la informaci\'on: $n$.
 \bigskip
 
 En el instante $k-1$, se obtienen dos cantidades 
 \begin{itemize}
-\item $\hat{x}_{k|k-1}$ : Estado estimado a priori.
+\item $\hat{x}_{k|k-1}$ : Estado estimado \textit{a priori}.
 \item $P_{k|k-1}$ : Matriz de covarianza \textit{a priori}.
 \end{itemize}
 \bigskip
@@ -115,7 +116,7 @@ Luego, en la fase de correcci\'on se calculan:
 \end{itemize}
 \bigskip
 
-Con estas variables, podemos describir las ecuaciones que explican la evoluci\'on del proceso de este algoritmo:
+Con estas variables, podemos describir las Ecuaciones que explican la evoluci\'on del proceso de este algoritmo:
 \begin{enumerate}
 \item \textbf{Fase predictiva:}\\
 Estimaci\'on de estado y matriz de covarianza \textit{a priori}.
@@ -137,7 +138,7 @@ Estimaci\'on de estado y matriz de covarianza \textit{a posteriori}.
 \tilde{z}_k=z_k - \hat{z}_k
 \label{eq:eq4}
 \end{equation}
-La ecuaci\'on \ref{eq:eq4} describe la obtenci\'on de un residuo de la diferencia entre la predicci\'on y la medida $z_k$. Posteriormente se calcula la matriz de covarianza entre residuos (\ref{eq:eq5}), con la que se calcula la ganancia de Kalman (ecuaci\'on \ref{eq:eq6}).
+La Ecuaci\'on \ref{eq:eq4} describe la obtenci\'on de un residuo de la diferencia entre la predicci\'on y la medida $z_k$. Posteriormente se calcula la matriz de covarianza entre residuos (\ref{eq:eq5}), con la que se calcula la ganancia de Kalman (ecuaci\'on \ref{eq:eq6}).
 \begin{equation}
 S_k = H_k P_{k|k-1} H_{k}^T + R_k
 \label{eq:eq5}
@@ -166,12 +167,12 @@ P_{k|k} = (I_N - K_kH_k)P_{k|k-1}
 \centering
 \includegraphics[scale=0.5]{images/kfb}
 \label{fig:kfb}
-\caption{Representaci\'on del proceso de predicci\'on (obtenci\'on de cantidades a priori) de las cantidades $\hat{x}_{k|k-1}$ y $P_{k|k-1}$;  y de correcci\'on (estimaci\'on a posteriori) para obtener las cantidades $\hat{x}_{k+1|k}$ y $P_{k+1|k}$.}
+\caption{Representaci\'on del proceso de predicci\'on (obtenci\'on de cantidades a priori) de las cantidades $\hat{x}_{k|k-1}$ y $P_{k|k-1}$;  y de correcci\'on (estimaci\'on a posteriori) para obtener las cantidades $\hat{x}_{k+1|k}$ y $P_{k+1|k}$. \textit{E. Matsinos, 2016. The Kalman Filter: a didactical overview.}}
 \end{figure}
 
 \subsection{Filtro de Kalman de M\'axima Correntrop\'ia}
 
-El filtro de Kalman basado en correntrop\'ia m\'axima\cite{badong}, difiere del filtro de Kalman tradicional (b\'asico) en que no asume gaussianidad en las observaciones, considerando casos en que una se\~nal puede ser perturbada por pulsos de ruido que sigan una distribuci\'on de cola pesada, y en esta oportunidad se utiliza el \textit{criterio de correntrop\'ia m\'axima} para el proceso de correci\'on. 
+El filtro de Kalman basado en correntrop\'ia m\'axima\cite{badong}, difiere del filtro de Kalman tradicional (b\'asico) en que no asume gaussianidad en las observaciones, considerando casos en que una se\~nal puede ser perturbada por pulsos de ruido que sigan una distribuci\'on de cola pesada. En esta oportunidad se utiliza el \textit{criterio de correntrop\'ia m\'axima} para el proceso de correci\'on. 
 \bigskip
 
 Recordando que la correntrop\'ia es una medida de similitud entre dos variables aleatorias, supongamos, $X,Y \in \mathbb{R}$ con una distribuci\'on conjunta $F_{XY} (x,y)$, definimos la correntrop\'ia matem\'aticamente como:
@@ -180,21 +181,20 @@ Recordando que la correntrop\'ia es una medida de similitud entre dos variables 
 V(X,Y) = E[\kappa(X,Y)] = \int \kappa(x,y) dF_{XY} (x,y)
 \label{eq:eqcorr}
 \end{equation}
-
-Donde $E$ representa al operador de esperanza y $\kappa(,)$ corresponde a un kernel Mercer invariante a desplazamientos (teorema de Mercer, \cite{mercer}). Para este filtro se emplea una funci\'on de kernel Gaussiana, dado por
+\noindent
+donde $E$ representa al operador de esperanza y $\kappa(,)$ corresponde a un kernel Mercer invariante a desplazamientos (teorema de Mercer, \cite{mercer}). Para este filtro se emplea una funci\'on de kernel Gaussiana, dado por
 
 \begin{equation}
 \kappa(x, y) = G_{\sigma} (e) = exp \left(-\dfrac{e^2}{2\sigma^2} \right)
 \label{eq:eqkappa}
 \end{equation}
 
-
 Con este t\'ermino definimos la \textit{funci\'on de costo} de m\'axima correntrop\'ia.
 \begin{equation}
 J_{MCC} = \dfrac{1}{N} \sum_{i=1}^N G_{\sigma} (e (i))
 \label{eq:costo}
 \end{equation}
-La ecuaci\'on \ref{eq:costo} representa la funci\'on a m\'aximizar. Su maximizaci\'on calcula la estimaci\'on corregida para el estado en el instante k.
+La Ecuaci\'on \ref{eq:costo} representa la funci\'on a m\'aximizar. Su maximizaci\'on calcula la estimaci\'on corregida para el estado en el instante $k$.
 
 \begin{equation}
 \hat{x}_k = arg max_{x} (J_{MCC})= argmax_x (\sum_{i=1} G_{\sigma} (e_i(k)))
@@ -202,14 +202,14 @@ La ecuaci\'on \ref{eq:costo} representa la funci\'on a m\'aximizar. Su maximizac
 \end{equation}
 \bigskip
 
-Para obtener el m\'aximo de correntrop\'ia se procede a calcular el error residual $\tilde{e}_i$ (ecuaci\'on \ref{eq:eq9})
+Para obtener el m\'aximo de correntrop\'ia se procede a calcular el error residual $\tilde{e}_i$ (Ecuaci\'on \ref{eq:eq9})
 
 \begin{equation}
 \tilde{e}_i = d_{i,k} - w_{i,k} \hat{x}_{t-1, k|k}
 \label{eq:eq9}
 \end{equation}
 
-Con estos residuos definimos las matrices diagonales \ref{eq:eq10} y \ref{eq:eq11}. La primera matriz corresponde a evaluaciones del kernel en errores estimados de predicci\'on y la segunda en errores propios de las observaciones (ruido).
+Con estos residuos definimos las matrices diagonales, descritas en las Ecuaciones, \ref{eq:eq10} y \ref{eq:eq11}. La primera matriz corresponde a evaluaciones del kernel en errores estimados de predicci\'on y la segunda en errores propios de las observaciones (ruido).
 \bigskip
 
 \begin{equation}
@@ -222,7 +222,7 @@ Con estos residuos definimos las matrices diagonales \ref{eq:eq10} y \ref{eq:eq1
 \label{eq:eq11}
 \end{equation}
 
-La siguiente expresi\'on corresponde una transformaci\'on de la covarianza del ruido de las mediciones usando una descomposici\'on de Choleski ($B_{r, k}$) en el instante k (\cite{chen}).
+La siguiente expresi\'on corresponde una transformaci\'on de la covarianza del ruido de las mediciones usando una descomposici\'on de Choleski ($B_{r, k}$) en el instante $k$ (\cite{chen}).
 \bigskip
  
 \begin{equation}
@@ -230,7 +230,7 @@ La siguiente expresi\'on corresponde una transformaci\'on de la covarianza del r
 \label{eq:eq12}
 \end{equation}
 
-Luego se calcula la transformaci\'on de la predicci\'on de la matriz de covarianza de las estimaciones de estado, $P_{k|k-1}$ (ecuaci\'on \ref{eq:eq13}).
+Luego se calcula la transformaci\'on de la predicci\'on de la matriz de covarianza de las estimaciones de estado, $P_{k|k-1}$ (Ecuaci\'on \ref{eq:eq13}).
 \begin{equation}
 \tilde{P}_{k|k-1} = B_{p, k|k-1} \tilde{C}_{x, k}^{-1}B_{p, k|k-1}^T
 \label{eq:eq13}
@@ -242,14 +242,14 @@ Posteriormente se calcula la ganancia de Kalman para este nuevo sistema.
 \label{eq:eq14}
 \end{equation}
 
-Finalmente la actualizaci\'on de la esttimaci\'on de estado para el instante k queda como: 
+Finalmente la actualizaci\'on de la estimaci\'on de estado para el instante $k$ queda como: 
 \begin{equation}
 \hat{x}_{t, k|k} = \hat{x}_{k|k-1} + \tilde{K}_{k} (y_k - H_k \hat{x}_{k|k-1})
 \label{eq:eq15}
 \end{equation}
 \bigskip
 
-Las ecuaciones de la \ref{eq:eq9} a la \ref{eq:eq15} se repiten secuencialmente hasta satisfacer la condici\'on:
+Las Ecuaciones de \ref{eq:eq9} a \ref{eq:eq15} se repiten secuencialmente hasta satisfacer la condici\'on:
 
 \begin{equation}
 \dfrac{\parallel  \hat{x}_{t, k|k} - \hat{x}_{t-1, k|k} \parallel }{\parallel \hat{x}_{t-1, k|k} \parallel} \leq \epsilon
@@ -263,17 +263,20 @@ P_{k|k} = \left(I - \tilde{K}_kH_k \right)P_{k|k-1} \left(I - \tilde{K}_k H_k \r
 \label{eq:eq17}
 \end{equation}
 
-Finalmente se calcula la matriz de covarianza para el instante actual, k (expresi\'on \ref{eq:eq17}).
+Finalmente se calcula la matriz de covarianza para el instante actual, $k$ (Ecuaci\'on \ref{eq:eq17}).
 
 \subsection{Filtro de Kalman Unscented}
+\label{ssec:ukf}
+Este filtro corresponde a aquel que se pretende agregar a la familia de filtros ya desarrollada en el programa base.
+\bigskip
 
 \begin{enumerate}
 \item \textbf{Fase predictiva:}\\
-En esta versi\'on del filtro \cite{ukf} ya no se habla de matrices de transici\'on de estado, $F_k$, ni de matrices de transformaci\'on de estado-a-medici\'on, $H_k$, sino m\'as bien de funciones diferenciables $f$ y $h$ respectivamente para describir la transici\'on de estados  y la transformaci\'on de estos a estimaciones a priori. Sin embargo, previo a estas transiciones se deben seleccionar 2N+1 puntos representativos alrededor de $\hat{x}_{k-1|k-1}$ y evaluar estos en la funci\'on no lineal $f$, para obtener las estimaciones de $\hat{x_{k|k-1}}$ y $P_{k|k-1}$.
+En esta versi\'on del filtro \cite{ukf} ya no se habla de matrices de transici\'on de estado, $F_k$, ni de matrices de transformaci\'on de estado-a-medici\'on, $H_k$, sino m\'as bien de funciones diferenciables $f$ y $h$ respectivamente para describir la transici\'on de estados  y la transformaci\'on de estos a estimaciones a priori. Sin embargo, previo a estas transiciones se deben seleccionar 2N+1 puntos representativos alrededor de $\hat{x}_{k-1|k-1}$ y evaluar estos en la funci\'on no lineal $f$, para obtener las estimaciones de $\hat{x_{k|k-1}}$ y $P_{k|k-1}$. Estos puntos se conocen como \textit{puntos sigma.}
 
 \begin{figure}
 \includegraphics[scale=.5]{images/ukf}
-\caption{Representaci\'on del funcionamiento del filtro UKF. En esta oportunidad se hace uso de la funci\'on $f$ y $h$ para obtener las transformaciones $x_{k-1}\rightarrow x_k$ y $x_{k}\rightarrow z_k$. Esto se logra con la evaluaci\'on de de los 2N+1 puntos generados durante la etapa de predicci\'on (y posteriormente en la etapa de correcci\'on).} 
+\caption{Representaci\'on del funcionamiento del filtro UKF. En esta oportunidad se hace uso de la funci\'on $f$ y $h$ para obtener las transformaciones $x_{k-1}\rightarrow x_k$ y $x_{k}\rightarrow z_k$. Esto se logra con la evaluaci\'on de de los 2N+1 \textit{puntos sigma} generados durante la etapa de predicci\'on (y posteriormente en la etapa de correcci\'on). \textit{E. Matsinos, 2016. The Kalman Filter: a didactical overview.}} 
 \end{figure}
 
 La generaci\'on de los 2N+1 puntos, se realiza a partir de la \'ultima estimaci\'on $\hat{x}_{k-1|k-1}$  de la siguiente forma
@@ -285,13 +288,13 @@ La generaci\'on de los 2N+1 puntos, se realiza a partir de la \'ultima estimaci\
 \bar{x}_{k-1| k-1}^0 = \hat{x}_{k-1|k-1}- \chi_{i-N}, \quad  \forall i \in [N+1, 2N]
 \end{gathered}
 \end{equation}
-Donde la cantidad $\chi_i$ corresponde a la i-\'esima columna de la \textit{ra\'iz cuadrada} de la matriz:
+donde la cantidad $\chi_i$ corresponde a la i-\'esima columna de la \textit{ra\'iz cuadrada} de la matriz:
 
  \begin{equation}
  (N+\lambda) P_{k-1 | k-1}
  \label{eq:eq19}
  \end{equation}
-Esta matriz (ec. \ref{eq:eq19}) puede obtenerse a partir de la descomposic\'on de Choleski. Por otro lado los puntos sigma se generan junto a dos conjuntos de pesos: $\lbrace w_x^{i} \rbrace$ y $\lbrace w_p^{i} \rbrace$. El primer conjunto se emplea en la estimaci\'on del estado y la predicci\'on de la medida, mientras que el segundo conjunto es usado para obtener las matrices de covarianza relacionadas con el m\'etodo. Estos pesos son definidos como:
+Esta matriz (Ecuaci\'on \ref{eq:eq19}) puede obtenerse a partir de la descomposic\'on de Choleski. Por otro lado los puntos sigma se generan junto a dos conjuntos de pesos: $\lbrace w_x^{i} \rbrace$ y $\lbrace w_p^{i} \rbrace$. El primer conjunto se emplea en la estimaci\'on del estado y la predicci\'on de la medida, mientras que el segundo conjunto es usado para obtener las matrices de covarianza relacionadas con el m\'etodo. Estos pesos son definidos como:
 \begin{equation}
 \label{eq:eq20}
 \begin{gathered}
@@ -301,7 +304,7 @@ w^i_x = w^i_p = \dfrac{1}{2(N+\lambda)}\\
 \sum_i^{2N} w^i_x = 1
 \end{gathered}
 \end{equation}
-De las ecuaciones \ref{eq:eq20} se desprende que los pesos $w_x^i$ son normalizados. Por otro lado, el par\'ametro $\lambda$ se puede escribir en t\'erminos de los valores de $\alpha \in \left( 0,1\right]$ y $kappa$ seg\'un la expresi\'on \ref{eq:eq21}
+De las Ecuaciones \ref{eq:eq20} se desprende que los pesos $w_x^i$ son normalizados. Por otro lado, el par\'ametro $\lambda$ se puede escribir en t\'erminos de los valores de $\alpha \in \left( 0,1\right]$ y $\kappa$ seg\'un la expresi\'on \ref{eq:eq21}
 
 \begin{equation}
 \label{eq:eq21}
@@ -311,7 +314,7 @@ De las ecuaciones \ref{eq:eq20} se desprende que los pesos $w_x^i$ son normaliza
 Los par\'ametros $\alpha$, $\beta$ y $\kappa$ deben ser ajustados acorde al problema que se est\'a estudiando.
 \bigskip
 
-Con esto, es posible escribir las ecuaciones de la fase predictiva.
+Con esto, es posible escribir las Ecuaciones de la fase predictiva.
 \begin{itemize}
 \item Estimaci\'on a priori de los estados\\
 \begin{equation}
@@ -341,7 +344,7 @@ Durante la fase de correcci\'on, nuevamente se seleccionan 2N+1 puntos represent
 \end{equation}
 La cantidad $\psi_i$ representa el i-\'esima columna de la matriz de \textit{ra\'iz cuadrada} $(N+\lambda)P_{k|k-1}$.
 
-Las ecuaciones del proceso de correcci\'on, por tanto, quedan como sigue:
+Las Ecuaciones del proceso de correcci\'on, por tanto, quedan como sigue:
 \begin{itemize}
 \item Predicci\'on de las medidas:\\
 \begin{equation}
@@ -358,7 +361,7 @@ Las ecuaciones del proceso de correcci\'on, por tanto, quedan como sigue:
 S_k = \sum_{i=0}^{2N} w_p^i (h(y_{k|k-1}^{-i}) - \hat{z}_k)(h(y_{k|k-1}^{-i})^T + R_k 
 \label{eq:eq27}
 \end{equation}
-\item La matriz de covarianza cruzada de estado a medida se describe:\\
+\item La matriz de covarianza cruzada de estado a medida se describe como:\\
 \begin{equation}
 C_k = \sum_{i=0}^{2N} w_p^i ( f(\bar{x}^i_{k-1 | k-1})- \hat{x}_{k|k-1} )( h(y_{k|k-1}^{-i}) - \hat{z}_k )^T
 \label{eq:eq28}
@@ -382,11 +385,11 @@ P_{k|k} = P_{k|k-1} - K_kS_kK_k^T
 Los pesos $w_x^i$ y $w_p^i$ son los mismos calculados en la expresi\'on \ref{eq:eq20}, de la fase de predicci\'on.
 \end{enumerate}
 
-\section{Laboratorio nacional de computaci\'on de alto desempe\~no (NLHPC)}
+\section{Laboratorio Nacional de Computaci\'on de Alto Desempe\~no (NLHPC)}
 El National Laboratory for High Performance Computing (NLHPC) es un proyecto asociativo, financiado por el PIA de CONICYT el cual dispone de un potente sistema computacional el cual est\'a disponible a la comunidad cient\'ifica y acad\'emica nacional (instituciones de investigaci\'on, industria y universidades), estimulando su uso en el desarrollo de \'areas de investigaci\'on que requieran de herramientas computacionales robustas que deban ser usadas de manera intensiva. 
 \bigskip
 
-Para la realizaci\'on de esta tesis se har\'a uso de uno de los nodos del cl\'uster de Leftraru, el supercomputador del NLHPC disponible para la comunidad investigadora, llegado el 2014 a las instalaciones del Centro de Modelamiento Matem\'atico (CMM) de la Universidad de Chile.  
+Para la realizaci\'on de esta tesis se har\'a uso de uno de los nodos del cl\'uster de Leftraru, el supercomputador del NLHPC disponible para la comunidad investigadora desde el 2014 en las instalaciones del Centro de Modelamiento Matem\'atico (CMM) de la Universidad de Chile.  
 
 \begin{itemize}
 \item 132 nodos de c\'omputo HP (128 nodos HP SL230 y 4 nodos HP SL250), cada uno con dos procesadores de 10 cores Intel Xeon Ivy Bridge E5-2660 V2.
@@ -396,3 +399,6 @@ Para la realizaci\'on de esta tesis se har\'a uso de uno de los nodos del cl\'us
 \item 12 co-procesadores Intel Xeon Phi5110p de 2 TFlops
 \item Capacidad de c\'omputo de 70 TFlops 
 \end{itemize} 
+
+Para la ejecuci\'on de las pruebas se emplear\'an cuatro cores, 2400 MB por cada CPU (m\'axima RAM permitida) y un \textit{job-array} de largo 93.
+
