@@ -1,22 +1,22 @@
 \chapter{Evaluaci\'on del programa original}
 \label{ch:prev_work}
 
-A continuaci\'on se exponen los resultados de diferentes pruebas realizadas sobre el programa original con la finalidad de medir su desempe\~no computacional en t\'erminos de tiempo de ejecuci\'on y uso de memoria.
+A continuaci\'on se exponen los resultados de diferentes pruebas realizadas sobre el programa original con la finalidad de medir su desempe\~no computacional en t\'erminos de tiempo de ejecuci\'on y uso de memoria, a la par de estudiar los resultados en el proceso de detecci\'on de las 93 supernovas halladas en HiTS en la campa\~na del a\~no 2015.
 \bigskip
 
-Estas pruebas se llevaron a cabo en un computador personal de 8 GB (DDR4) de RAM. La raz\'on de esta  medida (que no se hayan ejecutado en Leftraru) es que el c\'odigo original contiene demasiadas l\'ineas con el comando \texttt{glob}\footnote{\url{https://docs.python.org/3.5/library/glob.html}} de Python el cual lista reiteradamente el contenido de los directorios de los archivos lo que finalmente termina saturando el nodo destinado para el lanzamiento del programa (ya que recorre la lista de 93 supernovas de HiTS, repitiendo para cada una de ellas el mismo proceso). Por esta raz\'on, los administradores del sistema del NLHPC sugirieron modificaciones al programa original, sin embargo, en pos de continuar con el esp\'iritu de esta tesis, se opt\'o por efectuar los experimentos de manera local (usando un computador personal) evitando as\'i introducir m\'as modificaciones (se adapt\'o el programa para Python 3.6, ya que originalmente estaba para 2.7 agregando cambios menores como la forma de imprimir mensajes en consola (\texttt{print})).
+Por tanto se realizaron dos tipos de prueba: la primera, orientada a medir tiempo de ejecuci\'on y uso de memoria principal, se llev\'o a cabo en un computador personal de 8 GB (DDR4) de RAM sobre tres series de datos definidos por pares de CCD y campo en los que se sabe que hay una supernova. El segundo tipo de prueba se realiz\'o en Leftraru, pasando por algunas complicaciones relacionadas con el dise\~no del programa ya que el c\'odigo original contiene demasiadas l\'ineas con el comando \texttt{glob}\footnote{\url{https://docs.python.org/3.5/library/glob.html}} de Python el cual lista reiteradamente el contenido de los directorios del home del usuario lo que finalmente termina saturando el nodo destinado para el lanzamiento del programa si se tiene una gran cantidad de archivos. Este problema pudo resolverse eliminando documentos resultantes de pruebas pristinas. Cabe destacar que se adapt\'o el programa para Python 3.6, ya que originalmente estaba para 2.7 (ambos tipos de pruebas se realizaron para la versi\'on 3.6). %Por esta raz\'on, los administradores del sistema del NLHPC sugirieron modificaciones al programa original, sin embargo, en pos de continuar con el esp\'iritu de esta tesis, se opt\'o por efectuar los experimentos de manera local (usando un computador personal) evitando as\'i introducir m\'as modificaciones (se adapt\'o el programa para Python 3.6, ya que originalmente estaba para 2.7 agregando cambios menores como la forma de imprimir mensajes en consola (\texttt{print})).
 \bigskip
 
-La pipeline original (\texttt{candidate\_search}) est\'a estructurada, a grandes rasgos por dos bloques de \textbf{detecci\'on}: el primero est\'a destinado a buscar una supernova confirmada por HiTS (cuya coordenada es conocida) y el segundo a obtener la informaci\'on de otros posibles candidatos que se hayan encontrado anteriormente. Cabe recalcar que a este segundo proceso se ingresa s\'olo en el caso que se hayan encontrado candidatos desconocidos en primera fase.
+La pipeline original (\texttt{candidate\_search}) est\'a estructurada por un proceso que puede dividirse en dos bloques: el primero est\'a destinado a buscar una supernova confirmada por HiTS (cuya coordenada es conocida) y encontrar nuevos candidatos; mientras que el segundo bloque, con la lista de coordenadas de nuevos candidatos, est\'a destinado a obtener la informaci\'on de estos. Sin embargo, nos encontramos con un segundo problema de implementaci\'on: la existencia de c\'odigo duplicado. Ya que ambos bloques est\'an repitiendo los mismos pasos salvo el \'ultimo en el que se diferencian en el registro de los resultados: en uno se guarda la informaci\'on de la supernova conocida (s\'olo si la detecta) y en el siguiente, s\'olo si hay nuevos candidatos, guarda la informaci\'on de estos.%: En el primer bloque se guarda la informaci\'on de la supernova conocida, y en el caso del segundo (el cu\'al se ejecuta s\'olo si hay nuevos candidatos) se guarda la informaci\'on de los nuevos candidatos.   %de otros posibles candidatos que se hayan encontrado anteriormente. Cabe recalcar que a este segundo proceso se ingresa s\'olo en el caso que se hayan encontrado candidatos desconocidos en primera fase.
 \bigskip
 
-El proceso de b\'usqueda de la supernova se inicializa en una instancia de \textsc{RunData}, \textbf{listando los archivos desde disco}, para preparar las im\'agenes y el resto de archivos que ser\'an usados para el proceso iterativo que se lista a continuaci\'on: 
+El proceso de detecci\'on se inicializa en una instancia de \textsc{RunData}, \textbf{listando los archivos desde disco}(apoy\'andose de la clase \textbf{FITSHandler}), para preparar las im\'agenes y el resto de archivos que ser\'an usados para el proceso iterativo que se lista a continuaci\'on: 
 
 \begin{enumerate}
 \item \textbf{C\'alculo de flujo:} A partir de las im\'agenes cient\'ificas y de calibraci\'on se obtiene el flujo (en ADU\footnote{Analog-to-digital unit}) por pixel y es registrado en una matriz (\texttt{numpy array}) en cada iteraci\'on. 
-\item \textbf{Proceso de estimaci\'on con filtro de Kalman:} En este paso se realizan los procesos de predicci\'on y correcci\'on para obtener una nueva estimaci\'on. 
-\item \textbf{Detecci\'on de fuentes:} En este paso se estudia la idoneidad de los pixeles tanto del flujo como de las estimaciones de los mismos (obtenidos con el filtro de Kalman) y del resto de las im\'agenes al momento de verificar una serie de criterios con los cuales estos se agrupar\'ian entre vecinos para formar potenciales candidatos.  
-\item \textbf{Actualizaci\'on de candidatos:} Revisa si hay nuevos candidatos a ser considerados. Se registran en un arreglo (\texttt{numpy array}).
+\item \textbf{Proceso de estimaci\'on con filtro de Kalman:} En este paso se realizan los procesos de predicci\'on y correcci\'on para obtener una nueva estimaci\'on (se usa alguna instancia de uno de los filtros \textbf{KalmanFilter} o \textbf{MaximumCorrentropyKalmanFilter}). 
+\item \textbf{Detecci\'on de fuentes:} En este paso se estudia la idoneidad de los pixeles tanto del flujo como de las estimaciones de los mismos (obtenidos con el filtro de Kalman) y del resto de las im\'agenes al momento de verificar una serie de criterios con los cuales estos se agrupar\'ian entre vecinos para formar potenciales candidatos (este proceso se realiza en \textbf{SNDetector}).  
+\item \textbf{Actualizaci\'on de candidatos:} Revisa si hay nuevos candidatos a ser considerados. Se registran en un arreglo (\texttt{numpy array}) y guarda resultados de la supernova conocida en caso de encontrarse en un arreglo de diccionarios (variable de instancia \textit{obj} de un objeto de la clase \textbf{Observer}).
 \end{enumerate}
 
 Si en el proceso anterior se encuentra alg\'un candidato, se procede a repetir los pasos de obtenci\'on de flujos, estimaciones y filtrado de pixeles. La diferencia est\'a en que en esta ocasi\'on se van guardando los resultados en una estructura de datos de diccionario. El nuevo ciclo queda como sigue:
@@ -24,7 +24,7 @@ Si en el proceso anterior se encuentra alg\'un candidato, se procede a repetir l
 \begin{enumerate}
 
 \item \textbf{Repetici\'on de los pasos anteriores 1-3}
-\item \textbf{Guardado de resultados:} La informaci\'on de los nuevos candidatos encontrados previamente es guardado en una estructura de diccionario y registrado en disco usando el formato NPZ (formato brindado por \textsc{Numpy} para comprimir datos).
+\item \textbf{Guardado de resultados:} La informaci\'on de los nuevos candidatos encontrados previamente es guardado en la lista diccionarios \textit{obj} (variable de la clase \textbf{Observer}) y registrado en disco usando el formato NPZ (formato brindado por \textsc{Numpy} para comprimir datos).
 \end{enumerate}
 
 
@@ -44,13 +44,13 @@ Cabe destacar que durante el proceso de refactoring del programa original se enc
 
 \section{Estructura de datos}
 \label{des:struct}
-Debido a la naturaleza de la informaci\'on de entrada (im\'agenes) se debe trabajar en p\'ixeles, por lo que la estructura de datos que representen las variables de estado debe considerar la dimensi\'on de las im\'agenes (considerando que por cada p\'ixel se debe modelar las variables de estado flujo y velocidad de flujo, y covarianza asociada). Debido a esto, en el trabajo de Pablo Huentelemu \cite{huentelemu} se dise\~naron \textit{hiperrect\'angulos} para modelar las variables de estado y covarianza de todos los pixeles de una imagen. Los datasets contienen im\'agenes de dimensi\'on  $2046 \times 4096$. La figura \ref{fig:data_scheme} muestra el esquema de sistema de matrices o \textit{hiperrect\'angulos} usada para representar el estado de cada p\'ixel y su recpectiva covarianza.
+Debido a la naturaleza de la informaci\'on de entrada (im\'agenes) se debe trabajar en p\'ixeles, por lo que la estructura de datos que representen las variables de estado debe considerar la dimensi\'on de las im\'agenes (considerando que por cada p\'ixel se debe modelar las variables de estado flujo y velocidad de flujo, y covarianza asociada). Debido a esto, en el trabajo de Pablo Huentelemu \cite{huentelemu} se dise\~naron \textit{hiperrect\'angulos} para modelar las variables de estado y covarianza de todos los pixeles de una imagen. Los datasets contienen im\'agenes de dimensi\'on  $2046 \times 4096$. La figura \ref{fig:data_scheme} muestra el esquema de sistema de matrices o \textit{hiperrect\'angulos} usada para representar el estado de cada p\'ixel y su respectiva covarianza.
 \bigskip  
 
 \begin{figure}
 \centering
 \includegraphics[scale=.35]{/home/paloma/Documents/Memoria/SVG/hola.png}
-\caption{Esquema las estructuras de datos usadas para la representaci\'on de las matrices de estados y de las matrices de covarianza de la relaci\'on entre el flujo y la velocidad de flujo para cada pixel, de una imagen de ancho $w$ y altura $h$. Para los conjuntos de datos, $w=2046$ y $h=4096$.}
+\caption{Esquema de las estructuras de datos usadas para la representaci\'on de las matrices de estados y de las matrices de covarianza de la relaci\'on entre el flujo ($x$) y la velocidad de flujo ($\dot{x}$) para cada pixel, de una imagen de ancho $w$ y altura $h$. Para los conjuntos de datos, $w=2046$ y $h=4096$.}
 \label{fig:data_scheme}
 \end{figure}
 \bigskip
@@ -79,7 +79,7 @@ $\bar{t}/Obs$ & 11.00 &  0.97 & 2.24 & 0.00\\\hline
 
 \begin{table}[h!]
 \centering
-\caption{Resultados de tiempos de ejecuci\'on correspondientes a calculo de flujos, estimaci\'on de los filtros, agrupaci\'on de pixeles y filtrado de los mismos durante el peri\'odo de estudio de los nuevos candidatos encontrados en el paso anterior. Para esta prueba se utiliz\'o el filtro de Kalman B\'asico. Se observa que para las dos \'ultimas supernovas los tiempos son cero ya que no se encontraron m\'as candidatos.}
+\caption{Resultados de tiempos de ejecuci\'on correspondientes a calculo de flujos, estimaci\'on de los filtros, agrupaci\'on de pixeles y filtrado de los mismos durante el per\'iodo de estudio de los nuevos candidatos encontrados en el paso anterior. Para esta prueba se utiliz\'o el filtro de Kalman B\'asico. Se observa que para las dos \'ultimas supernovas los tiempos son cero ya que no se encontraron m\'as candidatos.}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{ID} & \textbf{C\'alc. Flujos [s]} & \textbf{Aplic. KF [s]} &  \textbf{Agrup. Pixeles [s]}  & \textbf{Guardar resultados [s]}\\ \hline \hline
@@ -166,7 +166,7 @@ SN80 & 666.85 & 0.00& 0.00\\\hline \hline
 La memoria ocupada por el programa se midi\'o en t\'erminos de MiB (Mebibyte) usando la librer\'ia \texttt{memory\_profiler}. Posteriormente las mediciones en la unidad previamente mencionada fueron pasadas a MB\footnote{$1MiB\simeq 1.049MB$ }.
 \bigskip
 
-La figura \ref{fig:mem_kbf} muestra el comportamiento del uso de memoria principal (en t\'erminos de Mebibytes) para los tres conjuntos de datos empleados, usando el filtro de Kalman B\'asico. Se distinguen un uso m\'as intensivo (m\'aximo alcanzado) durante el proceso en que se usaron los datos de la SN14, la cual no s\'olo posee una secuencia de im\'agenes mayor (de 26) sino tambi\'en corresponde a aquella en donde se encontraron posibles nuevos candidatos. En la tabla \ref{tab:mem1} se expone el m\'aximo consumo generado durante la ejecuci\'on de la pipeline empleando el filtro B\'asico.
+La figura \ref{fig:mem_kbf} muestra el comportamiento del uso de memoria principal (en t\'erminos de Mebibytes) para los tres conjuntos de datos empleados, usando el filtro de Kalman B\'asico. Se distingue un uso m\'as intensivo (m\'aximo alcanzado) durante el proceso en que se usaron los datos de la SN14, la cual no s\'olo posee una secuencia de im\'agenes mayor (de 26) sino tambi\'en corresponde a aquella en donde se encontraron posibles nuevos candidatos. En la tabla \ref{tab:mem1} se expone el m\'aximo consumo generado durante la ejecuci\'on de la pipeline empleando el filtro B\'asico.
 \bigskip
 
 \begin{figure}[h!]
@@ -174,14 +174,14 @@ La figura \ref{fig:mem_kbf} muestra el comportamiento del uso de memoria princip
 \subfloat[Memoria ocupada en SN14]{\label{fig:kbf_14}{\includegraphics[width=0.5\textwidth]{images/results/sn14_00}}}\hfill
 \subfloat[Memoria ocupada en SN18]{\label{fig:kbf_18}{\includegraphics[width=0.5\textwidth]{images/results/sn18_00}}}\vfill
 \subfloat[Memoria ocupada en SN80]{\label{fig:kbf_80}{\includegraphics[width=0.5\textwidth]{images/results/sn80_00}}}
-\caption{Comportamiento de la memoria (en mebibytes) durante la ejecuci\'on para los tres conjuntos de datos usando el filtro de Kalman B\'asico.}
+\caption{Comportamiento de la memoria (en mebibytes) durante la ejecuci\'on para los tres conjuntos de datos  de las supernovas SN14, SN18 y SN80, usando el filtro de Kalman B\'asico.}
 \label{fig:mem_kbf}
 \end{figure}
 
  
 \begin{table}[h!]
 \centering
-\caption{Memoria principal (en unidades de MB) usada durante la ejecuci\'on del programa original usando la versi\'on b\'asica del filtro de Kalman.}
+\caption{Memoria principal (en unidades de MB) usada durante la ejecuci\'on del programa original con la versi\'on b\'asica del filtro de Kalman.}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{ID} & Memoria [MB]\\\hline\hline
@@ -202,7 +202,7 @@ La figura \ref{fig:mem_mcc} muestra el consumo de memoria (en Mebibytes) para la
 \subfloat[Memoria ocupada en SN14]{\label{fig:mc_14}{\includegraphics[width=0.5\textwidth]{images/results/sn14_01}}}\hfill
 \subfloat[Memoria ocupada en SN18]{\label{fig:mc_18}{\includegraphics[width=0.5\textwidth]{images/results/sn18_01}}}\vfill
 \subfloat[Memoria ocupada en SN80]{\label{fig:mc_80}{\includegraphics[width=0.5\textwidth]{images/results/sn80_01}}}
-\caption{Comportamiento de la memoria (en mebibytes) durante la ejecuci\'on para los tres conjuntos de datos. En los tres lanzamientos se us\'o el filtro de Kalman de correntrop\'ia m\'axima.}
+\caption{Comportamiento de la memoria (en mebibytes) durante la ejecuci\'on para los tres conjuntos de datos de las supernovas SN14, SN18 y SN80. En los tres lanzamientos se us\'o el filtro de Kalman de correntrop\'ia m\'axima.}
 \label{fig:mem_mcc}
 \end{figure}
 
@@ -220,56 +220,72 @@ SN80 & 3209.67\\\hline
 \label{tab:mem2}
 \end{table}
 
-\section{Falsos negativos y verdaderos positivos}
-La Tabla \ref{tab:tpfn}, muestra el resultado de la detecci\'on de las 93 supernovas de HiTS para el conjunto de datos del a\~no 2015. Se logr\'o realizar las pruebas en Leftraru durante el mes de diciembre de 2018 liberando memoria (evitando as\'i problemas asociados al enlistado de archivos usando \texttt{glob}).
+\section{Detecci\'on}
+Se realizaron las pruebas de detecci\'on sobre los conjuntos de datos de las 93 supernovas en Leftraru durante el mes de febrero de 2019. La Tabla \ref{tab:tpfn}, muestra el n\'umero de detecciones exitosas como verdaderos positivos (TP), detecciones fallidas como falsos negativos (FN), falsos positivos (FP) y escenarios en donde la ejecuc\i'on del programa fall\'o (por no encontrar archivos necesarios). 
 \bigskip
 
 \begin{table}[h!]
 \centering
-\caption{N\'umero de falsos negativos (FN) y verdaderos positivos (TP) encontrados usando cada uno de los filtros. La tercera columna, \textbf{NaN} indica el n\'umero conjunto de datos que no se pudieron procesar por falta de alguna informaci\'on de entrada. No se observan diferencias sustanciales entre los resultados de cada filtro.}
-\begin{tabular}{|l|l|l|l|}
+\caption{N\'umero de verdaderos positivos (TP), falsos negativos (FN) y falsos positivos (FP) encontrados usando cada uno de los filtros. La cuarta columna, \textbf{NaN} indica el n\'umero conjunto de datos que no se pudieron procesar por falta de alg\'un(os) archivo(s). No se observan diferencias sustanciales entre los resultados de cada filtro.}
+\begin{tabular}{|l|l|l|l|l|}
 \hline
-\textbf{Filtro} & \textbf{TP} & \textbf{FN} & \textbf{NaN}\\ \hline
-Básico          & 33          & 57         & 3 \\ \hline
-MCC             & 33          & 57         & 3 \\ \hline
+\textbf{Filtro} & \textbf{TP} & \textbf{FN} & \textbf{FP}  & \textbf{NaN}\\ \hline
+Básico          & 35          & 55         & 53 & 3 \\ \hline
+MCC             & 35          & 55         & 52 & 3 \\ \hline
 \end{tabular}
 \label{tab:tpfn}
 \end{table}
 
-Estableciendo par\'ametros de umbral de 200.0 para flujo y de 50.0 para la velocidad de flujo (cantidades estimadas para el filtro de Kalman) se obtienen resultados id\'enticos para ambos filtros al momento de detectar supernovas conocidas por HiTS. En ambos casos se detectaron 33 de 90, ya que para tres supernovas (de las 93 y \'ultimas en la lista) no se encontraron las im\'agenes de invarianza inversa.
+Estableciendo par\'ametros de umbral de 200.0 para flujo y de 50.0 para la velocidad de flujo (umbrales para el filtro de Kalman) se obtienen resultados id\'enticos para ambos filtros en t\'erminos de cantidad de supernovas detectadas. En ambos casos se detectaron 35, sin embargo existe una leve diferencia en la cantidad de falsos positivos: el programa, usando el filtro de m\'axima correntrop\'ia encuentra un falso positivo menos que al usar el filtro b\'asico. Para ambos casos, tres secuencias de supernovas no pudieron ser procesadas (cuyos resultados fueron etiquetados como \textit{NaN}) debido a la falta de im\'agenes de invarianza inversa (esenciales para el c\'alculo de flujo).  %, ya que para tres supernovas (de las 93 y \'ultimas en la lista) no se encontraron las im\'agenes de invarianza inversa.
 \bigskip
 
-Sin embargo, cabe destacar que dentro de las 93 supernovas, existen 36 (las primeras de la lista) de las cuales se conoce que corresponden a supernovas j\'ovenes que se encuentran en pleno per\'iodo de aumento de luminosidad. De estas 36, para ambos filtros, se detectaron 22 lo que corresponder\'ia a un 61\%. El descarte de pixeles genera la disminuci\'on de puntos a considerar en la estimaci\'on de la curva lo que perjudica al filtro en la toma de decisi\'on al requerir al menos 5 a 6 puntos (mediciones) consecutivos. Por esta raz\'on se piensa que el desarrollo de un nuevo filtro de aproximaci\'on no-lineal podr\'ia mejorar este resultado.
+Cabe destacar que durante las primeras pruebas con el programa original, en su versi\'on para Python 2.7, se detectaban 33 supernovas de las 93, no obstante al actualizar el c\'odigo para una versi\'on compatible con Python 3.6, se obtiene un mejor resultado para los dos tipos de filtros, detect\'andose dos supernovas m\'as. Se piensa que esto puede deberse a la aactualizaci\'on de la librer\'ia \textsc{PyMorph} por \textsc{Mahotas}. 
+
+%Sin embargo, cabe destacar que dentro de las 93 supernovas, existen 36 (las primeras de la lista) de las cuales se conoce que corresponden a supernovas j\'ovenes que se encuentran en pleno per\'iodo de aumento de luminosidad. De estas 36, para ambos filtros, se detectaron 22 lo que corresponder\'ia a un 61\%. El descarte de pixeles genera la disminuci\'on de puntos a considerar en la estimaci\'on de la curva lo que perjudica al filtro en la toma de decisi\'on al requerir al menos 5 a 6 puntos (mediciones) consecutivos. Por esta raz\'on se piensa que el desarrollo de un nuevo filtro de aproximaci\'on no-lineal podr\'ia mejorar este resultado.
 \bigskip
 
-\subsection{\'Epocas de detecci\'on}
+\subsection{Observaciones}
+A partir de los resultados obtenidos, se procedi\'o a estudiar las curvas de luz (en t\'erminos de ADU\footnote{analog-to-digital unit} considerando escenarios en donde supernovas conocidas son detectadas por el programa (con ambos filtros) (figura \ref{fig:sns_found}) y donde no ocurre (figura \ref{fig:sns_not_found}). 
 
-Al estudiar los periodos de las detecciones de cada uno de los conjuntos de datos de las supernovas de HiTS, para ambos filtros, se obtiene que no hay diferencias en la \'epoca en que se realiza (es decir misma hora o MJD). Ver Ap\'endice, secci\'on \ref{ap:tab1}. 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{/home/paloma/Documents/Memoria/Background/light_curves/found0.png}
+\caption{Curvas de luz (en ADU vs MJD) de 16 supernovas detectadas tanto por el filtro de Kalman b\'asico como el de m\'axima correntrop\'ia.}
+\label{fig:sns_found}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{/home/paloma/Documents/Memoria/Background/light_curves/not_found0.png}
+\caption{Curvas de luz (en ADU vs MJD) de 16 supernovas no detectadas ni por el filtro de Kalman b\'asico ni por el de de m\'axima correntrop\'ia.}
+\label{fig:sns_not_found}
+\end{figure}
+
+En la figura \ref{fig:sns_found} se observa, a grandes rasgos, la presencia una etapa de crecimiento en el flujo de los objetos (supernovas), coincidiendo con el per\'iodo de alta cadencia mencionado en el cap\'itulo anterior (Cap\'itulo \ref{ch:background}, subsecci\'on \ref{ssec:data}), mientras que por el contrario en la imagen \ref{fig:sns_not_found} el comportamiento de los flujos es m\'as bien irregular y no se distinguen etapas de crecimiento constante. Hay que mencionar que el algoritmo principal, aquel cuya tarea es la de filtrar y agrupar p\'ixeles bajo criterios de descarte (implementado en \textbf{SNDetector}), emplea un sistema de \textit{alerta} interno con el cual se gatilla una detecci\'on cuando un grupo determinado de pixeles satisface una serie de requisitos en cuatro \'epocas consecutivas. Para gatillar esta alerta, uno de los requisitos que debe cumplir un grupo de p\'ixeles para considerarse candidato a supernova es el crecimiento continuo de los flujos por p\'ixel. Si ocurre un descenso entonces el grupo es inmediatamente descartado.  
+%Al estudiar los periodos de las detecciones de cada uno de los conjuntos de datos de las supernovas de HiTS, para ambos filtros, se obtiene que no hay diferencias en la \'epoca en que se realiza (es decir misma hora o MJD). Ver Ap\'endice, secci\'on \ref{ap:tab1}. 
 \bigskip
 
-Las Im\'agenes \ref{fig:orig_det_snL} y \ref{fig:orig_det_snaa} muestran dos casos del int\'ervalo de tiempo en que se realiza la detecci\'on usando las implementaciones de los filtros del programa original.
+Las Im\'agenes \ref{fig:orig_det_snL} y \ref{fig:orig_det_snaa} muestran dos casos del int\'ervalo de tiempo en que se realizan detecciones exitosas usando ambas implementaciones de los filtros del programa original (ver Ap\'endice, secci\'on \ref{ap:tab1} para conocer lista completa de fechas de detecciones).
 \bigskip
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.35]{/home/paloma/Documents/Memoria/SVG/hits_snL.png}
-\caption{Curva de luz (en ADU (\textit{analog-to-digital unit}) vs MJD) de supernova  observada durante el periodo del primer semestre del 2015 cuyo registro se realiz\'o en el CCD N27, en el campo 34. La detecci\'on realizada por los filtros b\'asico y de m\'axima correntrop\'ia se realiz\'o en el MJD 57072.214 (\'epoca u observaci\'on 7 de 18). }
+\caption{Curva de luz (en ADU vs MJD) de supernova registrada en el CCD N27, campo 34. La detecci\'on realizada por los filtros b\'asico y de m\'axima correntrop\'ia se realiz\'o en el MJD 57072.214 (\'epoca u observaci\'on 7 de 18). }
 \label{fig:orig_det_snL}
 \end{figure}
-
-La Figura \ref{fig:orig_det_snL} muestra una detecci\'on dentro de un claro regimen creciente, que puede ser observado casi al comienzo de la curva de luz (\'epoca 7 de 18). La figura \ref{fig:orig_det_snaa}, por el contrario, muestra una detecci\'on (realizada en la \'epoca 23 de 27) en un r\'egimen no muy claro y de bastante ruido.
 
 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.35]{/home/paloma/Documents/Memoria/SVG/hits_snaa.png}
-\caption{Curva de luz supernova observada durante el periodo del primer semestre del 2015 cuyo registro se realiz\'o en el CCD S5, en el campo 21. Ambos filtros detectaron la supernova en el MJD 57077.166 (\'epoca u observaci\'on 23 de 27).}
+\caption{Curva de luz supernova observada en el CCD S5, campo 21. Ambos filtros detectaron la supernova en el MJD 57077.166 (\'epoca u observaci\'on 23 de 27).}
 \label{fig:orig_det_snaa}
 \end{figure}
 \bigskip
 
-\section{Falsos positivos}
-El poder reconocer falsos positivos a trav\'es de este algoritmo se hace imposible si no se cuenta con una herramienta externa de visualizaci\'on o de machine learning (por ejemplo, usando un clasificador de conjuntos de pixeles que eval\'ue la probabilidad de que se trata efectivamente de una supernova joven). Esto se debe a que existen variados objetos como estrellas variables o \textit{artefactos} que corresponden a zonas ruidosas de la imagen  cient\'ifica (en particular, bordes) y pueden proveer valores alterados de flujo lo que en algunos casos puede conllevar a la detecci\'on de falsos positivos.
+\subsubsection{Falsos positivos}
+El poder reconocer falsos positivos a trav\'es de este algoritmo resulta complicado si no se cuenta con una herramienta externa de visualizaci\'on o de machine learning (por ejemplo, usando un clasificador de conjuntos de pixeles que eval\'ue la probabilidad de que se trata efectivamente de una supernova joven). Esto se debe a que existen variados objetos como estrellas variables o \textit{artefactos} que corresponden a zonas ruidosas de la imagen  cient\'ifica (en particular, bordes) y pueden proveer valores alterados de flujo lo que en algunos casos puede conllevar a la detecci\'on de falsos positivos.
 \bigskip
 
-Una forma de poder estudiar un falso positivo es a trav\'es de la visualizaci\'on de su espacio de fase y la obtenci\'on de su curva entr\'opica.
+Una forma de poder estudiar un falso positivo es a trav\'es de la visualizaci\'on de su espacio de fase y la obtenci\'on la entrop\'ia de la curva.
