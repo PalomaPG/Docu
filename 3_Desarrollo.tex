@@ -1,13 +1,13 @@
 \chapter{Refactoring}
 \label{ch:refactoring}
-El refactoring del c\'odigo original se realiz\'o en Python en su versi\'on 3.6.6 (versi\'on diferente a la que el programa fue implementado inicialmente: 2.7). Adem\'as se mantuvieron casi la totalidad de las librer\'ias cambiando \'unicamente Pymorph\footnote{\url{https://pythonhosted.org/pymorph/}} por Mahotas\footnote{\url{https://mahotas.readthedocs.io/en/latest/}} (ambas librer\'ias desarrolladas por el mismo autor, Luis P. Coelho\footnote{\url{https://github.com/luispedro}}), debido a que la primera dej\'o de ser mantenida desde el 2010 y contempla adaptaci\'on para Python 3.   
+El refactoring del c\'odigo original se realiz\'o en Python en su versi\'on 3.6 (versi\'on diferente a la que el programa fue implementado inicialmente: 2.7). Adem\'as se mantuvieron casi la totalidad de las librer\'ias cambiando \'unicamente Pymorph\footnote{\url{https://pythonhosted.org/pymorph/}} por Mahotas\footnote{\url{https://mahotas.readthedocs.io/en/latest/}} (ambas librer\'ias desarrolladas por el mismo autor, Luis P. Coelho\footnote{\url{https://github.com/luispedro}}), debido a que la primera dej\'o de ser mantenida desde el 2010 y contempla adaptaci\'on para Python 3.   
 
 %\section{Ejecuci\'on de la rutina}
 \section{Manejo de datos de entrada}
-Toda las im\'agenes de entrada son manipuladas y servidas por la clase \textsc{DataPicker}. Esta clase se inicializa recibiendo un path hacia un archivo de configuraci\'on (ver Ap\'endice \ref{subs:a1}) que contiene tanto las rutas a los archivos as\'i como los nombres de estos en t\'erminos de expresiones regulares, semestre a los que corresponde la secuencia de observaciones (los dos \'ultimos d\'igitos del a\~no concatenados con la letra A en caso de corresponder al primer semestre o B al segundo), el campo (representado como un n\'umero de dos d\'igitos, comenzando con cero para valores menores a 10) y el detector CCD (cadena de tres car\'acteres donde el primero de ellos describe a que grupo de detectores corresponde: N o S (ver figura \ref{fig:f4}); adem\'as de un n\'umero entero que va de 1 a 36) como strings. 
+Toda las im\'agenes de entrada son manipuladas y servidas por la clase \textsc{DataPicker}. Esta clase se inicializa recibiendo un \textit{path} hacia un archivo de configuraci\'on (ver Ap\'endice \ref{subs:a1}) que contiene tanto las rutas a los archivos as\'i como los nombres de estos en t\'erminos de expresiones regulares, semestre a los que corresponde la secuencia de observaciones (los dos \'ultimos d\'igitos del a\~no concatenados con la letra A en caso de corresponder al primer semestre o B al segundo), el campo (representado como un n\'umero de dos d\'igitos, comenzando con cero para valores menores a 10) y el detector CCD (cadena de tres car\'acteres donde el primero de ellos describe a que grupo de detectores corresponde: N o S (ver figura \ref{fig:f4}); adem\'as de un n\'umero entero que va de 1 a 36) como strings. 
 \bigskip
 
-El archivo que esta clase consume, para la configuraci\'on de las rutas, debe contener los siguientes campos (ver ejemplo \ref{subs:a1}).
+El archivo que esta clase consume, para la configuraci\'on de las rutas, debe contener los siguientes campos (ver ejemplo \ref{subs:a1}):
 \begin{itemize}
 \item \textbf{\texttt{maskDir}}: Directorio donde se almacenan las im\'agenes m\'ascara (im\'agenes que identifican p\'ixeles que no deben ser considerados).
 \item \textbf{\texttt{scienceDir}}: Directorio donde se almacenan las im\'agenes cient\'ificas (im\'agenes base ya preprocesadas).
@@ -16,7 +16,7 @@ El archivo que esta clase consume, para la configuraci\'on de las rutas, debe co
 \item \textbf{\texttt{invDir}}: Directorio que guarda las im\'agenes correspondientes a la varianza inversa (\textit{peso} de cada pixel en t\'erminos de ruido: a menor peso, mayor ruido).
 \item \textbf{\texttt{afluxDir}}: Directorio que contiene los archivos de extensi\'on \texttt{NPY} dentro de los cuales se guarda el valor de la variable \texttt{aflux}.
 \item \textbf{\texttt{maskRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes m\'ascara en disco siguiendo el path \texttt{maskDir}.
-\item \textbf{\texttt{scienceRegEx}}: Expresi\'on regular con la que es posible identificar el el nombre de las im\'agenes cient\'ificas en disco siguiendo el path \texttt{scienceDir}.
+\item \textbf{\texttt{scienceRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes cient\'ificas en disco siguiendo el path \texttt{scienceDir}.
 \item \textbf{\texttt{diffRegEx}}: Expresi\'on regular con la que se identifican el nombre de las im\'agenes de diferencia en disco siguiendo el path \texttt{diffDir}.
 \item \textbf{\texttt{invRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes de la varianza inversa siguiendo el path \texttt{invDir}.
 \item \textbf{\texttt{afluxRegEx}}: Expresi\'on regular con la que se identifica el nombre de los archivos \textit{match} que contienen el valor de \texttt{aflux}. Estos archivos est\'an ubicados en el path \texttt{afluxDir}.
@@ -44,7 +44,7 @@ M\'etodo con el cual se recorren las rutas definidas en los pasos anteriores y s
 \bigskip
 
 \item \textbf{\texttt{filter\_science\_images()}}\\
-Filtra im\'agenes cient\'ificas de acuerdo a su airmass \ref{ap:airmass}, seleccionando las fechas en que las observaciones fueron hechas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD) como variables de punto flotante.
+Filtra im\'agenes cient\'ificas de acuerdo a su airmass (Ap\'endice  \ref{ap:airmass}), seleccionando las fechas en que las observaciones fueron hechas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD) como variables de punto flotante.
 \bigskip
 
 \item \textbf{\texttt{select\_fits(dir)}}\\
@@ -71,9 +71,9 @@ Calcula el producto del flujo por su variaza. Retorna el producto y la varianza.
 Calcula el flujo y su varianza gestionando la entrada y la salida de \texttt{naylor\_photometry(invvar, diff, psf)}. Los valores NaN son transformados a valores de punto flotante de constante 0.001.
 \end{itemize} 
 
-Estos m\'etodos  son llamados desde la rutina \textsc{RoutineHandler} (ver en el cap\'itulo \ref{ch:news}).
+Estos m\'etodos  son llamados desde la rutina \textsc{RoutineHandler} (ver Cap\'itulo \ref{ch:news}).
 \section{Filtros originales}
-La refactorizaci\'on de los filtros de Kalman originales implic\'o la implementaci\'on de nuevas clases e interfaces para el desarrollo del patr\'on propuesto: Strategy. A continuaci\'on se presentan cada una de ellas:
+La refactorizaci\'on de los filtros de Kalman originales implic\'o la implementaci\'on de nuevas clases e interfaces para el desarrollo del patr\'on propuesto: Strategy (ver familia de m\'etodos resultante en la figura \ref{fig:ref1}). A continuaci\'on se presentan cada una de ellas:
 
 \begin{itemize}
 \item \textbf{IPredict:} Interface que describe el comportamiento de la funci\'on \textsc{Predict} de un filtro de Kalman. \texttt{predict} recibe como par\'ametros el paso de tiempo ($\Delta t$), la matriz de estado, la matriz de covarianza de estado, y las predicciones de las matrices de estado y covariaza determinadas en el paso anterior (con la finalidad de actualizar estas variables). Su firma queda como:
@@ -92,12 +92,12 @@ Esta funci\'on entrega finalmente las matrices de estado y covarianza de estado 
 
 \end{itemize}
 
-\subsection{Strategies de predicci\'on}
+\subsection{Predicci\'on}
 \textbf{LinearPredict:} Clase que extiende de IPredict. Implementa m\'etodo \texttt{predict} que ser\'a usado tanto por el filtro b\'asico como el de m\'axima correntrop\'ia. Su instanciaci\'on recibe como argumento \texttt{sigma\_a} (desviaci\'on est\'andar del modelo, asumiendo una distribui\'on gaussiana en la distribuci\'on de las observaciones).
 \bigskip
 
 
-\subsection{Strategies de correcci\'on}
+\subsection{Correcci\'on}
 \textbf{BasicCorrect:} Clase que extiende de ICorrect. Implementa m\'etodo \texttt{correct} que ser\'a usado para el tipo de filtro de Kalman B\'asico.
 \bigskip
 
@@ -106,7 +106,7 @@ Esta funci\'on entrega finalmente las matrices de estado y covarianza de estado 
 \begin{itemize}
 \item \texttt{epsilon}: Cantidad con la cual se contrastar\'a el error o precisi\'on que se quiera lograr con la estimaci\'on.
 \item \texttt{max\_iter}: N\'umero m\'aximo de iteraciones.
-\item \texttt{silverman}: \textit{boolean}. Determina si se usa o no la apoximaci\'on de Silverman para la desviaci\'on estandar.
+\item \texttt{silverman}: \textit{boolean}. Determina si se usa o no la apoximaci\'on de Silverman para el ancho de banda del kernel Gaussiano.
 \item \texttt{std\_factor}: Factor de desviaci\'on est\'andar usado en la aproximaci\'on de Silverman.
 \item \texttt{sigma}: Sigma usado para el kernel Mercer.
 \end{itemize}
@@ -123,12 +123,12 @@ Esta funci\'on entrega finalmente las matrices de estado y covarianza de estado 
 \begin{figure}
 \centering
 \includegraphics[scale=.5]{images/kalmanfilter_class}
-\caption{Familia de filtros de Kalman y patr\'on strategy usado en la implementaci\'on de los m\'etodos \texttt{predict} y \texttt{correct}.}
+\caption{Familia de filtros de Kalman y patr\'on \textit{strategy} usado en la implementaci\'on de los m\'etodos \texttt{predict} y \texttt{correct}.}
 \label{fig:ref1}
 \end{figure}
 
 \section{Detecci\'on de candidatos}
-La detecci\'on de candidatos en el programa original se realiza en \textsc{SNDetector} sin embargo, durante este refactoring se descompuso el proceso de reconcimiento de fuentes estelares (grupo de pixeles brillantes) del proceso de selecci\'on de candidatos, siendo este la continuaci\'on del primero. Por tanto se crearon las clases \textsc{SourceFinder} para el filtrado y agrupamiento de pixeles y \textsc{TPDetector} (transient phenomena detector) para la revisi\'on de las \textit{fuentes} encontradas en el paso anterior.
+La detecci\'on de candidatos en el programa original se realiza en \textsc{SNDetector}, sin embargo, durante este refactoring se descompuso el proceso de reconocimiento de fuentes estelares (grupo de pixeles brillantes) del proceso de selecci\'on de candidatos, siendo este \'ultimo la continuaci\'on del primero. Por tanto se crearon las clases \textsc{SourceFinder} para el filtrado y agrupamiento de pixeles y \textsc{TPDetector} (transient phenomena detector) para la revisi\'on de las \textit{fuentes} encontradas en el paso anterior.
 \subsection{SourceFinder}
 La clase \textsc{SourceFinder} posee los siguientes m\'etodos:
 \begin{itemize}
@@ -137,14 +137,14 @@ M\'etodo en el que se realiza el descarte de pixeles de forma individual, siguie
 \begin{enumerate}
 \item Si el estado (flujo) calculado para un pixel es menor que el umbral dado.
 \item Si la tasa de cambio estado (cambio o variaci\'on de flujo) es menor que el umbral de variaci\'on de flujo multiplicado por el nivel de saturaci\'on alcanzado en esta variaci\'on (se define una tasa de saturaci\'on \textit{aceptable}).
-\item Si un pixel de la imagen cient\'ifica es menor a la mediana m\'as un valor arbitrario (en este trabajo, siguiendo la l\'inea de desarrollo de P. Huentelemu, se consider\'o 5.0) es descartado.
-\item Si las varianzas de flujo son mayores a 150.0 (valor arbitrario).
+\item Si un pixel de la imagen cient\'ifica es menor a la mediana m\'as cierto delta (en este trabajo, siguiendo la l\'inea de desarrollo de P. Huentelemu, se consider\'o 5.0) es descartado.
+\item Si las varianzas de flujo son mayores a 150.0 (valor estimado por el autor del software original \cite{huentelemu}).
 \item Si las varianzas de la tasa de cambio de flujo (o velocidad de flujo) es mayor o igual a 150.0.
 \item Si los pixeles no caen en etiquetas de invalidaci\'on dentro de la m\'ascara que ha sido procesada para marcar tambi\'en los pixeles vecinos a los realmente defectuosos.
-\item Si los pixeles no han ca\'ido dentro del descarte por superar la mediana estiamda a partir de cuatro \'epocas. 
+\item Si los pixeles no han ca\'ido dentro del descarte por superar la mediana estimada a partir de cuatro \'epocas. 
 \end{enumerate}
 \item \texttt{grouping\_pixels(pixel\_flags, mjd\_index)}:\\
-Este m\'etodo recibe como entradas las etiquetas determinadas en el paso anterior en un arreglo de matrices (\texttt{numpy array}) denominado \texttt{pixel\_flags}. Adem\'as recibe el \'indice de MJD (o fecha en d\'ia juliano modificado) correspondiente a la observaci\'on de tal fecha.
+Este m\'etodo recibe como entradas las etiquetas determinadas en el paso anterior en un arreglo de matrices (\texttt{numpy array}) denominado \texttt{pixel\_flags}. Adem\'as recibe el \'indice de MJD (o fecha en d\'ia Juliano modificado) correspondiente a la observaci\'on de tal fecha.
 La agrupaci\'on de pixeles se realiza gracias a funciones brindadas por la librer\'ia \textsf{Mahotas}, usando el m\'etodo \texttt{label} para encontrar dominios cerrados en el mapa de pixeles validados.
 \bigskip
 
@@ -171,30 +171,32 @@ Este m\'etodo es el que llama a \texttt{pixel\_discard} para etiquetar pixeles p
 La visualizaci\'on de los resultados se realiza a trav\'es de la clase \textbf{Visualizer} con el cual se generan dos diferentes gr\'aficas usando la librer\'ia \textsc{MatplotLib}. 
 \begin{itemize}
 \item \textbf{Curvas de flujo observado, estimado y predicho, con sus respectivas varianzas}. Otorga informaci\'on del comportamiento de los flujos de inter\'es durante las diferentes \'epocas (medidas en MJD). 
-\item \textbf{Estampillas}. Se muestra el comportamiento del flujo a trav\'es de los pixeles de diferentes matrices: imagen cient\'ifica, PSF, flujos observado y su varianza, estados de flujo y su velocidad estimados, etiquetas de pixeles y de grupos de pixeles.
+\item \textbf{Estampillas}. Se muestra el comportamiento del flujo a trav\'es de los pixeles de diferentes matrices de tama\~no $21 \times 21$: imagen cient\'ifica, PSF, flujos observado y su varianza, estados de flujo y su velocidad estimados, etiquetas de pixeles y de grupos de pixeles.
 \end{itemize}
 
 Estas gr\'aficas son generadas gracias a los siguientes m\'etodos:
 
 \begin{itemize}
 \item \texttt{plot\_lightcurve(coords, position, filename):}\\
-M\'etodo destinado a crear la serie de curvas de flujo observado, estimado y predicho junto con sus respectivas velocidades de flujo (estimado, predicho) y varianzas. La variable \texttt{coords} corresponde a la coordenada del objeto estudiado en la primera imagen cient\'ifica. La variable \texttt{position} guarda la posici\'on del mismo objeto en las estampillas (se asume la misma posici\'on ya que est\'an alineadas). Por \'ultimo, \texttt{filename} corresponde al nombre del archivo con el que se va a guardar la imagen resultante (de extensi\'on PNG, por convenci\'on).  
+M\'etodo destinado a crear la serie de curvas de flujo observado, estimado y predicho junto con sus respectivas velocidades de flujo (estimado, predicho) y varianzas. La variable \texttt{coords} corresponde a la coordenada del objeto estudiado en la primera imagen cient\'ifica. La variable \texttt{position} guarda la posici\'on del mismo objeto en las estampillas (se asume la misma posici\'on ya que est\'an alineadas). Por \'ultimo, \texttt{filename} corresponde al nombre del archivo con el que se va a guardar la imagen resultante (de extensi\'on PNG, por convenci\'on). Ejemplo de imagen resultante en figura \ref{fig:lc_result}.
+\bigskip
+ 
 \item \texttt{print\_stamps(coords, filename):}
-Recibe el nombre del archivo con el cual se guardar\'a la imagen. Es la funci\'on encargada de construir la imagen donde se muestra la evoluci\'on de los flujos y las etiquetas de los pixeles en diferentes etapas en las estampillas obtenidas previamente.
+Recibe el nombre del archivo con el cual se guardar\'a la imagen. Es la funci\'on encargada de construir la imagen donde se muestra la evoluci\'on de los flujos y las etiquetas de los pixeles en diferentes etapas en las estampillas obtenidas previamente (ver ejemplo de imagen en figura \ref{fig:stamps_result}).
 \end{itemize}
 
 \begin{figure}
 \centering
-\includegraphics[scale=.3]{/home/paloma/Documents/Memoria/Code/sif2/sif/resultsplots/FN/par-00_HiTS14_SN-nay_3278-1883_lightcurves.png}
+\includegraphics[scale=.45]{/home/paloma/Documents/Memoria/Code/sif2/sif/resultsplots/FN/par-00_HiTS14_SN-nay_3278-1883_lightcurves.png}
 \caption{Ejemplo de curva de flujo y velocidad de flujo observados, estimados y predichos, de una supernova encontrada por HiTS. }
 \label{fig:lc_result}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[scale=.3]{/home/paloma/Documents/Memoria/Code/sif2/sif/resultsplots/FN/par-00_HiTS14_SN-nay_3278-1883_stamps.png}
-\caption{Estampillas de matrices de pixeles y etiquetas que muestran el comportamiento del flujo a trav\'es del tiempo: la primera fila de im\'agenes corresponde a estampillas obtenidas desde las im\'agenes cient\'ificas en donde debiese habitar la supernova observada durante todo el periodo de observaci\'on (definido por las \'epocas). La siguiente fila inferior muestra los diferentes modelos de PSF obtenidos para diferentes \'epocas. La tercera fila muestra el flujo observado en la misma posici\'on. Le sigue la varianza de este flujo. Posteriormente viene el flujo estimado por el filtro de Kalman siguiendo la velocidad de flujo estimado. Finalmente vienen las etiquetas de los pixeles reconocidos por el programa como pertenecientes a un objeto transiente (etiquetado por pixel y pot grupo de pixeles). La \'ultima fila corresponde a la m\'ascara base usada en todo el an\'alisis.}
-\label{fig:lc_result}
+\includegraphics[scale=.45]{/home/paloma/Documents/Memoria/Code/sif2/sif/resultsplots/FN/par-00_HiTS14_SN-nay_3278-1883_stamps.png}
+\caption{Estampillas de matrices de $21 \times 21$ pixeles y etiquetas que muestran el comportamiento del flujo a trav\'es del tiempo: la primera fila de im\'agenes corresponde a estampillas obtenidas desde las im\'agenes cient\'ificas en donde debiese habitar la supernova observada durante todo el periodo de observaci\'on (definido por las \'epocas). La siguiente fila inferior muestra los diferentes modelos de PSF obtenidos para diferentes \'epocas. La tercera fila muestra el flujo observado en la misma posici\'on. Le sigue la varianza de este flujo. Posteriormente viene el flujo estimado por el filtro de Kalman siguiendo la velocidad de flujo estimado. Finalmente vienen las etiquetas de los pixeles reconocidos por el programa como pertenecientes a un objeto transiente (etiquetado por pixel y por grupo de pixeles). La \'ultima fila corresponde a la m\'ascara base usada en todo el an\'alisis.}
+\label{fig:stamps_result}
 \end{figure}
 \bigskip
 

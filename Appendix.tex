@@ -1,7 +1,7 @@
 % Adicionales
-\begin{additional} 
-\section{Capítulo Adicional que no es apéndice}
-\end{additional}
+%\begin{additional} 
+%\section{Capítulo Adicional que no es apéndice}
+%\end{additional}
 
 % Apéndices
 \begin{appendix} 
@@ -36,7 +36,7 @@ Versi\'on de Python: 3.5
 \end{itemize}
 \subsection{Archivo de entrada: configuraci\'on de paths}
 \label{subs:a1}
-\VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/input_example.txt}
+\VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/dirset_leftraru.txt}
 \section{Nueva funcionalidad}
 \subsection{Modelo de archivo de almacenamiento de resultados}
 
@@ -52,5 +52,249 @@ Comprueba que las salidas de la versi\'on b\a'sica del filtro de Kalman del prog
 \item \texttt{test\_MCKF}\\
 Comprueba que las salidas de la versi\'on de m\'axima correntro\'ia  del filtro de Kalman del programa refactorizado sea id\'entico al de la versi\'on original, usando secuencia de im\'agenes conocida.
 \end{itemize}
+\pagebreak
+
+\section{Detecci\'on usando pipeline original}
+\begin{table}[h!]
+\small
+\centering
+\caption{Resultados de \'epocas de detecci\'on en t\'erminos de MJD de las 93 supernovas del conjunto de 2015 de HiTS, usando los filtros implementados originalmente (b\'asico y de correntrop\'ia m\'axima).}
+\begin{tabular}{|l|r|r|}
+\hline
+\textbf{\'Ind.} & \textbf{B\'asico} & \textbf{MCC}   \\
+\hline
+1&57072.1869637 & 57072.1869637 \\
+2&-             & -             \\
+3&57075.1450198 & 57075.1450198 \\
+4&57075.2134724 & 57075.2134724 \\
+5&57072.2392548 & 57072.2392548 \\
+6&-             & -             \\
+7&-             & -             \\
+8&57075.1009618 & 57075.1009618 \\
+9&57075.2202993 & 57075.2202993 \\
+10&57077.1097248 & 57077.1097248 \\
+11&57075.2038295 & 57075.2038295 \\
+12&57072.2143034 & 57072.2143034 \\
+13&57077.1546506 & 57077.1546506 \\
+14&-             & -             \\
+15&57077.1110959 & 57077.1110959 \\
+16&57077.0857227 & 57077.0857227 \\
+17&57077.1110959 & 57077.1110959 \\
+18&57090.2264287 & 57090.2264287 \\
+19&-             & -             \\
+20&57077.1178    & 57077.1178    \\
+21&-             & -             \\
+22&57077.1230908 & 57077.1230908 \\
+23&-             & -             \\
+24&57077.08304   & 57077.08304   \\
+25&57075.2452892 & 57075.2452892 \\
+26&-             & -             \\
+27&57077.1656386 & 57077.1656386 \\
+28&-             & -             \\
+29&-             & -             \\
+30&57072.3480749 & 57072.3480749 \\
+31&-             & -             \\
+32&57075.2106837 & 57075.2106837 \\
+33&-             & -             \\
+34&-             & -             \\
+35&-             & -             \\
+36&57080.1051523 & 57080.1051523 \\
+37&57075.2134724 & 57075.2134724 \\
+38&-             & -             \\
+39&-             & -             \\
+40&-             & -             \\
+41&-             & -             \\
+42&-             & -             \\
+43&57090.2200634 & 57090.2200634 \\
+44&-             & -             \\
+45&-             & -             \\
+46&-             & -             \\
+47&57075.1957933 & 57075.1957933 \\\hline
+\end{tabular}
+\quad
+\begin{tabular}{|l|r|r|}
+\hline
+\textbf{\'Ind.} & \textbf{B\'asico} & \textbf{MCC} \\
+\hline
+48&57080.1745874 & 57080.1745874 \\
+49&57090.2390433 & 57090.2390433 \\
+50&57075.2051724 & 57075.2051724 \\
+51&-             & -             \\
+52&-             & -             \\
+53&-             & -             \\
+54&-             & -             \\
+55&-             & -             \\
+56&57075.107637  & 57075.107637  \\
+57&57095.1962245 & 57095.1962245 \\
+58&-             & -             \\
+59&57095.2015731 & 57095.2015731 \\
+60&-             & -             \\
+61&-             & -             \\
+62&57095.1619457 & 57095.1619457 \\
+63&-             & -             \\
+64&-             & -             \\
+65&-             & -             \\
+66&-             & -             \\
+67&-             & -             \\
+68&-             & -             \\
+69&-             & -             \\
+70&-             & -             \\
+71&-             & -             \\
+72&-             & -             \\
+73&-             & -             \\
+74&-             & -             \\
+75&-             & -             \\
+76&-             & -             \\
+77&-             & -             \\
+78&-             & -             \\
+79&-             & -             \\
+80&-             & -             \\
+81&-             & -             \\
+82&-             & -             \\
+83&-             & -             \\
+84&-             & -             \\
+85&-             & -             \\
+86&57080.2017908 & 57080.2017908 \\
+87&-             & -             \\
+88&-             & -             \\
+89&-             & -             \\
+90&-             & -             \\
+91&NaN           & NaN           \\
+92&NaN           & NaN           \\
+93&NaN           & NaN          \\\hline
+\end{tabular}
+\label{ap:tab1}
+\end{table}
+\pagebreak
+
+
+\section{Detecci\'on usando pipeline refactorizada}
+\label{ap:pip_ref}
+\begin{table}[h!]
+\small
+\centering
+\caption{Resultados de \'epocas de detecci\'on en t\'erminos de MJD de las 93 supernovas del conjunto de 2015 de HiTS, usando los filtros refactorizados (b\'asico y de correntrop\'ia m\'axima).}
+\begin{tabular}{|l|r|r|}
+\hline
+\textbf{\'Ind.} & \textbf{B\'asico} & \textbf{MCC} \\\hline
+1& 57072.186964   & 57072.186964   \\
+2& -              & -              \\
+3& 57075.14502    & 57075.14502    \\
+4& 57072.152555   & 57072.152555   \\
+5& 57072.239255   & 57072.239255   \\
+6& 57077.085723   & 57077.085723   \\
+7& -              & -              \\
+8& 57075.033352   & 57075.033352   \\
+9& 57075.220299   & 57075.220299   \\
+10& 57077.109725   & 57077.109725   \\
+11& 57075.20383    & 57075.20383    \\
+12& 57072.144542   & 57072.144542   \\
+13& 57077.154651   & 57077.154651   \\
+14& 57077.19278    & 57077.19278    \\
+15& 57077.111096   & 57077.111096   \\
+16& 57075.168335   & 57075.168335   \\
+17& 57077.111096   & 57077.111096   \\
+18& 57080.097143   & 57080.097143   \\
+19& -              & -              \\
+20& 57077.179284   & 57077.179284   \\
+21& 57077.123091   & 57077.123091   \\
+22& 57077.123091   & 57077.123091   \\
+23& -              & -              \\
+24& -              & -              \\
+25& 57075.245289   & 57075.245289   \\
+26& 57077.087046   & 57077.087046   \\
+27& 57075.119637   & 57075.119637   \\
+28& -              & -              \\
+29& -              & -              \\
+30& 57072.279068   & 57072.279068   \\
+31& -              & -              \\
+32& 57075.210684   & 57075.210684   \\
+33& -              & -              \\
+34& -              & -              \\
+35& 57077.194101   & 57077.194101   \\
+36& 57080.105152   & 57080.105152   \\
+37& -              & -              \\
+38& (57077.200762) & (57077.200762) \\
+39& -              & -              \\
+40& -              & -              \\
+41& -              & -              \\
+42& -              & -              \\
+43& 57090.220063   & 57090.220063   \\
+44& -              & -              \\
+45& -              & -              \\
+46& -              & -              \\
+47& 57072.204787   & 57072.204787   \\\hline
+\end{tabular}
+\quad
+\begin{tabular}{|l|r|r|}
+\hline
+\textbf{\'Ind.} & \textbf{B\'asico} & \textbf{MCC}\\\hline
+48& 57080.106472   & 57080.106472   \\
+49& 57090.239043   & 57090.239043   \\
+50& 57077.121768   & 57077.121768   \\
+51& 57077.132439   & 57077.132439   \\
+52& -              & -              \\
+53& -              & -              \\
+54& -              & -              \\
+55& -              & -              \\
+56& 57075.107637   & 57075.107637   \\
+57& 57090.252927   & 57090.252927   \\
+58& -              & -              \\
+59& -              & -              \\
+60& -              & -              \\
+61& -              & -              \\
+62& 57095.161946   & 57095.161946   \\
+63& -              & -              \\
+64& -              & -              \\
+65& -              & -              \\
+66& 57095.146651   & 57095.146651   \\
+67& -              & -              \\
+68& -              & -              \\
+69& -              & -              \\
+70& -              & -              \\
+71& -              & -              \\
+72& -              & -              \\
+73& -              & -              \\
+74& -              & -              \\
+75& -              & -              \\
+76& -              & -              \\
+77& -              & -              \\
+78& -              & -              \\
+79& -              & -              \\
+80& -              & -              \\
+81& -              & -              \\
+82& -              & -              \\
+83& -              & -              \\
+84& -              & -              \\
+85& -              & -              \\
+86& 57080.201791   & 57080.201791   \\
+87& -              & -              \\
+88& -              & -              \\
+89& -              & -              \\
+90& -              & -              \\
+91& NaN            & NaN            \\
+92& NaN            & NaN            \\
+93& NaN            & NaN           \\\hline
+\end{tabular}
+\label{ap:tab2}
+\end{table}
+\pagebreak
+\begin{comment}
+\section{Fotometr\'ia y curvas de luz}
+Las im\'agenes que se muestran en esta secci\'on corresponden a curvas de luz obtenidas desde la fotometr\'ia llevada a cabo por el experto (en este caso el astr\'onomo Francisco F\"orster).
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Background/light_curves/SNHiTS15N.png}
+\caption{ Supernova correspondiente a una de las reconocidas por la nueva versi\'on del programa, pero no por su versi\'on original.}
+\label{fig:ap_lc1}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Background/light_curves/SNHiTS15bg.png}
+\caption{Supernova detectada por el programa original, pero no por la nueva versi\'on.}
+\label{fig:ap_lc2}
+\end{figure}
+\end{comment}
 \end{appendix}
 

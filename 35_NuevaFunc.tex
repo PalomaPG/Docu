@@ -1,6 +1,6 @@
 \chapter{Nueva funcionalidad}
 \label{ch:news}
-Se detallan en las siguientes secciones la nueva funcionalidad agregada (no incluye el manejo de los datos en \textsc{DataPicker} ya que se describe como parte del refactoring), con la que se pretende implementar la funcionalidad en l\'inea de  este programa. 
+Se detalla en las siguientes secciones la nueva funcionalidad agregada (no incluye el manejo de los datos en \textsc{DataPicker} ya que se describe como parte del refactoring), con la que se pretende implementar la funcionalidad en l\'inea de  este programa. 
 
 \section{Manejo de la rutina: \textsc{RoutineHandler}}
 
@@ -27,7 +27,7 @@ El diccionario de umbrales y valores de configuraci\'on contiene la siguiente li
 \item \texttt{sigma\_a}: Varianza para Kalman B\a'sico.
 \item \texttt{epsilon}: Radio de error con que la estimaci\'on por filtro de Kalman de m\'axima correntrop\'ia disminuye la ganancia de Kalman. Corresponde a un criterio de detenci\'on.
 \item \texttt{max\_iter}: N\'umero de iteraciones m\'aximo para el proceso de correcci\'on al usar Kalman de m\'axima correntrop\'ia. 
-\item \texttt{silverman}: \textit{booleano}. Se establece si se usa o no la aproximaci\'on de Silverman para determinar el kernel al emplear el filtro de m\'axima correntrop\'ia.
+\item \texttt{silverman}: \textit{Entero} toma valor 1 en caso de considerarse, y 0 si no. Se establece si se usa o no la aproximaci\'on de Silverman para determinar ancho de banda del kernel al emplear el filtro de m\'axima correntrop\'ia.
 \item \texttt{std\_factor}: Factor de incremento de sigma al usar el m\'etodo de Silverman.
 \item \texttt{sigma}: Sigma usado por defecto, sin Silverman, en la determinaci\'on del kernel durante el proceso de correcci\'on con el Filtro de Kalman de m\'axima correntrop\'ia.
 \end{itemize}
@@ -52,8 +52,8 @@ Corresponde a la rutina que comprende el an\'alisis de las observaciones de un s
 \end{itemize}  
 \bigskip
 
-\section{Detecci\'on de fen\'omenos trasientes: \textbf{TPDetector}}
-Es una peque\~na clase con la que se apoya el proceso de reconocimiento o detecci\'on de alg\'un fen\'omeno trasiente en el comportamiento de la intensidad de los pixeles calculados despu\'es la ejecuci\'on de \texttt{routine} (es decir, una vez que se han obtenido los resultados con \texttt{routine} de \textsc{RoutineHandler}).
+\section{Detecci\'on de fen\'omenos transitorios: \textbf{TPDetector}}
+Es una peque\~na clase con la que se apoya el proceso de reconocimiento o detecci\'on de alg\'un fen\'omeno transitorio en el comportamiento de la intensidad de los pixeles calculados despu\'es la ejecuci\'on de \texttt{routine} (es decir, una vez que se han obtenido los resultados con \texttt{routine} de \textsc{RoutineHandler}).
 \bigskip
 
 Esta clase posee los siguientes m\'etodos:
@@ -73,6 +73,9 @@ Con finalidades exploratorias, este m\'etodo registra los candidatos (por pares 
 \bigskip
 
 Para el guardado de los datos se implement\'o la funci\'on \texttt{save\_results} que recibe como par\'ametros la ruta donde se quiere almacenar los resultados, el campo de observaci\'on, el CCD, el MJD y la matriz de estados junto con la covarianza de estados. El resto de los arreglos son definidos en las funciones \texttt{set\_mid\_coords} y \texttt{group\_info}.
+\bigskip
+
+La figura \ref{fig:new_routine} muestra diagrama de flujo del programa refactorizado. Desde el script \texttt{exec} se declara una instancia de \textsc{RoutineHandler}, desde la cual se calculan los flujos y se crea una instancia de un filtro de Kalman (alg\'un objeto de la familia \textsc{KalmanFilter}). Posteriormente, el m\'etodo \texttt{draw\_complaying\_pixel\_groups} de un objeto de la clase \textsc{SourceFinder} agrupa y filtra los pixeles y grupos de pixeles que pudiesen ser parte de alg\'un candidato. Finalmente los datos de estos candidatos son guardados con el m\'etodo \texttt{save\_results}. Estos pasos se repiten a medida que hayan \'epocas (observaciones) de que no se hayan procesado.    
 
 \begin{figure}
 \centering
@@ -88,12 +91,14 @@ Se implement\'o una nueva funci\'on con la que visualizar el espacio de fase del
 
 \texttt{print\_space\_states(coords, position, save\_filename)}\\
 
-Esta funci\'on recibe como entradas la coordenada del objeto, la posici\'on en estampillas determinadas anteriormente (para no cargar todas las matrices de estado y covarianza en memoria) y un nombre de archivo en \texttt{file\_name}.
+Esta funci\'on recibe como entradas la coordenada del objeto, la posici\'on en estampillas determinadas anteriormente (para no cargar todas las matrices de estado y covarianza en memoria) y un nombre de archivo en \texttt{file\_name}. La Figura \ref{fig:sp_st} muestra un ejemplo de gr\'afica generada del espacio de estado.  
 
 \begin{figure}
 \includegraphics[scale=.5]{images/space_curve.png}
-\caption{Espacio de fase de flujo y velocidad de flujo. En azul se destaca la estimaci\'on lograda por filtro de Kalman. En rojo, corresponde al comportamiento del flujo observado y su varianza. Se destaca la curva final de los estados estimados ya que esta da cuenta el alcance m\'aximo en la curva de la supernova y su pr\'oximo decaimiento.}
+\caption{Espacio de fase de flujo y velocidad de flujo. En azul se destaca la estimaci\'on lograda por filtro de Kalman. En rojo, corresponde al comportamiento del flujo observado y su varianza. Se destaca la vuelta que da la curva azul antes de los 1750 ADU estimados ya que esta da cuenta el alcance m\'aximo en la curva de la supernova y su pr\'oximo decaimiento.}
+\label{fig:sp_st}
 \end{figure}
+
 \section{\textsc{Filtro de Kalman Unscented}}
 El dise\~no de la nueva clase de filtro se realiz\'o continuando con la arquitectura del patr\'on Strategy, definiendo los m\'etodos de predicc\'on y correcci\'on en instancias de clases que implementen las interfaces \textsc{IPredict} e \textsc{ICorrect} respectivamente: \textsc{UnscentPredict} y \textsc{UnscentCorrect}.
 

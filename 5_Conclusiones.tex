@@ -1,11 +1,28 @@
 \chapter{Conclusiones}
 \label{ch:conclusion}
 
-
-
-\section{Trabajo futuro}
-El trabajo propuesto en esta tesis describe tres diferentes versiones de un nuevo m\'etodo de detecci\'on de fen\'omenos trasientes en r\'egimen creciente, basados tres variantes del filtro de Kalman, destinado a la detecci\'on de supernovas en etapa temprana. Sin embargo este mismo m\'etodo puede ser aplicado en la detecci\'on de estrellas variables usado un filtro que distinga tendencias decrecientes en la luminosidad de estos objetos; por lo que una extensi\'on prometedora de este sistema podr\'ia dise\~narse  para reconocer alternancia en los reg\'imenes creciente y decreciente, haciendo uso de la estructura de clases dada por el patr\'on Strategy en el modelo del filtro.
+Se propone una nueva versi\'on optimizada del software implementado originalmente por Pablo Huentelemu, obteni\'endose una familia de filtros de Kalman que puede ser f\'acilmente extendida con la finalidad de agregar nuevos m\'etodos de estimaci\'on de estado. Esta extensi\'on es facilitada gracias al patr\'on de dise\~no Strategy.
 \bigskip
 
-Por otro lado queda tambi\'en pendiente, el estudiar el comportamiento de los resultados al variar los umbrales relacionados con la estimaci\'on realizada por el filtro de Kalman y que son usados en la fase de reconocimiento de candidatos (en la clase \textsc{SourceFinder}). [M\'etodo basado en machine learning para estudiar falsos positivos??] 
+Por otro lado, otro de los beneficios adquiridos en esta versi\'on actual de programa es el control sobre los argumentos de entrada al programa. Anteriormente, los nombres de los archivos ten\'ian que ser escritos expl\'icitamente en el c\'odigo del programa. Sin embargo el c\'odigo redise\~nado en este trabajo es independiente de los nombres de los archivos que recibe como entrada por lo que el usuario s\'olo debe velar en entregar las rutas y las expresiones regulares de las im\'agenes correctas en los archivos de entrada de esta nueva versi\'on del programa. Adem\'as, cabe destacar que igualmente se tiene se independiz\'o del c\'odigo los valores de entrada de umbrales y de configuraci\'on requeridos en diferentes rutinas entreg\'andose estos en un archivo de texto plano (en donde se incluye el campo y su valor). Es decir se logr\'o evitar el \textit{harcoding} presente en la versi\'on anterior de la pipeline.
+\bigskip
 
+
+Respecto de las pruebas realizadas en la evaluaci\'on de las versiones original y nueva, se observa que efectivamente la nueva versi\'on de los filtros b\'asico y de m\'axima correntrop\'ia logran detectar m\'as supernovas que sus respectivas versiones originales, usando un umbral de flujo de 200 y de 50 en velocidad de flujo. Este resultado se presume que puede ser debido a la mejora en el ordenamiento de los datos de entrada ya que este ordenamiento es aplicado sobre todos los datasets de entrada y no s\'olo sobre las im\'agenes cient\'ificas como lo realiza el programa original.
+\bigskip
+
+Se desprende del an\'alsis de desempe\~no que, al menos para el par de valores de umbral de flujo y velocidad de flujo entregadas no hay diferencia entre los resultados entregados por un filtro u otro (para cada versi\'on, orginal o nueva), respecto de los filtros de Kalman b\'asico y m\'axima correntrop\'ia, empleando un modelo linear. Por lo que, al escoger un modelo linear para el estudio de candidatos en alg\'un nuevo conjunto de datos, se recomienda utilizar el filtro B\'asico debido a su bajo consumo de memoria y tiempo. Esto, ya que aparentemente no hay diferencias con el filtro de m\'axima correntrop\'ia en sus estimaciones. Sin embargo, se debe hacer notar que estos resultados tambi\'en dependen de las condiciones iniciales y par\'ametros que reciba cada filtro de acuerdo a su arquitectura. El conjunto de par\'ametros seleccionado para ambos filtros durante la generaci\'on de este trabajo permiti\'o la obtenci\'on de resultados similares.
+\bigskip
+
+
+Se debe agregar, que dentro de los cambios agregados a la nueva versi\'on de la pipeline se acort\'o tiempo del proceso ya que a priori se asume que no se conoce ninguna supernova, es decir, el programa no tiene porqu\'e saber si existe un candidato conocido, por lo que los resultados de los potenciales aspirantes a supernova son tratados ecu\'animamente, y por tanto no se discrimina en la informaci\'on obtenida en los resultados al ser guardada en disco. Por ende, el an\'alisis se realiza en una pasada (lo que le permite demorarse la mitad del tiempo original) y no en dos como se realizaba anti\"guamente.
+\bigskip
+
+%El trabajo propuesto en esta tesis describe tres diferentes versiones de un nuevo m\'etodo de detecci\'on de fen\'omenos transitorios en r\'egimen creciente, usando tres variantes del filtro de Kalman, destinado a la detecci\'on de supernovas en etapa temprana (es decir, mientras la luminosidad se encuentra en regimen creciente). 
+%\bigskip
+
+\section{Trabajo futuro}
+Los m\'etodos presentados pueden ser aplicados en la detecci\'on de estrellas variables aplicando un filtro que distinga tendencias decrecientes en la luminosidad de estos objetos; por lo que una extensi\'on prometedora de este sistema podr\'ia dise\~narse  para reconocer alternancia en los reg\'imenes creciente y decreciente, haciendo uso de la estructura de clases dada por el patr\'on Strategy en el modelo del filtro.
+\bigskip
+
+Por otra parte queda tambi\'en pendiente, el estudiar el comportamiento de los resultados al variar los umbrales relacionados con la estimaci\'on realizada por el filtro de Kalman y que son usados en la fase de reconocimiento de candidatos (en la clase \textsc{SourceFinder}).

@@ -1,6 +1,15 @@
 \begin{preface}
 % Resumen
 \section{Resumen Ejecutivo}
+En este trabajo de t\'itulo se describe un proceso de refactoring a una pipeline dedicada a la detecci\'on de fen\'omenos astron\'omicos transitorios como las supernovas que corresponden a eventos caracterizados por un incremento y un consecuente decremento de su luminosidad. Esta pipeline sobre la que se trabaj\'o usa como m\'etodo de detecci\'on una familia de filtros de estimaci\'on conocida como Filtros de Kalman, en particular sus versiones b\'asica y de correntrop\'ia m\'axima.
+\bigskip
+
+El refactoring llevado a cabo apunt\'o a optimizar el manejo de los datos de entrada (tanto par\'ametros de funcionamiento como informaci\'on a ser procesada, en este caso, im\'agenes) y a modularizar los m\'etodos de estimaci\'on de los filtros de Kalman usando el patr\'on de dise\~no \textit{Strategy} definido por sus procesos de predicci\'on y correcci\'on. Adem\'as se  implementaron nuevas formas de guardar resultados y visualizar resultados conservando aspectos de las gr\'aficas generadas por el software original. 
+\bigskip
+
+Por otro lado, se propone un nuevo miembro para la familia de filtros de Kalman con el cual es posible usar una aproximaci\'on no-lineal para la detecci\'on de fen\'omenos transitorios de regimen creciente, conocido como filtro de Kalman Unscented.
+
+
 
 % Pagina Optativa - Dedicatoria
 \dedicatoria{...}

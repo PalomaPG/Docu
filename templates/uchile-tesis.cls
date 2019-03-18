@@ -17,8 +17,8 @@
 
 % inputec, babel, blindtext ::  Español + UTF8
 \usepackage[utf8x]{inputenc}
-
-\usepackage[spanish]{babel}
+\usepackage{comment}
+\usepackage[spanish, es-tabla]{babel}
 \selectlanguage{spanish}
 
 \usepackage{titlesec, blindtext, color}
@@ -145,9 +145,11 @@ subrefformat=parens} %<-----designing subcaption
         \vskip 1.0cm%
             \MakeUppercase{Profesor guía:}\\
             \MakeUppercase{\@profguia}\\
+       \vskip 1.0cm%
+            \MakeUppercase{Profesor co-guía:}\\
+            \MakeUppercase{\@profcoguia}\\
         \vskip 0.75cm
             \MakeUppercase{Miembros de la Comisión:}\\
-            \MakeUppercase{\@profcoguia}\\
             \MakeUppercase{\@profint}\\
             \ifx \@profinta \undefined
                 \vskip 0.33cm

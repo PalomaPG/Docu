@@ -8,44 +8,49 @@ La astronomía es uno de los campos científicos que más se ha visto afectado p
 Ejemplos de proyectos que actualmente producen una gran cantidad de datos a trav\'es de telescopios en diferentes partes del mundo son: el Panoramic Survey Telescope and Rapid Response System (Pan-STARRS), el Visible and Infrarred Survey Telescope (VISTA), el VLT Survey Telescope (VST), el Dark Energy Camera Legacy Survey (DECaLS) y el Hyper Suprime-Cam Subaru Strategic Program (HSC SSP). Estos surveys est\'an caracterizados por un amplio \textit{\'etendue}  que consiste en el producto entre el \'area del espejo de un telescopio y su \'angulo s\'olido proyectado en el cielo.
 \bigskip
 
-En el futuro, telescopios como el Large Synoptic Survey Telescope (LSST)~\cite{lsst} (que entrará en funcionamiento a mediados del 2022) continuar\'an revolucionando la era del big data en astronom\'ia con etendues y c\'amaras CCD mucho m\'as grandes de lo que hasta el d\'ia de hoy se utiliza. En particular se espera que el LSST produzca un n\'umero de alertas transientes (avisos de objetos encontrados y su consecuente seguimiento) del orden del mill\'on cada noche. La capacidad de detectar nuevos objetos de inter\'es depender\'a de la calidad de los datos y de los algoritmos de tiempo real  destinados a generar las alertas mencionadas. 
+En el futuro, telescopios como el Large Synoptic Survey Telescope (LSST)~\cite{lsst} (que entrará en funcionamiento a mediados del 2022) continuar\'an revolucionando la era del big data en astronom\'ia con \'etendues y c\'amaras CCD mucho m\'as grandes de lo que se utiliza hasta el d\'ia de hoy. En particular se espera que el LSST produzca un n\'umero de alertas de fen\'omenos transitorios (avisos de objetos que cambian en el tiempo o espacio) del orden 10 millones cada noche. La capacidad de detectar nuevos objetos de inter\'es depender\'a de la calidad de los datos y de los algoritmos de tiempo real  destinados a generar las alertas mencionadas. 
 \bigskip
 
-Al d\'ia de hoy se han elaborado sondeos como el High Cadence Transient Survey (HiTS)~\cite{hits} cuya finalidad ha sido la b\'usqueda de fen\'omenos transientes r\'apidos con escalas de tiempo que van desde las horas a d\'ias, utilizando secuencias de observaciones de la c\'amara DECam del telescopio Blanco (en Cerro Tololo) para la detecci\'on y posterior reporte de objetos candidatos a supernova. En este trabajo proponen un m\'etodo de detecci\'on de potenciales candidatos a supernova a trav\'es de la discriminaci\'on de p\'ixeles que involucren un incremento trasiente de intensidad.
-\bigskip
-
-Esta discriminaci\'on comienza con la determinaci\'on del flujo a trav\'es de la intensidad de los p\'ixeles que puedan corresponder a una estrella y a la variaci\'on de cada uno de ellos usando m\'etodos iterativos de filtrado en secuencias de im\'agenes de largo arbitrario. Los filtros pensados para HiTS corresponden a miembros de una familia de filtros conocidos como \textit{filtros de Kalman}. En particular se hace uso de los filtros de Kalman b\'asico \cite{kalman} y de correntrop\'ia m\'axima \cite{chen}.
+Al d\'ia de hoy se han elaborado sondeos como el High Cadence Transient Survey (HiTS)~\cite{hits} cuya finalidad ha sido la b\'usqueda de fen\'omenos transitorios r\'apidos con escalas de tiempo que van desde las horas a d\'ias, utilizando secuencias de observaciones de la c\'amara DECam del telescopio Blanco (en Cerro Tololo) para la detecci\'on y posterior reporte de objetos candidatos a supernova. En este trabajo se propone un m\'etodo de detecci\'on de potenciales candidatos a supernova a trav\'es de la discriminaci\'on de p\'ixeles que involucren un incremento en la intensidad. Esta discriminaci\'on comienza con la determinaci\'on del flujo a trav\'es de la intensidad de los p\'ixeles que puedan corresponder a una estrella y a la variaci\'on de cada uno de ellos usando m\'etodos iterativos de filtrado en secuencias de im\'agenes de largo arbitrario. Los filtros desarrollados para HiTS corresponden a miembros de una familia de filtros conocidos como \textit{filtros de Kalman}.% En particular se hace uso de los filtros de Kalman b\'asico \cite{kalman} y de correntrop\'ia m\'axima \cite{chen}.
 \bigskip
 
 
-El reciente trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.) guiado por Pablo Est\'evez  (PhD) y Francisco Förster (PhD), propone el uso de estos filtros en el reconocimiento de supernovas j\'ovenes (o en su fase de crecimiento de luminosidad) de tipo II, por lo que se plantea la posibilidad de dise\~nar alg\'un otro criterio de filtrado y de estudiar la variaci\'on de los resultados.
+El trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.), propone el uso de los filtros cl\'asico (o b\'asico) \cite{kalman} y de m\'axima correntrop\'ia \cite{chen} en el reconocimiento de supernovas j\'ovenes (o en su fase de crecimiento de luminosidad) de tipo II, por lo que se plantea la posibilidad de dise\~nar alg\'un otro criterio de filtrado y de estudiar la variaci\'on de los resultados.
 \bigskip
 
 %En el presente trabajo se pretende desarrollar un nuevo m\'odulo de filtro de Kalman que sea robusto a sistemas no-lineales para la detecci\'on de potenciales candidatos a supernova, para posteriormente ser embebido en un programa que pueda funcionar en l\'inea generando alarmas de detecci\'on. Por otro lado se busca implementar un software que contenga los m\'etodos de filtrados originales (versiones cl\'asica y de m\'axima correntrop\'ia del filtro de Kalman) a trav\'es de un refactoring del programa  base. Paralelamente, se desea encontrar rangos apropiados para los umbrales requeridos para el filtrado.
 
 
 \section{Objetivos}
-El objetivo de esta tesis comprende la reestructuraci\'on de un programa destinado al an\'alisis fotom\'etrico de datos astron\'omicos con \'el cual se busca implementar una base de sistema de alertas que de aviso del estado temprano de una posible supernova de tipo II. Es decir, que notifique el momento en que la luminosidad de una estrella comience a crecer debido a este tipo de explosi\'on. 
+\section{Objetivo general}
+El objetivo de esta tesis comprende la reestructuraci\'on y extensi\'on de un programa existente destinado al an\'alisis fotom\'etrico de datos astron\'omicos con \'el cual se busca implementar un modelo de sistema de alertas que d\'e aviso del estado temprano de un fen\'omeno astron\'omico transitorio. 
 \bigskip
 
-El llevar a cabo este refactorizaci\'on requiere la familiarizaci\'on con una familia de m\'etodos conocido como Filtros de Kalman que hacen uso de las mediciones obtenidas sobre un sistema din\'amico empleando la incertidumbre de las observaciones y del sistema en la estimaci\'on del estado de este. Esto, con la finalidad de poder desarrollar una familia de m\'etodos en t\'erminos de programaci\'on orientada a objetos empleando el patr\'on de dise\~no Strategy.
+Paralelamente se buscar estudiar la sensibilidad del programa y en particular de los m\'etodos de filtro de Kalman en un escenario donde hay p\'erdida de informaci\'on.
+
+\section{Objetivos espec\'ificos}
+
+\begin{itemize}
+
+
+\item Mejorar proceso existente sobre la manipulaci\'on de los archivos requisito del programa original, debido a que actualmente existen problemas de \textit{hard-coding} respecto de la ubicaci\'on de \'estos, as\'i como ciertos reparos durante el proceso de selecci\'on de los mismos. Adem\'as se necesita reformular la configuraci\'on de par\'ametros funcionales de entrada (propios de la ejecuci\'on del programa, como los umbrales) para flexibilizar la entrada de estos. 
 \bigskip
 
-La refactorizaci\'on de los m\'etodos de filtrado existentes (b\'asico y de m\'axima correntrop\'ia ~\cite{huentelemu}) va acompa\~nada del desarrollo de una nueva variante que permita el uso de un modelo no lineal y control sobre \'el mismo (es decir, que el usuario pueda decidir qu\'e modelo no-lineal emplear para sus estimaciones).
+\item Generar una familia de m\'etodos en t\'erminos de programaci\'on orientada a objetos empleando el patr\'on de dise\~no \textit{Strategy} que implemente la familia de m\'etodos conocido como Filtros de Kalman.
 \bigskip
 
-Por otro lado, se requiere un breve proceso de ingenier\'ia sobre la manipulaci\'on de los archivos requisito del programa original, debido a que existen problemas de \textit{hard-coding} respecto de la ubicaci\'on de estos, as\'i como ciertos reparos durante el proceso de selecci\'on de los mismos. Adem\'as se necesita reformular la configuraci\'on de par\'ametros funcionales de entrada (propios de la ejecuci\'on del programa, como los umbrales) para flexibilizar la configuraci\'on de estos \'ultimos. 
+\item Agregar una nueva variante de filtro que permita el uso de un modelo no lineal.
 \bigskip
 
-Por otra parte, se desea implementar una nueva alternativa en la obtenci\'on de las gr\'aficas de resultados en las que sea posible observar la medici\'on y error de la entrop\'ia al obtener las curvas de estado (espacio de fase) de flujo y velocidad de flujo. 
+\item Implementar gr\'aficas de resultados en las que sea posible observar la curva generada por el flujo y la velocidad de flujo estimados por los filtros indicando la entrop\'ia aproximada del espacio de estados generado, visualizar la evoluci\'on de las mediciones y estimaciones tanto en secuencias de im\'agenes estampillas (pix\'eles) como en gr\'aficas.    
 \bigskip
 
-Finalmente se busca estudiar los resultados obtenidos con esta nueva versi\'on del programa con cada uno de sus filtros sobre un conjunto de datos brindado por HiTS (del a\~no 2015), a la par que el desempe\~no de este. Por \'ultimo se busca establecer un contraste con la versi\'on original.     
+\item Estudiar los resultados obtenidos con esta nueva versi\'on del programa con cada uno de sus filtros sobre un conjunto de datos brindado por HiTS (del a\~no 2015), a la par que el desempe\~no (medido en t\'erminos de uso de memoria principal y tiempo de ejecuci\'on) de \'este. Por \'ultimo se busca establecer un contraste con la versi\'on original.     
 
-
+\end{itemize}
 \section{Organizaci\'on de la tesis}
 
-Este documento sigue los siguientes cap\'itulos: en el Cap\'itulo \ref{ch:background} se describe en qu\'e consiste una supernova, el proyecto HiTS  as\'i como el background matem\'atico de los m\'etodos de filtrado usados en el trabajo original (filtros de Kalman b\'asico y de m\'axima correntrop\'ia) y el filtro a implementar (filtro de Kalman unscented).%la relevancia de la linealidad de un sistema (y su impacto en la estad\'istica del mismo en la aplicaci\'on de un m\'etodo de filtrado como el filtro de Kalman)%
+Este documento contiene los siguientes cap\'itulos: en el Cap\'itulo \ref{ch:background} se describe en qu\'e consiste una supernova, el proyecto HiTS  as\'i como el background matem\'atico de los m\'etodos de filtrado usados en el trabajo original (filtros de Kalman b\'asico y de m\'axima correntrop\'ia) y el filtro a implementar (filtro de Kalman unscented).%la relevancia de la linealidad de un sistema (y su impacto en la estad\'istica del mismo en la aplicaci\'on de un m\'etodo de filtrado como el filtro de Kalman)%
 \bigskip
 
 %El siguiente cap\'itulo, \ref{ch:linear} est\'a destinado para explicitar la relevancia de la linealidad de un modelo y que ocurre en casos de que este no sea, al aplicar un filtro de Kalman.
@@ -57,14 +62,13 @@ En el Cap\'itulo \ref{ch:prev_work}, se estudian tanto el desempe\~no como los r
 Posteriormente, en el Cap\'itulo \ref{ch:refactoring} se describe el refactoring del programa  del c\'odigo original: se enlistan nuevos m\'etodos para el manejo de archivos y cambios realizados en la implementaci\'on de los m\'etodos iniciales. 
 \bigskip
 
-En el Cap\'itulo \ref{ch:news} se exponen los pasos del desarrollo del nuevo filtro adem\'as de la nueva funcionalidad relacionada con la carga de resultados previamente guardados en pos de hacer este programa un proceso on-line.
+En el Cap\'itulo \ref{ch:news} se exponen los pasos del desarrollo del nuevo filtro adem\'as de la nueva funcionalidad relacionada con la carga de resultados previamente guardados.
 \bigskip
 
-Posteriormente, en el cap\'itulo \ref{ch:resultados}, se exponen los resultados obtenidos para el desempe\~no de la nueva versi\'on del programa (para los dos filtros originales) adem\'as de la cantidad de supernovas redescubiertas y el periodo en que se detectaron. El cap\'itulo concluye con el an\'alisis de los estos resultados y una comparaci\'on con aquellos obtenidos en el Cap\'itulo \ref{ch:prev_work}.
+Posteriormente, en el Cap\'itulo \ref{ch:resultados}, se exponen los resultados obtenidos para el desempe\~no de la nueva versi\'on del programa (para los dos filtros originales) adem\'as de la cantidad de supernovas redescubiertas y el per\'iodo en que se detectaron. El cap\'itulo concluye con el an\'alisis de los resultados y una comparaci\'on con aquellos obtenidos en el Cap\'itulo \ref{ch:prev_work}.
 \bigskip
 
-Finalmente las conclusiones, contenidas en el cap\'itulo \ref{ch:conclusion}, resumen el aprendizaje obtenido durante este trabajo as\'i como los resultados relevantes logrados durante las pruebas realizadas. Adem\'as se plantean nuevas l\'ineas de trabajo futuro.
-
+Finalmente en el Cap\'itulo \ref{ch:conclusion} se presentan las conclusiones desprendidas de este trabajo y se propone el trabajo a futuro que se extiende de \'el.
 
 %\fillup{1}
 
