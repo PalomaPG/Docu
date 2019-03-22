@@ -82,22 +82,8 @@ La figura \ref{fig:new_routine} muestra diagrama de flujo del programa refactori
 \includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Code/sif2/sif2_act}
 \label{fig:new_routine}
 \caption{Rutina del programa refactorizado.}
-\end{figure}
+\end{figure}  
 
-
-\section{Nuevo m\'etodo en Visualizer}
-
-Se implement\'o una nueva funci\'on con la que visualizar el espacio de fase del flujo y su velocidad estimada.
-
-\texttt{print\_space\_states(coords, position, save\_filename)}\\
-
-Esta funci\'on recibe como entradas la coordenada del objeto, la posici\'on en estampillas determinadas anteriormente (para no cargar todas las matrices de estado y covarianza en memoria) y un nombre de archivo en \texttt{file\_name}. La Figura \ref{fig:sp_st} muestra un ejemplo de gr\'afica generada del espacio de estado.  
-
-\begin{figure}
-\includegraphics[scale=.5]{images/space_curve.png}
-\caption{Espacio de fase de flujo y velocidad de flujo. En azul se destaca la estimaci\'on lograda por filtro de Kalman. En rojo, corresponde al comportamiento del flujo observado y su varianza. Se destaca la vuelta que da la curva azul antes de los 1750 ADU estimados ya que esta da cuenta el alcance m\'aximo en la curva de la supernova y su pr\'oximo decaimiento.}
-\label{fig:sp_st}
-\end{figure}
 
 \section{\textsc{Filtro de Kalman Unscented}}
 El dise\~no de la nueva clase de filtro se realiz\'o continuando con la arquitectura del patr\'on Strategy, definiendo los m\'etodos de predicc\'on y correcci\'on en instancias de clases que implementen las interfaces \textsc{IPredict} e \textsc{ICorrect} respectivamente: \textsc{UnscentPredict} y \textsc{UnscentCorrect}.
