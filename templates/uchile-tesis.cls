@@ -11,7 +11,8 @@
 
 % subfig - Used to have subfigures within figures, or subtables within table floats
 \usepackage{subfig}
-
+\usepackage{wrapfig}
+\usepackage{listings}
 % xspace - text macros
 \usepackage{xspace}
 
