@@ -1,15 +1,15 @@
 \chapter{Nueva funcionalidad}
 \label{ch:news}
-En este cap\'itulo se detallan los cambios realizados a la  manera de ejecutar la pipeline distingui\'endose de su antecesor \textsc{RunData} y la modularizaci\'on de las diferentes tareas que involucra este programa, construy\'endose as\'i una nueva clase para la administraci\'on de los procesos: \textsc{RoutineHandler}. Adem\'as se describe la estructura y aspectos esenciales del nuevo miembro de la familia de filtros de Kalman: \textsf{UnscentedKalman}
-%Se detalla en las siguientes secciones la nueva funcionalidad agregada (no incluye el manejo de los datos en \textsc{DataPicker} ya que se describe como parte del refactoring), con la que se pretende implementar la funcionalidad en l\'inea de  este programa. 
+En este cap\'itulo se detallan los cambios realizados a la  manera de ejecutar la pipeline anterior \textsc{RunData} y la modularizaci\'on de las diferentes tareas que involucra este programa, construy\'endose as\'i una nueva clase para la administraci\'on de los procesos: \textsc{RoutineHandler}. Adem\'as se describe la estructura y aspectos esenciales de un nuevo miembro de la familia de filtros de Kalman: \textsf{UnscentedKalman}
+
 
 \section{Manejo de la rutina: \textsc{RoutineHandler}}
 
-La \textbf{rutina} comprende desde el proceso de listado de archivos (que en esta nueva versi\'on se realiza con \textsc{DataPicker}), la creaci\'on de una instancia de la familia del filtro de Kalman y la secuencia iterativa de pasos de c\'alculo de flujo, obtenci\'on de estimaciones y el propio proceso de detecci\'on con \textsc{SourceFinder}. Para lograr esto, una instancia de \textsc{RoutineHandler} debe recibir tres archivos descritos a continuaci\'on:
+La \textbf{rutina} comprende el proceso de listado de archivos (que en esta nueva versi\'on se realiza con \textsc{DataPicker}), la creaci\'on de una instancia de la familia del filtro de Kalman y la secuencia iterativa de pasos de c\'alculo de flujo, obtenci\'on de estimaciones y el propio proceso de detecci\'on con \textsc{SourceFinder}. Para lograr esto, una instancia de \textsc{RoutineHandler} debe recibir tres archivos descritos a continuaci\'on:
 %La \textbf{rutina} se entiende como la ejecuci\'on completa del programa, con la cual se procesan todas las observaciones de acuerdo a una lista de semestres, campos y CCDs . Para esta finalidad se cre\'o una clase llamada \textsc{RoutineHandler} la cual maneja los archivos de entrada de:
 
 \begin{itemize}
-\item Lista de campos, CCDs, semestres y, alternativamente, las coordenadas de alg\'un objeto de inter\'es, en un archivo CSV (en este mismo orden) y con el encabezado \texttt{Field, CCD, Semester, POS\_Y, POS\_X}. En caso de no adjuntar las coordenadas en los campos de posic\'on, se puede rellenar con un gui\'on (`-'). En el constructor este archivo se recibe como \texttt{obs\_index\_path}.
+\item Lista de campos, CCDs, semestres y, alternativamente, las coordenadas de alg\'un objeto de inter\'es, en un archivo CSV (en este mismo orden) y con el encabezado \texttt{Field, CCD, Semester, POS\_Y, POS\_X}. En caso de no adjuntar las coordenadas en los campos de posici\'on, se puede rellenar con un gui\'on (`-'). En el constructor este archivo se recibe como \texttt{obs\_index\_path}.
 \item Diccionario de directorios y expresiones regulares de las ubicaciones de los archivos y sus nombres, respectivamente (archivo de formato CSV). En el constructor de la clase este archivo se denomina como \texttt{route\_templates}.
 \item Diccionario de umbrales y par\'ametros relevantes en la ejecuci\'on del programa, as\'i como el tipo de filtro a usar (archivo de formato CSV). En el constructor se denomin\'o \texttt{settings\_file}.
 \end{itemize}
@@ -20,51 +20,7 @@ Adem\'as de estos archivos se debe especificar el \'indice de la fila a procesar
 \texttt{RoutineHandler(obs\_index\_path, route\_templates, settings\_file, index)}
 \end{center}
 
-\subsection{Diccionario de umbrales y par\'ametros}
-El diccionario de umbrales y par\'ametros de configuraci\'on contiene la siguiente lista de valores:
-
-\begin{itemize}
-\item \texttt{imgHeight}: Altura de las im\'agenes cient\'ificas. Esta dimensi\'on se propaga al resto de im\'agenes y matrices.
-\item \texttt{imgWidth}: Ancho de las im\'agenes cient\'ificas. Esta dimensi\'on se propaga al resto de im\'agenes y matrices.
-\item \texttt{filter}: Tipo de filtro (\texttt{basic}, \texttt{mcc} o \texttt{ukf}).
-\item \texttt{results}: Directorio de resultados (donde guardar las coordenadas de los candidatos encontrados junto a lista de \'epocas en que fueron detectados) en formato NPZ.
-\item \texttt{init\_var}: Varianza inicial que tendran las matrices de covarianza durante el proceso de estimaci\'on con los filtros de Kalman. 
-\item \texttt{flux\_thresh}: Umbral para estado de flujo obtenido con Kalman. 
-\item \texttt{flux\_rate\_thresh}: Umbral para la velocidad de flujo obtenido con Kalman.
-\item \texttt{rate\_satu}: Tasa de saturaci\'on.
-\item \texttt{sigma\_a}: Varianza de la distribuci\'on de la componente de control ($u_k$) asumiendo normalidad. Es importante al emplear los filtros b\'asico y unscented.
-\item \texttt{epsilon}: Radio de error con que la estimaci\'on por filtro de Kalman de m\'axima correntrop\'ia disminuye la ganancia de Kalman. Corresponde a un criterio de detenci\'on.
-\item \texttt{max\_iter}: N\'umero de iteraciones m\'aximo para el proceso de correcci\'on al usar Kalman de m\'axima correntrop\'ia. 
-\item \texttt{silverman}: \textit{Entero}. Toma valor 1 en caso de considerarse, y 0 si no. Se establece si se usa o no la aproximaci\'on de Silverman para determinar ancho de banda del kernel al emplear el filtro de m\'axima correntrop\'ia.
-\item \texttt{std\_factor}: Factor de incremento de sigma al usar el m\'etodo de Silverman.
-\item \texttt{sigma}: Sigma usado por defecto sin Silverman en la determinaci\'on del kernel durante el proceso de correcci\'on con el Filtro de Kalman de correntrop\'ia m\'axima .
-\item \texttt{beta}: Par\'ametro relacionado con la distribuci\'on del estado estimado ($x_k$). Toma valor de $\beta = 2$ para distribuciones normales.
-\item \texttt{kappa}: Participa en la regulaci\'on del rango de los valores de los puntos sigma. Aporta incremento adicional (ver Ecuaci\'on \ref{eq:eq21}).
-\item \texttt{alpha}: Participa en la regulaci\'on del rango de los valores de los puntos sigma. Incrementa el rango en un factor $\alpha$ (ver Ecuaci\'on \ref{eq:eq21}).
-\item \texttt{dim}: Cantidad de componentes de estado a medir (en este programa se miden dos: flujo y su velocidad).
-\end{itemize}
-
-\subsection{M\'etodos}
-
-Esta clase contiene los siguientes m\'etodos:
-\begin{itemize}
-\item \texttt{process\_settings():}\\
-En este m\'etodo se lee el archivo de diccionario de umbrales y par\'ametros con los que se configurar\'a la toma de decisiones del programa.
-\bigskip
-
-\item \texttt{retrieve\_kalman\_filter(kalman\_string):}\\
-Corresponde a un m\'etodo auxiliar que es invocado desde \texttt{process\_settings} con el que se crea una instancia del filtro de Kalman a partir de la lectura del archivo de valores, de acuerdo al valor defindo por el usuario. Los tres strings v\'alidos para la construcci\'on de una instancia son: `basic', `mcc' y `ukf'. Si se entrega otro tipo de string, se levanta un error.
-\bigskip
-  
-\item \texttt{iterate\_over\_sequences(check\_found\_objects):}\\
-Recorre la lista de campos, CCDs y semestres entregada al programa con la consiguiente llamada a \texttt{routine}. Recibe como par\'ametro el argumento \texttt{check\_found\_objects} con el cual se indica si se quiere analizar resultados obtenidos anteriormente (candidatos encontrados), y que es entregado al m\'etodo \texttt{routine} descrito a continuaci\'on.
-\bigskip
-
-\item \texttt{routine(semester, field, ccd, results\_path, check\_found\_objects, last\_mjd):}\\
-Comprende la rutina principal del programa, es decir, el an\'alisis de las observaciones de un semestre, campo y CCD espec\'ifico. El argumento \texttt{check\_found\_objects} es un boolean e indicar\'a el modo de ejecuci\'on del m\'etodo: si es falso, s\'olo guardar\'a las coordenadas de los candidatos encontrados (si no encontr\'o nada, entonces se guarda una lista vac\'ia) adem\'as de las \'epocas en que fueron detectados. Esta informaci\'on se guarda en un arreglo de diccionarios. Si \texttt{check\_found\_objects} es verdadero, entonces cargar\'a resultados anteriores del directorio de resultados (configurado en \texttt{process\_settings}) para estudiar la presencia de los candidatos encontrados en caso de existir.
-\end{itemize}  
-\bigskip
-   
+Los m\'etodos de esta clase se encuentran en el Ap\'endice \ref{subs:a4}, y ejemplos de los archivos de entrada \texttt{obs\_index\_path}, \texttt{route\_templates} y \texttt{settings\_file} en las secciones \ref{subs:sn_list}, \ref{subs:a1} y \ref{subs:settings_file}, respectivamente.     
 
 \begin{figure}
 \centering
@@ -87,11 +43,11 @@ El constructor de esta clase requiere como argumentos de entrada los siguientes 
 \begin{itemize}
 \item \texttt{f\_func:} Funci\'on usada para obtener el primer conjunto de puntos sigma para el per\'iodo de predicci\'on. Consiste en una funci\'on vectorial que se aplica sobre cada elemento de una matriz cuya dimensi\'on es la misma que la de la matriz de estado. Corresponde a la funci\'on principal con la que se aplicar\'a el modelo no lineal en el proceso de predicc\'on.
 \item \texttt{h\_func:} Funci\'on usada para obtener el segundo conjunto de puntos sigma durante el proceso de correcci\'on. Su aplicaci\'on procede de la misma forma que la descrita para \texttt{f\_func}. Participa en el proceso de correcci\'on.
-\item \texttt{f\_args:} Corresponde a una lista de n\'umero reales de largo dos. El primer valor corresponde a la potencia o grado de la funci\'on mientras que el segundo t\'ermino corresponde a el factor que la multiplica. Estos valores est\'an asociados a la funci\'on \texttt{f}.
-\item \texttt{h\_args:} Corresponde a una lista de n\'umero reales de largo dos  dos. El primer valor corresponde a la potencia o grado de la funci\'on mientras que el segundo t\'ermino corresponde a el factor que la multiplica. Estos valores est\'an asociados a la funci\'on \texttt{h}.
+\item \texttt{f\_args:} Corresponde a una lista de n\'umeros reales de largo dos. El primer valor corresponde a la potencia o grado de la funci\'on mientras que el segundo t\'ermino corresponde al factor que la multiplica. Estos valores est\'an asociados a la funci\'on \texttt{f}.
+\item \texttt{h\_args:} Corresponde a una lista de n\'umero reales de largo dos. El primer valor corresponde a la potencia o grado de la funci\'on mientras que el segundo t\'ermino corresponde al factor que la multiplica. Estos valores est\'an asociados a la funci\'on \texttt{h}.
 \item \texttt{alpha:} T\'ermino que indica que tan separados se encuentran los puntos sigma en torno a la media (junto a \texttt{kappa}). Por lo general su valor oscila entre $10^{-4}$ y $1$. 
 \item \texttt{beta:} Describe el valor de $\beta$ el cual incorpora conocimiento \textit{a priori} sobre la distribuci\'on de las variables de estado. Para distribuciones gaussianas, tiene un valor de $\beta=2$. 
-\item \texttt{kappa:} Corresponde a un par\'ametro de escalamiento secundario en la distancia de los puntos sigma a la media. Su valor va entre $0$ y $3-N$.
+\item \texttt{kappa:} Corresponde a un par\'ametro de escalamiento secundario en la distancia de los puntos sigma a la media. Su valor va entre $0$ y $3-N$ \cite{wan}.
 \item \texttt{sigma\_a:} Varianza asociada a la variable de control $\Delta t$. La funci\'on no lineal se aplicar\'a sobre el paso del tiempo.
 \item \texttt{image\_size:} Dimensiones de la imagen de flujo. Corresponde a una \textit{tupla}.
 \end{itemize}
@@ -110,13 +66,14 @@ flujo, por ende dos) \texttt{N}, la varianza $\sigma_a$ (\texttt{sigma\_a}) y la
 \end{center}
 \bigskip
 
-Se destaca que tantos los pesos como el valor de $\lambda$ se mantienen constantes durante todo el proceso de predicci\'on y estimaci\'on, valores con los cuales se obtienen los puntos sigma y el valor medio al propagar la func\'on \texttt{f\_func} (ver Ecuaci\'on \ref{eq:eq18}).
+Se destaca que tantos los pesos como el valor de $\lambda$ se mantienen constantes durante todo el proceso de predicci\'on y estimaci\'on, valores con los cuales se obtienen los puntos sigma y el valor medio al propagar la funci\'on \texttt{f\_func} (ver Ecuaci\'on \ref{eq:eq18}).
 \bigskip
 
 La salida de este m\'etodo est\'a compuesta por la matriz de estado predicha, la predicci\'on de la covarianza y los puntos sigma guardados en la variable \texttt{Xs} de la implementaci\'on.
 
 \subsection{Correcci\'on}
-El proceso de correcci\'on est\'a implementado en la clase \textsc{UnscentedCorrect} la cual implementa la interfaz \textsc{ICorrect} redefiniendo el m\'etodo \texttt{correct} para esta versi\'on del filtro. De acuerdo al proceso de correcci\'on para el funcionamiento del filtro se deben definir las funciones $f(•)$ y $h(•)$ , adem\'as requiere de los pesos 
+El proceso de correcci\'on est\'a implementado en la clase \textsc{UnscentedCorrect} la cual implementa la interfaz \textsc{ICorrect} redefiniendo el m\'etodo \texttt{correct} para esta versi\'on del filtro. De acuerdo al proceso de correcci\'on para el funcionamiento del filtro se deben definir las funciones $f(\cdot)$ y $h(\cdot)$, adem\'as requiere de los pesos calculados previmente (Ecuaci\'on \ref{eq:eq20}).
+\bigskip
 
 El constructor de esta clase posee la siguiente firma.
 
@@ -135,14 +92,13 @@ Durante la correcci\'on se escogen nuevamente $2N+1$ puntos sigma en torno al es
 Se desarrollaron diferentes funciones auxiliares para apoyar el c\'alculo de las matrices:
 \begin{itemize}
 \item \texttt{sigma\_points(mean\_, cov\_, lambda\_, N):}\\
-Funci\'on con la cual se calculan los puntos sigma a partir la media de las variables de estado, la covarianza, el valor de $\lambda$ y el n\'umero de variables de estado, N. Utiliza para esta finalidad, la descomposici\'on de Cholesky.
+Funci\'on con la cual se calculan los puntos sigma a partir de la media de las variables de estado, la covarianza, el valor de $\lambda$ y el n\'umero de variables de estado, N. Utiliza para esta finalidad, la descomposici\'on de Cholesky.
 \item \texttt{unscent\_weights(kappa, alpha, beta, N):}\\
 M\'etodo con el que se calculan los pesos a partir de los valores de $\kappa$, $\alpha$, $\beta$ y N (n\'umero de variables de estado). 
 \item \texttt{perform(func, *args):}\\
-Funci\'on auxiliar con la cual se recibe un puntero a otra funci\'on vectorial (destinada a ser aplicada sobre un conjunto de puntos sigma) y un n\'umero arbitrario de argumentos, dependiendo de la necesidad de la misma funci\'on
-\item \texttt{propagate\_func\_pred(func, Wm, Wc, Xs, *args, N):}\\
+Funci\'on auxiliar con la cual se recibe un puntero a otra funci\'on vectorial (destinada a ser aplicada sobre un conjunto de puntos sigma) y un n\'umero arbitrario de argumentos, dependiendo de la necesidad de la misma funci\'on.
+\item \texttt{propagate\_func(func, Wm, Wc, Xs, *args, N):}\\
 Funci\'on con la que se propaga la funci\'on \texttt{func} sobre el conjunto de puntos sigma \texttt{Xs} usando los pesos de media y covarianza \texttt{Wm} y \texttt{Wc}, respectivamente, adem\'as del n\'umero de variables de estado, N. Adem\'as, recibe el argumento \texttt{args} que corresponde a una tupla de entradas propias de la funci\'on \texttt{func}. 
-\item \texttt{propagate\_func\_corr}
 \end{itemize}
 
 Estas funciones est\'an implementadas en el script \texttt{unscented\_utils}.

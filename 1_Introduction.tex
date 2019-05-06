@@ -5,10 +5,10 @@
 La astronomía es uno de los campos científicos que más se ha visto afectado por el rápido crecimiento en la generación de datos debido al fuerte desarrollo de nuevas tecnologías de la información y  de nuevos instrumentos destinados a la observación. Este crecimiento ha gatillado un aumento importante en la demanda de una nueva generaci\'on de m\'etodos que puedan procesar esta oleada de informaci\'on o big data astron\'omico.
 \bigskip
 
-Ejemplos de proyectos que actualmente producen una gran cantidad de datos a trav\'es de telescopios en diferentes partes del mundo son: el Panoramic Survey Telescope and Rapid Response System (Pan-STARRS)\cite{pan}, el Visible and Infrarred Survey Telescope (VISTA)\cite{vista}, el VLT Survey Telescope (VST)\cite{vst}, el Dark Energy Camera Legacy Survey (DECaLS)\cite{decals} y el Hyper Suprime-Cam Subaru Strategic Program (HSC SSP)\cite{ssp}. Estos surveys est\'an caracterizados por un amplio \textit{\'etendue}  que consiste en el producto entre el \'area del espejo de un telescopio y su \'angulo s\'olido proyectado en el cielo.
+Ejemplos de proyectos que actualmente producen una gran cantidad de datos a trav\'es de telescopios en diferentes partes del mundo son: el Panoramic Survey Telescope and Rapid Response System (Pan-STARRS)\cite{pan}, el Visible and Infrarred Survey Telescope (VISTA)\cite{vista}, el VLT Survey Telescope (VST)\cite{vst}, el Dark Energy Camera Legacy Survey (DECaLS)\cite{decals} y el Hyper Suprime-Cam Subaru Strategic Program (HSC SSP)\cite{ssp}. Estos surveys est\'an caracterizados por un amplio \textit{\'etendue} definido como el producto entre el \'area del espejo de un telescopio y su \'angulo s\'olido proyectado en el cielo.
 \bigskip
 
-En el futuro, telescopios como el Large Synoptic Survey Telescope (LSST)~\cite{lsst} (que entrará en funcionamiento a mediados del 2022) continuar\'an revolucionando la era del big data en astronom\'ia con \'etendues y c\'amaras CCD mucho m\'as grandes de lo que se utiliza hasta el d\'ia de hoy. En particular se espera que el LSST produzca un n\'umero de alertas de fen\'omenos transitorios (avisos de objetos que cambian en el tiempo o espacio) del orden 10 millones cada noche. La capacidad de detectar nuevos objetos de inter\'es depender\'a de la calidad de los datos y de los algoritmos de tiempo real  destinados a generar las alertas mencionadas. 
+En el futuro, telescopios como el Large Synoptic Survey Telescope (LSST)~\cite{lsst} (que entrará en funcionamiento a mediados del 2022) continuar\'an revolucionando la era del big data en astronom\'ia con \'etendues y c\'amaras CCD mucho m\'as grandes de lo que se utiliza hasta el d\'ia de hoy. En particular se espera que el LSST produzca un n\'umero de alertas de fen\'omenos transitorios (avisos de objetos que cambian en el tiempo o espacio) del orden de 10 millones cada noche. La capacidad de detectar nuevos objetos de inter\'es depender\'a de la calidad de los datos y de los algoritmos de tiempo real  destinados a generar las alertas mencionadas. 
 \bigskip
 
 Al d\'ia de hoy se han elaborado sondeos como el High Cadence Transient Survey (HiTS)~\cite{hits} cuya finalidad ha sido la b\'usqueda de fen\'omenos transitorios r\'apidos con escalas de tiempo que van desde las horas a d\'ias, utilizando secuencias de observaciones de la c\'amara DECam del telescopio Blanco (en Cerro Tololo) para la detecci\'on y posterior reporte de objetos candidatos a supernova. En este trabajo se propone un m\'etodo de detecci\'on de potenciales candidatos a supernova a trav\'es de la discriminaci\'on de p\'ixeles que involucren un incremento en la intensidad. Esta discriminaci\'on comienza con la determinaci\'on del flujo a trav\'es de la intensidad de los p\'ixeles que puedan corresponder a una estrella y a la variaci\'on de cada uno de ellos usando m\'etodos iterativos de filtrado en secuencias de im\'agenes de largo arbitrario. Los filtros desarrollados para HiTS corresponden a miembros de una familia de filtros conocidos como \textit{filtros de Kalman}.% En particular se hace uso de los filtros de Kalman b\'asico \cite{kalman} y de correntrop\'ia m\'axima \cite{chen}.
@@ -22,27 +22,25 @@ El trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.), propone 
 
 
 \section{Objetivos}
-\section{Objetivo general}
+\subsection{Objetivo general}
 El objetivo de esta tesis comprende la reestructuraci\'on y extensi\'on de un programa existente destinado al an\'alisis fotom\'etrico de datos astron\'omicos con \'el cual se busca implementar un modelo de sistema de alertas que d\'e aviso del estado temprano de un fen\'omeno astron\'omico transitorio. 
 \bigskip
 
-Paralelamente se buscar estudiar la sensibilidad del programa y en particular de los m\'etodos de filtro de Kalman en un escenario donde hay p\'erdida de informaci\'on.
-
-\section{Objetivos espec\'ificos}
+\subsection{Objetivos espec\'ificos}
 
 \begin{itemize}
 
 
-\item Mejorar proceso existente sobre la manipulaci\'on de los archivos requisito del programa original, debido a que actualmente existen problemas de \textit{hard-coding} respecto de la ubicaci\'on de \'estos, as\'i como ciertos reparos durante el proceso de selecci\'on de los mismos. Adem\'as se necesita reformular la configuraci\'on de par\'ametros funcionales de entrada (propios de la ejecuci\'on del programa, como los umbrales) para flexibilizar la entrada de estos. 
+\item Mejorar proceso existente sobre la manipulaci\'on de los archivos requisito del programa original, debido a que actualmente existen problemas de \textit{hard-coding} respecto de la ubicaci\'on de estos, as\'i como ciertos reparos durante el proceso de selecci\'on de los mismos. Adem\'as se necesita reformular la configuraci\'on de par\'ametros funcionales de entrada (propios de la ejecuci\'on del programa, como los umbrales) para flexibilizar su entrada. 
 \bigskip
 
-\item Generar una familia de m\'etodos en t\'erminos de programaci\'on orientada a objetos empleando el patr\'on de dise\~no \textit{Strategy} que implemente la familia de m\'etodos conocido como Filtros de Kalman.
+\item Generar una familia de m\'etodos en t\'erminos de programaci\'on orientada a objetos empleando el patr\'on de dise\~no \textit{Strategy} que implemente la familia de m\'etodos conocida como Filtros de Kalman.
 \bigskip
 
 \item Agregar una nueva variante de filtro que permita el uso de un modelo no lineal.
 \bigskip
 
-\item Implementar gr\'aficas de resultados en las que sea posible observar la curva generada por el flujo y la velocidad de flujo estimados por los filtros indicando la entrop\'ia aproximada del espacio de estados generado, visualizar la evoluci\'on de las mediciones y estimaciones tanto en secuencias de im\'agenes estampillas (pix\'eles) como en gr\'aficas.    
+\item Implementar gr\'aficas de resultados en las que sea posible observar la curva generada por el flujo y la velocidad de flujo estimados por los filtros, indicando la entrop\'ia aproximada de la curva en el espacio de estados y visualizar la evoluci\'on de las mediciones y estimaciones tanto en secuencias de im\'agenes estampillas (p\'ixeles) como en gr\'aficas.    
 \bigskip
 
 \item Estudiar los resultados obtenidos con esta nueva versi\'on del programa con cada uno de sus filtros sobre un conjunto de datos brindado por HiTS (del a\~no 2015), a la par que el desempe\~no (medido en t\'erminos de uso de memoria principal y tiempo de ejecuci\'on) de \'este. Por \'ultimo se busca establecer un contraste con la versi\'on original.     
@@ -62,13 +60,13 @@ En el Cap\'itulo \ref{ch:prev_work}, se estudian tanto el desempe\~no como los r
 Posteriormente, en el Cap\'itulo \ref{ch:refactoring} se describe el refactoring del programa  del c\'odigo original: se enlistan nuevos m\'etodos para el manejo de archivos y cambios realizados en la implementaci\'on de los m\'etodos iniciales. 
 \bigskip
 
-En el Cap\'itulo \ref{ch:news} se exponen los pasos del desarrollo del nuevo filtro adem\'as de la nueva funcionalidad relacionada con la carga de resultados previamente guardados.
+En el Cap\'itulo \ref{ch:news} se exponen los pasos para desarrollar el nuevo filtro, adem\'as de la nueva funcionalidad relacionada con la carga de resultados previamente guardados.
 \bigskip
 
-Posteriormente, en el Cap\'itulo \ref{ch:resultados}, se exponen los resultados obtenidos para el desempe\~no de la nueva versi\'on del programa (para los dos filtros originales) adem\'as de la cantidad de supernovas redescubiertas y el per\'iodo en que se detectaron. El cap\'itulo concluye con el an\'alisis de los resultados y una comparaci\'on con aquellos obtenidos en el Cap\'itulo \ref{ch:prev_work}.
+Posteriormente, en el Cap\'itulo \ref{ch:resultados}, se exponen los resultados obtenidos para el desempe\~no de la nueva versi\'on del programa (para los dos filtros originales) incluyendo la cantidad de supernovas redescubiertas y el per\'iodo en que se detectaron. El cap\'itulo concluye con el an\'alisis de los resultados y una comparaci\'on con aquellos obtenidos en el Cap\'itulo \ref{ch:prev_work}.
 \bigskip
 
-Finalmente en el Cap\'itulo \ref{ch:conclusion} se presentan las conclusiones desprendidas de este trabajo y se propone el trabajo a futuro que se extiende de \'el.
+Finalmente en el Cap\'itulo \ref{ch:conclusion} se presentan las conclusiones de este trabajo y se propone el trabajo a futuro a realizar.
 
 %\fillup{1}
 

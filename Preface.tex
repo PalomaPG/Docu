@@ -1,33 +1,33 @@
 
 
-\hfill
-\begin{tabular}{@{}l@{}}
-\uppercase{Resumen de la memoria para optar al}\\
-\uppercase{t\'itulo de ingeniera civil en computaci\'on}\\
-\uppercase{Por: Paloma Cecilia P\'erez Garc\'ia}\\
-\uppercase{Fecha: 2019}\\
-\uppercase{Prof. Gu\'ia: Pablo Est\'evez Valencia}\\
-\uppercase{Prof. Co-Gu\'ia: Benjam\'ina Bustos}\\
-\end{tabular}
-\bigskip
+%\hfill
+%\begin{tabular}{@{}l@{}}
+%\uppercase{Resumen de la memoria para optar al}\\
+%\uppercase{t\'itulo de ingeniera civil en computaci\'on}\\
+%\uppercase{Por: Paloma Cecilia P\'erez Garc\'ia}\\
+%\uppercase{Fecha: 2019}\\
+%\uppercase{Prof. Gu\'ia: Pablo Est\'evez Valencia}\\
+%\uppercase{Prof. Co-Gu\'ia: Benjam\'in Bustos C\'ardenas}\\
+%\end{tabular}
+%\bigskip
 
 \begin{preface}
 \begin{center}
-\uppercase{Extensi\'on de filtro de Kalman de aproximaci\'on no lineal para la detecci\'on de objetos astronómicos}
+%\uppercase{Extensi\'on de filtro de Kalman de aproximaci\'on no lineal para la detecci\'on de objetos astronómicos}
+\uppercase{Resumen}
 \end{center}
 %\section{Resumen Ejecutivo}
-En este trabajo de t\'itulo se describe un proceso de refactoring a una pipeline dedicada a la detecci\'on de fen\'omenos astron\'omicos transitorios como las supernovas que corresponden a eventos caracterizados por un incremento y un consecuente decremento de su luminosidad. Esta pipeline sobre la que se trabaj\'o usa como m\'etodo de detecci\'on una familia de filtros de estimaci\'on conocida como Filtros de Kalman, en particular sus versiones b\'asica y de correntrop\'ia m\'axima.
+El presente trabajo describe el desarrollo de un software en \textsc{Python} destinado a la detecci\'on de fen\'omenos astron\'omicos transitorios como las supernovas que corresponden a eventos caracterizados por un incremento r\'apido en su luminosidad y un consecuente decremento lento en esta. El programa se dise\~n\'o sobre la base de una rutina ya implementada la cual hace uso de estimaciones generadas por m\'etodos del filtro de Kalman. En su versi\'on cl\'asica (o b\'asica) y tambi\'en de m\'axima correntrop\'ia. Debido a que esta rutina presenta complicaciones en la administraci\'on de archivos y manejo de par\'ametros (producido principalmente por \textit{hard-coding}) se realiz\'o un proceso de \textit{refactoring} que implica adem\'as dise\~nar y generar una nueva familia de filtros de Kalman basados en el patr\'on de dise\~no \textsc{Strategy}.
 \bigskip
 
-El refactoring llevado a cabo apunt\'o a optimizar el manejo de los datos de entrada (tanto par\'ametros de funcionamiento como informaci\'on a ser procesada, en este caso, im\'agenes) y a modularizar los m\'etodos de estimaci\'on de los filtros de Kalman usando el patr\'on de dise\~no \textit{Strategy} definido por sus procesos de predicci\'on y correcci\'on. Adem\'as se  implementaron nuevas formas de guardar resultados y visualizar resultados conservando aspectos de las gr\'aficas generadas por el software original. 
+Sobre este c\'odigo refactorizado se efectuaron pruebas de rendimiento obteni\'endose as\'i una mejora en t\'erminos de tiempo pero no en la memoria principal utilizada. Por otro lado se realizaron pruebas de detecci\'on usando el conjunto de 93 supernovas detectadas por el sondeo de HiTS del a\~no 2015, hall\'andose mejoras notables en la disminuci\'on de falsos positivos as\'i como tambi\'en un leve aumento en el n\'umero de verdaderos positivos al emplear las versiones cl\'asica y de m\'axima correntrop\'ia de los filtros refactorizados. Sin embargo no ocurri\'o lo mismo con el filtro unscented, que permite emplear funciones no lineales al momento de estimar. Para este filtro se usaron una funci\'on cuadr\'atica y otra de exponente 1.5, evaluadas sobre el paso del tiempo desde el inicio de las observaciones (o \'epocas).   
 \bigskip
 
-Por otro lado, se propone un nuevo miembro para la familia de filtros de Kalman con el cual es posible usar una aproximaci\'on no-lineal para la detecci\'on de fen\'omenos transitorios de regimen creciente, conocido como filtro de Kalman Unscented.
-
+Se recomienda continuar estudiando el nuevo filtro de Kalman de aproximaci\'on no lineal debido al acotado conjunto de par\'ametros y funciones utilizado durante la realizaci\'on de este trabajo.
 
 
 % Pagina Optativa - Dedicatoria
-\dedicatoria{...}
+\dedicatoria{En memoria de H. P.}
 
 % Pagina Optativa - Agradecimientos
 \section{Agradecimientos}

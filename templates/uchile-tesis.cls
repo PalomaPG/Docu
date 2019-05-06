@@ -8,14 +8,15 @@
 
 %  amsmath, amsthm, amssymb - Mathematical packages
 \usepackage{amsmath} \usepackage{amsthm} \usepackage{amssymb}
-
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 % subfig - Used to have subfigures within figures, or subtables within table floats
 \usepackage{subfig}
 \usepackage{wrapfig}
 \usepackage{listings}
 % xspace - text macros
 \usepackage{xspace}
-
+\usepackage[toc]{glossaries}
 % inputec, babel, blindtext ::  Español + UTF8
 \usepackage[utf8x]{inputenc}
 \usepackage{comment}
@@ -111,7 +112,7 @@ subrefformat=parens} %<-----designing subcaption
 %%%%%%%%%%%%%%%%%%%%%%
 %Constants used in the class
 %%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\bibliographyname}{Referencias}
+\newcommand{\bibliographyname}{Bibliograf\'ia}
 
 % Definimos el espacio a usar
 \renewcommand{\baselinestretch}{\@space}
@@ -146,9 +147,9 @@ subrefformat=parens} %<-----designing subcaption
         \vskip 1.0cm%
             \MakeUppercase{Profesor guía:}\\
             \MakeUppercase{\@profguia}\\
-       \vskip 1.0cm%
-            \MakeUppercase{Profesor co-guía:}\\
-            \MakeUppercase{\@profcoguia}\\
+       %\vskip 1.0cm%
+            %\MakeUppercase{Profesor co-guía:}\\
+            %\MakeUppercase{\@profcoguia}\\
         \vskip 0.75cm
             \MakeUppercase{Miembros de la Comisión:}\\
             \MakeUppercase{\@profint}\\
@@ -311,4 +312,7 @@ subrefformat=parens} %<-----designing subcaption
 \renewcommand{\chaptername}{Cap\'itulo}
 
 \usepackage{fancyvrb}
-
+\addto\captionsspanish{% Replace "english" with the language you use
+  \renewcommand{\contentsname}%
+    {Tabla de Contenido}%
+}
