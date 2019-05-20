@@ -1,41 +1,13 @@
-\chapter{Nueva funcionalidad}
+\chapter{Filtro de aproximaci\'on no lineal: unscented Kalman}
 \label{ch:news}
-En este cap\'itulo se detallan los cambios realizados a la  manera de ejecutar la pipeline anterior \textsc{RunData} y la modularizaci\'on de las diferentes tareas que involucra este programa, construy\'endose as\'i una nueva clase para la administraci\'on de los procesos: \textsc{RoutineHandler}. Adem\'as se describe la estructura y aspectos esenciales de un nuevo miembro de la familia de filtros de Kalman: \textsf{UnscentedKalman}
+En este cap\'itulo se describe la estructura y detalles importantes del nuevo miembro de la familia de clases de filtros de Kalman: \textsc{UnscentedKalman}
 
 
-\section{Manejo de la rutina: \textsc{RoutineHandler}}
-
-La \textbf{rutina} comprende el proceso de listado de archivos (que en esta nueva versi\'on se realiza con \textsc{DataPicker}), la creaci\'on de una instancia de la familia del filtro de Kalman y la secuencia iterativa de pasos de c\'alculo de flujo, obtenci\'on de estimaciones y el propio proceso de detecci\'on con \textsc{SourceFinder}. Para lograr esto, una instancia de \textsc{RoutineHandler} debe recibir tres archivos descritos a continuaci\'on:
-%La \textbf{rutina} se entiende como la ejecuci\'on completa del programa, con la cual se procesan todas las observaciones de acuerdo a una lista de semestres, campos y CCDs . Para esta finalidad se cre\'o una clase llamada \textsc{RoutineHandler} la cual maneja los archivos de entrada de:
-
-\begin{itemize}
-\item Lista de campos, CCDs, semestres y, alternativamente, las coordenadas de alg\'un objeto de inter\'es, en un archivo CSV (en este mismo orden) y con el encabezado \texttt{Field, CCD, Semester, POS\_Y, POS\_X}. En caso de no adjuntar las coordenadas en los campos de posici\'on, se puede rellenar con un gui\'on (`-'). En el constructor este archivo se recibe como \texttt{obs\_index\_path}.
-\item Diccionario de directorios y expresiones regulares de las ubicaciones de los archivos y sus nombres, respectivamente (archivo de formato CSV). En el constructor de la clase este archivo se denomina como \texttt{route\_templates}.
-\item Diccionario de umbrales y par\'ametros relevantes en la ejecuci\'on del programa, as\'i como el tipo de filtro a usar (archivo de formato CSV). En el constructor se denomin\'o \texttt{settings\_file}.
-\end{itemize}
-\bigskip
-Adem\'as de estos archivos se debe especificar el \'indice de la fila a procesar de la lista de campos (\texttt{index}), CCDs y semestre (primer archivo de entrada). Esto se hizo as\'i con la finalidad de facilitar la paralelizaci\'on de los an\'alisis de diferentes conjuntos de datos. Por lo tanto el constructor de \textsc{RoutineHandler} queda como sigue:
-
-\begin{center}
-\texttt{RoutineHandler(obs\_index\_path, route\_templates, settings\_file, index)}
-\end{center}
-
-Los m\'etodos de esta clase se encuentran en el Ap\'endice \ref{subs:a4}, y ejemplos de los archivos de entrada \texttt{obs\_index\_path}, \texttt{route\_templates} y \texttt{settings\_file} en las secciones \ref{subs:sn_list}, \ref{subs:a1} y \ref{subs:settings_file}, respectivamente.     
-
-\begin{figure}
-\centering
-\includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Code/sif2/sif2_act}
-\caption{Rutina del programa refactorizado.}
-\label{fig:new_routine}
-\end{figure}  
-
-
-\section{\textsc{Filtro de Kalman Unscented}}
+\section{\textsc{Dise\~no}}
 El dise\~no de la nueva clase de filtro se realiz\'o continuando con la arquitectura del patr\'on Strategy, definiendo los m\'etodos de predicci\'on y correcci\'on en instancias de clases que implementen las interfaces \textsc{IPredict} e \textsc{ICorrect} respectivamente: \textsc{UnscentPredict} y \textsc{UnscentCorrect}.
+\bigskip
 
-\subsection{La clase \textsc{UnscentedKalman}}
-
-El filtro Unscented se desarroll\'o en la clase \textsc{UnscentedKalman}, la cual encierra los m\'etodos de predicci\'on y correcci\'on (descritos en el Cap\'itulo \ref{ch:background}, subsecci\'on \ref{ssec:ukf}) implementados en \texttt{predict} y \texttt{correct}.
+El filtro unscented se desarroll\'o en la clase \textsc{UnscentedKalman}, la cual encierra los m\'etodos de predicci\'on y correcci\'on (descritos en el Cap\'itulo \ref{ch:background}, subsecci\'on \ref{ssec:ukf}) implementados en \texttt{predict} y \texttt{correct}.
 \bigskip
 
 El constructor de esta clase requiere como argumentos de entrada los siguientes par\'ametros:
@@ -49,17 +21,16 @@ El constructor de esta clase requiere como argumentos de entrada los siguientes 
 \item \texttt{beta:} Describe el valor de $\beta$ el cual incorpora conocimiento \textit{a priori} sobre la distribuci\'on de las variables de estado. Para distribuciones gaussianas, tiene un valor de $\beta=2$. 
 \item \texttt{kappa:} Corresponde a un par\'ametro de escalamiento secundario en la distancia de los puntos sigma a la media. Su valor va entre $0$ y $3-N$ \cite{wan}.
 \item \texttt{sigma\_a:} Varianza asociada a la variable de control $\Delta t$. La funci\'on no lineal se aplicar\'a sobre el paso del tiempo.
-\item \texttt{image\_size:} Dimensiones de la imagen de flujo. Corresponde a una \textit{tupla}.
+\item \texttt{image\_size:} Dimensiones de la imagen de flujo. Corresponde a una tupla de dos n\'umeros enteros (por defecto, $(4094, 2046)$).
 \end{itemize}
 
-Al inicializar una instancia de esta clase, se calculan tanto los pesos como el t\'ermino $\lambda$, los cuales dependen de los par\'ametros: $\beta$, $\kappa$ $\alpha$ y N (o cantidad de variables de estado). Ver Ecuaciones \ref{eq:eq20} y \ref{eq:eq21}.
+Al inicializar una instancia de esta clase, se calculan tanto los pesos como el t\'ermino $\lambda$, los cuales dependen de los par\'ametros: $\beta$, $\kappa$ $\alpha$ y $N$ (o cantidad de variables de estado). Ver Ecuaciones \ref{eq:eq20} y \ref{eq:eq21}.
 \bigskip
 
-Como parte de la familia de \textsc{KalmanFilter} posee el m\'etodo \texttt{update}, desde el cual se llama a \texttt{predict} y a \texttt{correct}, conservando la firma.
+Como parte de la familia de \textsc{KalmanFilter} posee el m\'etodo \texttt{update}, desde el cual se llama a \texttt{predict} y a \texttt{correct}, conservando la firma. 
  
 \subsection{Predicci\'on}
-La predicci\'on de este filtro se implement\'o, como se mencion\'o anteriormente, en la clase \textsc{UnscentedPredict} (que implementa a \textsc{IPredict}). Para instanciar esta clase se debe entregar como argumento al constructor: un puntero a funci\'on (que puede o no ser lineal) \texttt{f\_func} y sus argumentos en \texttt{f\_args}, los pesos asociados a la media \texttt{W\_m} y la covarianza \texttt{W\_c} de predicci\'on, el coeficiente $\lambda$ (\texttt{lambda\_}), la cantidad de variables de estado medidas (en este modelo, se trata de dos: flujo y velocidad de 
-flujo, por ende dos) \texttt{N}, la varianza $\sigma_a$ (\texttt{sigma\_a}) y la dimensi\'on de las im\'agenes \texttt{image\_size}. Por lo tanto la firma del constructor queda como sigue:
+La predicci\'on de este filtro se implement\'o, como se mencion\'o anteriormente, en la clase \textsc{UnscentedPredict} (que implementa a \textsc{IPredict}). Para instanciar esta clase se debe entregar como argumento al constructor: un puntero a funci\'on (que puede o no ser lineal) \texttt{f\_func} y sus argumentos en \texttt{f\_args}; los pesos asociados a la media, \texttt{W\_m}, y a la covarianza, \texttt{W\_c}; el coeficiente $\lambda$ (\texttt{lambda\_}); la cantidad de variables de estado medidas, $N$ (en este modelo, se trata de dos: flujo y velocidad de flujo, por ende $N=2$); la varianza $\sigma_a$ (\texttt{sigma\_a}) y la dimensi\'on de las im\'agenes \texttt{image\_size}. Por lo tanto la firma del constructor queda como sigue:
 \bigskip
 \begin{center}
 \texttt{UnscentedPredict(f\_func, f\_args, Wm, Wc, lambda\_, N, sigma\_a, image\_size)}
@@ -82,23 +53,14 @@ El constructor de esta clase posee la siguiente firma.
 \texttt{UnscentedCorrect(f\_func, h\_func, f\_args, h\_args,  Wm, Wc, lambda\_, N, image\_size)}
 \end{center}
 
-
-
-
-Durante la correcci\'on se escogen nuevamente $2N+1$ puntos sigma en torno al estado predicho (fase previa) (ver Ecuaci\'on \ref{eq:eq24}), sin embargo los valores de los pesos y de $\lambda$ son los mismos usados durante la fase de predicc\'on, cambiando s\'olo la funci\'on que se propaga sobre este nuevo conjunto de puntos: $h(\dot)$ (expresada como \texttt{h\_func}). 
+Durante la correcci\'on se escogen nuevamente $2N+1$ puntos sigma en torno al estado predicho (fase previa) (ver Ecuaci\'on \ref{eq:eq24}), sin embargo los valores de los pesos y de $\lambda$ son los mismos usados durante la fase de predicc\'on, cambiando s\'olo la funci\'on que se propaga sobre este nuevo conjunto de puntos: $h(\cdot)$ (expresada como \texttt{h\_func}). Las operaciones que participan en este proceso se implementaron en el script \texttt{unscented\_utils} (para ver detalles de los m\'etodos, ver Ap\'endice, secci\'on \ref{ap:unsutils}).
 \bigskip
 
-\subsection{Funciones auxiliares}
-Se desarrollaron diferentes funciones auxiliares para apoyar el c\'alculo de las matrices:
-\begin{itemize}
-\item \texttt{sigma\_points(mean\_, cov\_, lambda\_, N):}\\
-Funci\'on con la cual se calculan los puntos sigma a partir de la media de las variables de estado, la covarianza, el valor de $\lambda$ y el n\'umero de variables de estado, N. Utiliza para esta finalidad, la descomposici\'on de Cholesky.
-\item \texttt{unscent\_weights(kappa, alpha, beta, N):}\\
-M\'etodo con el que se calculan los pesos a partir de los valores de $\kappa$, $\alpha$, $\beta$ y N (n\'umero de variables de estado). 
-\item \texttt{perform(func, *args):}\\
-Funci\'on auxiliar con la cual se recibe un puntero a otra funci\'on vectorial (destinada a ser aplicada sobre un conjunto de puntos sigma) y un n\'umero arbitrario de argumentos, dependiendo de la necesidad de la misma funci\'on.
-\item \texttt{propagate\_func(func, Wm, Wc, Xs, *args, N):}\\
-Funci\'on con la que se propaga la funci\'on \texttt{func} sobre el conjunto de puntos sigma \texttt{Xs} usando los pesos de media y covarianza \texttt{Wm} y \texttt{Wc}, respectivamente, adem\'as del n\'umero de variables de estado, N. Adem\'as, recibe el argumento \texttt{args} que corresponde a una tupla de entradas propias de la funci\'on \texttt{func}. 
-\end{itemize}
+La familia de filtros resultantes de la agregaci\'on de este nuevo m\'odulo se puede observar en la Figura \ref{fig:kalmanfilter2}.
 
-Estas funciones est\'an implementadas en el script \texttt{unscented\_utils}.
+\begin{figure}
+\centering
+\includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Code/sif2/kalmanfilter2.png}
+\caption{Diagrama de clases de la familia de filtros de Kalman resultante. El patr\'on Strategy permite que las funcionalidades de predicci\'on y correcci\'on puedan definirse en diferentes clases, facilitanto la modularizaci\'on y la implementaci\'on de nuevos filtros como el unscented. }
+\label{fig:kalmanfilter2}
+\end{figure}

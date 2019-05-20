@@ -17,34 +17,34 @@
 \uppercase{Resumen}
 \end{center}
 %\section{Resumen Ejecutivo}
-El presente trabajo describe el desarrollo de un software en \textsc{Python} destinado a la detecci\'on de fen\'omenos astron\'omicos transitorios como las supernovas que corresponden a eventos caracterizados por un incremento r\'apido en su luminosidad y un consecuente decremento lento en esta. El programa se dise\~n\'o sobre la base de una rutina ya implementada la cual hace uso de estimaciones generadas por m\'etodos del filtro de Kalman. En su versi\'on cl\'asica (o b\'asica) y tambi\'en de m\'axima correntrop\'ia. Debido a que esta rutina presenta complicaciones en la administraci\'on de archivos y manejo de par\'ametros (producido principalmente por \textit{hard-coding}) se realiz\'o un proceso de \textit{refactoring} que implica adem\'as dise\~nar y generar una nueva familia de filtros de Kalman basados en el patr\'on de dise\~no \textsc{Strategy}.
+El presente trabajo describe el desarrollo de un software en \textsc{Python} destinado a la detecci\'on de fen\'omenos astron\'omicos transitorios como las supernovas que corresponden a eventos caracterizados por un incremento r\'apido en su luminosidad y un consecuente decremento lento. El programa se dise\~n\'o sobre la base de una rutina ya implementada la cual hace uso de estimaciones generadas por m\'etodos del filtro de Kalman: en su versi\'on cl\'asica (o b\'asica) o su versi\'on de m\'axima correntrop\'ia. Debido a que esta rutina presenta complicaciones en la administraci\'on de archivos y manejo de par\'ametros (producido principalmente por \textit{hard-coding}) se realiz\'o un proceso de \textit{refactoring} que implica adem\'as dise\~nar y generar una nueva familia de filtros de Kalman basados en el patr\'on de dise\~no \textsc{Strategy}.
 \bigskip
 
-Sobre este c\'odigo refactorizado se efectuaron pruebas de rendimiento obteni\'endose as\'i una mejora en t\'erminos de tiempo pero no en la memoria principal utilizada. Por otro lado se realizaron pruebas de detecci\'on usando el conjunto de 93 supernovas detectadas por el sondeo de HiTS del a\~no 2015, hall\'andose mejoras notables en la disminuci\'on de falsos positivos as\'i como tambi\'en un leve aumento en el n\'umero de verdaderos positivos al emplear las versiones cl\'asica y de m\'axima correntrop\'ia de los filtros refactorizados. Sin embargo no ocurri\'o lo mismo con el filtro unscented, que permite emplear funciones no lineales al momento de estimar. Para este filtro se usaron una funci\'on cuadr\'atica y otra de exponente 1.5, evaluadas sobre el paso del tiempo desde el inicio de las observaciones (o \'epocas).   
+Sobre este c\'odigo refactorizado se efectuaron pruebas de rendimiento obteni\'endose as\'i una mejora en t\'erminos de tiempo pero no en la memoria principal utilizada. Por otro lado se realizaron pruebas de detecci\'on usando el conjunto de 93 supernovas detectadas por el sondeo de HiTS del a\~no 2015, hall\'andose mejoras notables en la disminuci\'on de falsos positivos as\'i como tambi\'en un leve aumento en el n\'umero de verdaderos positivos al emplear las versiones cl\'asica y de m\'axima correntrop\'ia de los filtros refactorizados. Sin embargo no ocurri\'o lo mismo con el nuevo filtro unscented, que permite emplear funciones no lineales al momento de estimar. Para este filtro se usaron una funci\'on cuadr\'atica y otra de exponente 1,5, evaluadas sobre el paso del tiempo desde el inicio de las observaciones (o \'epocas).   
 \bigskip
 
 Se recomienda continuar estudiando el nuevo filtro de Kalman de aproximaci\'on no lineal debido al acotado conjunto de par\'ametros y funciones utilizado durante la realizaci\'on de este trabajo.
 
 
 % Pagina Optativa - Dedicatoria
-\dedicatoria{En memoria de H. P.}
+\dedicatoria{En memoria de mi padre}
 
 % Pagina Optativa - Agradecimientos
 \section{Agradecimientos}
+
+Para empezar, quiero agradecer a todos quienes participaron en el desarrollo de este trabajo; en particular agradezco enormemente el apoyo y la gu\'ia del profesor Pablo Estevez, con qui\'en pude aprender aplicaciones desde su disciplina, y del profesor Benjam\'in Bustos por el tiempo y paciencia brindados durante el desarrollo de este trabajo de t\'itulo. Tambi\'en agradezco a Francisco F\"orster por su orientaci\'on y tiempo entregados en los momentos de consulta. De igual modo, le doy las gracias al Laboratorio Nacional de Computaci\'on de Alto Rendimiento por las herramientas facilitadas, sin las cuales este proyecto no hubiese podido llevarse a cabo.
+\bigskip
+
+Quiero agradecer a toda la gente que he conocido en la U, tanto en mi licenciatura de astronom\'ia como en la carrera de ingeniera del DCC, ya que siento que he aprendido de todos un poco, tanto de profesores como de compa\~neros y funcionarios.   
+\bigskip
+
+Agradezco siempre a la vida, por contar con mi familia. A mi madre y mi hermana en especial, por acompa\~narme siempre en todo momento, aunque sea a la distancia. 
+
 
 \begin{flushright}
 \makeatletter
 	\@author
 \makeatother
 \end{flushright}
-
-% Indice - General
-\tableofcontents
-
-% Indice - Tablas
-\listoftables
-
-% Indice - Figuras
-\listoffigures
 
 \end{preface}

@@ -1,6 +1,6 @@
 \chapter{Resultados}
 \label{ch:resultados}
-En este cap\'itulo se exponen resultados y an\'alisis de diferentes pruebas realizadas con la nueva versi\'on desarrollada del programa. La primera de las pruebas consiste en medir el desempe\~no de esta pipeline en t\'erminos de tiempo de ejecuci\'on y uso de memoria principal ocupada al procesar tres datasets (usados en el cap\'itulo \ref{ch:prev_work}) asociados a supernovas encontradas por HiTS\cite{hits}: SN14, SN18 y SN80. El segundo conjunto de experimentos corresponde al procesamiento sobre los 93 conjuntos de datos asociados a las supernovas encontradas por HiTS en el semestre de 2015. En ambos tipos de pruebas se busca comparar el rendimiento y los resultados del programa al emplear los diferentes filtros de Kalman implementados. Finalmente se muestran algunos resultados espec\'ificos obtenidos con el filtro unscented.
+En este cap\'itulo se exponen resultados y an\'alisis de diferentes pruebas realizadas con la nueva versi\'on desarrollada del programa. La primera de las pruebas consiste en medir el desempe\~no de esta pipeline en t\'erminos de tiempo de ejecuci\'on y uso de memoria principal ocupada al procesar tres datasets (usados en el cap\'itulo \ref{ch:prev_work}) asociados a supernovas encontradas por HiTS\cite{hits}: SN14, SN18 y SN80. El segundo conjunto de experimentos corresponde al procesamiento de los 93 conjuntos de datos asociados a las supernovas encontradas por HiTS en el semestre de 2015. En ambos tipos de pruebas se busca comparar el rendimiento y los resultados del programa al emplear los diferentes filtros de Kalman implementados. Finalmente se muestran algunos resultados espec\'ificos obtenidos con el filtro unscented.
 \bigskip
 
 
@@ -8,35 +8,35 @@ Para todas las experiencias se emple\'o umbrales de flujo y velocidad de flujo e
 
 \subsection*{Filtro de Kalman B\'asico}
 \begin{itemize}
-\item \texttt{sigma\_a} : Se ocup\'o un valor de 0.1. Este valor se ajust\'o despu\'es de realizar diferentes pruebas variando este par\'ametro 100 y $10^{-4}$. Este t\'ermino es empleado durante el proceso de predicci\'on. 
-\item \texttt{init\_var} : La varianza inicial de flujo y velocidad de flujo se estableci\'o con un valor de 100.0.
-\item Se determin\'o 0.0 como valor inicial para las estimaciones de flujo y velocidad de flujo (estado).
+\item \texttt{sigma\_a}: Se ocup\'o un valor de 0,1. Este valor se ajust\'o despu\'es de realizar diferentes pruebas variando este par\'ametro entre 100 y $10^{-4}$. Este t\'ermino es empleado durante el proceso de predicci\'on y tambi\'en fue usado para ejecutar las pruebas con la versi\'on anterior del programa. 
+\item \texttt{init\_var}: La varianza inicial de flujo y velocidad de flujo se estableci\'o con un valor de 100,0. Tal como se emple\'o en el programa original.
+\item Se determin\'o 0,0 como valor inicial para las estimaciones de flujo y velocidad de flujo (estado). Fue el mismo valor usado para las pruebas realizadas con el programa original.
 \end{itemize}
 \subsection*{Filtro de Kalman de m\'axima correntrop\'ia}
 \begin{itemize}
-\item \texttt{sigma\_a}: Se emple\'o valor 0.1. Este valor es usado, al igual que en el caso del filtro b\'asico, durante el proceso de predicci\'on (mismo m\'etodo).
-\item \texttt{sigma}: Valor de la desviaci\'on est\'andar usado por defecto en caso de no usar optimizaci\'on de Silverman durante proceso de correcci\'on.
+\item \texttt{sigma\_a}: Se emple\'o valor 0,1. Este valor es usado, al igual que en el caso del filtro b\'asico, durante el proceso de predicci\'on (mismo m\'etodo).
+\item \texttt{sigma}: Se estableci\'o un valor de 1000,0 para la desviaci\'on est\'andar por defecto, en caso de no usar optimizaci\'on de Silverman durante proceso de correcci\'on (valor determinado en la versi\'on original del programa).
 \item \texttt{silverman}: \texttt{False}. Para estas pruebas no se us\'o el m\'etodo de Silverman para obtener distribuci\'on ya que la implementaci\'on en el programa original se encuentra incompleta (por lo que una nueva implementaci\'on de esta funci\'on en el software desarrollado en este trabajo queda pendiente para trabajo futuro). 
-\item \texttt{std\_factor}: Se estableci\'o como 100.0. Al no usarse el m\'etodo de Silverman, tampoco se hace uso de este valor.
-\item \texttt{epsilon}: Se asign\'o valor de $10^{-6}$, como error m\'aximo. 
+\item \texttt{std\_factor}: Se estableci\'o como 100,0. Al no usarse el m\'etodo de Silverman, tampoco se hace uso de este valor (valor establecido en la versi\'on original del programa).
+\item \texttt{epsilon}: Se asign\'o valor de $10^{-6}$, como error m\'aximo. Es el mismo usado en la versi\'on anterior del programa.
 \item \texttt{max\_iter}: Se consider\'o 10 como n\'umero m\'aximo de iteraciones, que es el n\'umero definido por defecto (en el dise\~no del programa original).  
-\item \texttt{init\_var} : La varianza inicial de flujo y velocidad de flujo se estableci\'o con un valor de 100.0.
-\item Se determin\'o 0.0 como valor inicial para las estimaciones de flujo y velocidad de flujo (estado).
+\item \texttt{init\_var} : La varianza inicial de flujo y velocidad de flujo se estableci\'o con un valor de 100.0, tal como se hizo con la versi\'on original.
+\item Se determin\'o 0,0 como valor inicial para las estimaciones de flujo y velocidad de flujo. Este valor se us\'o igualmente para las pruebas ejecutadas con el programa original.
 
 \end{itemize}
 \subsection*{Filtro de Kalman Unscented}
 \begin{itemize}
-\item \texttt{f\_func:} Se defini\'o una funci\'on no lineal de grado 1.5 (informaci\'on entregada en \texttt{f\_args}).
+\item \texttt{f\_func:} Se defini\'o una funci\'on no lineal de grado 1,5 (informaci\'on entregada en \texttt{f\_args}).
 \item \texttt{h\_func:} Se estableci\'o como la funci\'on identidad.
-\item \texttt{f\_args:} El grado de la funci\'on se defini\'o como 1.5 y un factor de 1.0 (por tanto corresponde a la lista [1.5, 1.0]).
+\item \texttt{f\_args:} El grado de la funci\'on se defini\'o como 1,5 y un factor de 1,0 (por tanto corresponde a la lista [1,5; 1,0]).
 \item \texttt{h\_args:} Para estas pruebas se defini\'o como una lista vac\'ia ya que $h(\cdot)$ se trata de la funci\'on identidad.
-\item \texttt{alpha:} Se estableci\'o como 0.001. Ya que con este valor se obtuvieron verdaderos positivos, aunque aumentaron los falsos positvos. A mayores valores disminuyen el n\'umero de candidatos encontrados (se probaron con valores de 0.0001 a 10).
-\item \texttt{beta:} Se le asign\'o un valor de 2.0. Se asumi\'o distribuci\'on normal de las variables de estado\cite{matsinos}. 
-\item \texttt{kappa:} Se le asign\'o un valor de 0.0. Se asumi\'o distribuci\'on normal de las variables de estado \cite{matsinos}.
+\item \texttt{alpha:} Se estableci\'o como 0,001. Ya que con este valor se detectaron algunas supernovas de HiTS. A mayores valores disminuyen el n\'umero de candidatos encontrados (se probaron con valores de 0,0001 a 10).
+\item \texttt{beta:} Se le asign\'o un valor de 2,0. Se asumi\'o distribuci\'on normal de las variables de estado\cite{matsinos}. 
+\item \texttt{kappa:} Se le asign\'o un valor de 0,0. Se asumi\'o distribuci\'on normal de las variables de estado \cite{matsinos}.
 \item \texttt{N:} Al tratarse de dos variables de estado, se establece \texttt{N}=2.
-\item \texttt{sigma\_a}: Se defini\'o como 0.1. Se consider\'o usar el mismo valor para este par\'ametro de acuerdo a los resultados obtenidos con los filtros b\'asico y de m\'axima correntrop\'ia, ya que los resultados variaban negativamente (disminuyendo candidatos encontrados) al tomar valores (potencias de diez) mayores o menores a este n\'umero.    
+\item \texttt{sigma\_a}: Se defini\'o como 0,1. Se consider\'o usar el mismo valor para este par\'ametro de acuerdo a los resultados obtenidos con los filtros b\'asico y de m\'axima correntrop\'ia, ya que los resultados variaban negativamente (disminuyendo candidatos encontrados) al tomar valores (potencias de diez) mayores o menores a este n\'umero.    
 \end{itemize}
-Las condiciones iniciales del filtro unscented fueron diferentes a las definidas para los filtros b\'asico y de m\'axima correntrop\'ia. Esto debido a que la funci\'on no lineal depende de un $\Delta t$ medido desde cierta \'epoca $t_0$. Para estos experimentos se defini\'o $t_0$ como la primera \'epoca de observaci\'on (los otros m\'etodos dependen de la diferencia temporal entre una \'epoca y otra). Por tanto, se configur\'o el flujo inicial al valor del flujo calculado de la primera \'epoca. Adem\'as, la varianza del estado del flujo fue definida como la matriz de varianza de flujo calculado.
+Las condiciones iniciales del filtro unscented fueron diferentes a las definidas para los filtros b\'asico y de m\'axima correntrop\'ia, ya que se consider\'o la primera medici\'on de flujo y su varianza para inicializar las matrices de estado y covarianza. Esto debido a que la funci\'on no lineal depende de un $\Delta t$ medido desde cierta \'epoca $t_0$. Para estos experimentos se defini\'o $t_0$ como la primera \'epoca de observaci\'on (los otros m\'etodos dependen de la diferencia temporal entre una \'epoca y otra). Por tanto, se configur\'o el flujo inicial al valor del flujo calculado de la primera \'epoca. Adem\'as, la varianza del estado del flujo fue definida como la matriz de varianza de flujo calculado.
 
 
 \section{Desempe\~no}
@@ -44,7 +44,7 @@ En esta secci\'on se describen los resultados obtenidos durante las experiencias
 \bigskip
 
 Las pruebas se realizaron usando el mismo conjunto de datos utilizado para medir el desempe\~no del programa original 
-(Cap\'itulo \ref{ch:prev_work}), adem\'as se emplearon como herramientas de medici\'on igualmente el perfilador de memoria \texttt{mem\_profiler} y la librer\'ia \textsc{Resource}\footnote{M\'etodo \texttt{get\_rusage}}.
+(Cap\'itulo \ref{ch:prev_work}), adem\'as se emplearon como herramientas de medici\'on igualmente el perfilador de memoria \texttt{mem\_profiler} y la librer\'ia \textsc{Resource}\footnote{M\'etodo \texttt{get\_rusage}}. Del mismo modo en que se llevaron a cabo las pruebas usando el programa original, se emple\'o un computador personal de 8 GB de RAM, con un procesador de 2,8 GHz de frecuencia.  
 
 \subsection{Tiempo de ejecuci\'on}
 Las Tablas \ref{tab:t7}, \ref{tab:t9} y \ref{tab:t11} muestran los resultados de tiempo medido en segundos de cada una de las partes del proceso de la rutina principal, para los tres datasets usando los filtros b\'asico, de m\'axima correntrop\'ia y unscented, respectivamente. 
@@ -89,22 +89,23 @@ SN14        & 280,67            & 342,88        &  123,68 & 0,01 \\ \hline
 SN18            & 243,96             & 293,05         &  122,09  & 0,00\\ \hline
 SN80            & 190,43             & 231,34         &   74,48 & 0,00 \\ \hline \hline
 %Media & 303.08 &  26.23 & 37.83 & 0.01\\\hline 
-$\bar{t}/Obs$ & 10,65 &  12,93 & 14,21 & 0,00\\\hline 
+$\bar{t}/Obs$ & 10,65 &  12,93 & 4,73 & 0,00\\\hline 
 \end{tabular}
 \label{tab:t11}
 \end{table}
-A todos estos resultados se les ha agregado la medici\'on de tiempo promedio por imagen (ya que las secuencias poseen largos diferentes). De estos resultados es posible deducir que el tiempo de c\'alculo de flujo por \'epoca siempre toma alrededor de 11.0 segundos. Esto es claro debido a que el proceso de c\'alculo de flujo es independiente del filtro escogido. Los tiempos de estimaci\'on de estado, por el contrario, var\'ian de filtro en filtro. Tomando mayor tiempo al usar el filtro de m\'axima correntrop\'ia. Sin embargo, opuesto a lo que se esperaba (ya que el proceso de detecci\'on ocurre una vez realizada la estimaci\'on de estado) el filtro unscented presenta un tiempo de detecci\'on casi diez veces mayor a los tiempos medidos en los otros filtros; esto se podr\'ia deber a las operaciones lineales realizadas durante el proceso de correcci\'on. 
+A todos estos resultados se les ha agregado la medici\'on de tiempo promedio por imagen (ya que las secuencias poseen largos diferentes). De estos resultados es posible deducir que el tiempo de c\'alculo de flujo por \'epoca siempre toma alrededor de 11,0 segundos. Esto es claro debido a que el proceso de c\'alculo de flujo es independiente del filtro escogido. Los tiempos de estimaci\'on de estado, por el contrario, var\'ian de filtro en filtro. Tomando mayor tiempo al usar el filtro de m\'axima correntrop\'ia. Sin embargo, opuesto a lo que se esperaba (ya que el proceso de detecci\'on ocurre una vez realizada la estimaci\'on de estado) el filtro unscented presenta un tiempo de detecci\'on casi cuatro veces mayor a los tiempos medidos en los otros filtros; esto se podr\'ia deber a las operaciones lineales realizadas durante el proceso de correcci\'on ya que existir\'ia mayor consumo de RAM. 
 \bigskip
 
-Con los filtros b\'asico y de m\'axima correntrop\'ia no se encontraron candidatos en ninguno de los datasets. Sin embargo se detectaron candidatos con el filtro unscented al ejecutar la pipeline sobre los datos de la supernova SN14.
+Con los filtros b\'asico y de m\'axima correntrop\'ia no se encontraron candidatos en ninguno de los datasets. Esto probablemente puede deberse al cambio en el filtrado de las im\'agenes generado por el proceso de \textit{refactoring}, siendo un proceso m\'as riguroso en la nueva versi\'on, algunas im\'agenes u archivos del dataset de SN14 fueron descartados. No ocurri\'o lo mismo con el filtro unscented al ejecutar la pipeline sobre los datos de la supernova SN14, ya que se encontraron canditatos. Sin embargo, al ser candidatos no confirmados por HiTS, pueden corresponder efectivamente otro tipo de objetos (no necesariamente supernovas), por lo que tendr\'ia que estudiarse su curva de luz o la curva generada por su espacio de estados (es decir, determinar \'indice de entrop\'ia de la curva).
 \bigskip
 
-La totalidad y el promedio del tiempo que toma la ejecuci\'on de la pipeline con los tres filtros sobre los datasets se muestran en las Tablas \ref{tab:t8},  \ref{tab:t10} y \ref{tab:t12} (filtros b\'asico, de correntrop\'ia m\'axima y unscented, respectivamente).
+La totalidad y el promedio del tiempo que toma la ejecuci\'on de la pipeline con los tres filtros sobre los datasets se muestran en la Tabla \ref{tab:time}, en donde figuran los resultados de los filtros b\'asico, de correntrop\'ia m\'axima y unscented, respectivamente.
 \bigskip
 
-\begin{table}[h!]
-\centering
-\caption{Tiempo de exploraci\'on (para detecci\'on de candidatos) usando filtro de Kalman B\'asico refactorizado. La \'ultima fila corresponde a tiempo total promedio por observaci\'on.}
+\begin{table}
+        
+        \caption{Tiempo de exploraci\'on (para detecci\'on de candidatos) para cada uno de los filtros. La \'ultima fila corresponde a tiempo (en segundos) total promedio por observaci\'on. A la izquierda, tiempo empleado usando la nueva versi\'on de filtro de Kalman b\'asico. En el centro, los resultados de tiempo correspondientes al filtro de Kalman de m\'axima correntrop\'ia. A la derecha, resultados correspondientes al filtro unscented.}
+            \footnotesize
 \begin{tabular}{|l|r|}
 \hline
 \textbf{ID} & \textbf{Tiempo total [s]} \\ \hline
@@ -115,13 +116,7 @@ SN80  & 241,91 \\\hline\hline
 %Media & 367.15 & 374.83 & 741.98  \\\hline
  $\bar{t}/Obs. $& 13,61 \\\hline 
 \end{tabular}
-\label{tab:t8}
-\end{table}
-
-
-\begin{table}[h!]
-\centering
-\caption{Tiempo de exploraci\'on (para detecci\'on de candidatos) usando filtro de Kalman de m\'axima correntrop\'ia refactorizado. La \'ultima fila corresponde a tiempo total promedio por observaci\'on.}
+\hfill
 \begin{tabular}{|l|r|}
 \hline
 \textbf{ID} & \textbf{Tiempo total [s]} \\ \hline
@@ -132,12 +127,7 @@ SN80  & 571,92 \\\hline\hline
 %Media & 367.15 & 374.83 & 741.98  \\\hline
  $\bar{t}/Obs. $& 31,58 \\\hline 
 \end{tabular}
-\label{tab:t10}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\caption{Tiempo de exploraci\'on (para detecci\'on de candidatos) usando filtro unscented. La \'ultima fila corresponde a tiempo total promedio por observaci\'on en segundos.}
+                \hfill
 \begin{tabular}{|l|r|}
 \hline
 \textbf{ID} & \textbf{Tiempo total [s]} \\ \hline
@@ -148,13 +138,15 @@ SN80  & 496,25 \\\hline\hline
 %Media & 367.15 & 374.83 & 741.98  \\\hline
  $\bar{t}/Obs. $& 28,32 \\\hline 
 \end{tabular}
-\label{tab:t12}
-\end{table}
+                \label{tab:time}
+            \end{table}
 
-De los resultados expuestos sobre el tiempo total de ejecuci\'on se desprende que la pipeline demora menos con el filtro b\'asico, mientras que con el de m\'axima correntrop\'ia es con el que m\'as se demora.
+
+De los resultados expuestos sobre el tiempo total de ejecuci\'on se desprende que la pipeline demora menos con el filtro b\'asico, mientras que con el de m\'axima correntrop\'ia es con el toma mayor tiempo.
 
 \subsection{Uso de memoria}
-Las Figuras \ref{fig:mem_new_kbf}, \ref{fig:mem_new_mcc} y \ref{fig:mem_ukf} muestran el comportamiento del consumo de memoria al usar la nueva versi\'on del filtro b\'asico, de m\'axima correntrop\'ia y el nuevo filtro unscented, respectivamente, ejecutando la pipeline refactorizada sobre los tres conjuntos de datos (SN14, SN18 y SN80). 
+Las Figuras \ref{fig:mem_new_kbf}, \ref{fig:mem_new_mcc} y \ref{fig:mem_ukf} muestran el comportamiento del consumo de memoria (en mebibytes) en el tiempo (en segundos) al usar la nueva versi\'on del filtro b\'asico, de m\'axima correntrop\'ia y el nuevo filtro unscented, respectivamente, ejecutando la pipeline refactorizada sobre los tres conjuntos de datos (SN14, SN18 y SN80). 
+\bigskip
 
 \begin{figure}[h!]
 \centering
@@ -165,12 +157,13 @@ Las Figuras \ref{fig:mem_new_kbf}, \ref{fig:mem_new_mcc} y \ref{fig:mem_ukf} mue
 \label{fig:mem_new_kbf}
 \end{figure}
 
-De la Figura \ref{fig:mem_new_kbf} se desprenden los m\'aximos alcanzados durante cada ejecuci\'on con el filtro b\'asico. Los resultados en megabytes se listan en la Tabla \ref{tab:mem3}.
+De la Figura \ref{fig:mem_new_kbf} se desprenden los m\'aximos alcanzados durante cada ejecuci\'on (en cada \textit{dataset}) con el filtro b\'asico. Los resultados en megabytes (MB) se listan en la Tabla \ref{tab:mem3}, a la izquierda.
 \pagebreak
 
-\begin{table}[h!]
-\centering
-\caption{Memoria principal (en unidades de MB) usada durante la ejecuci\'on del programa refctorizado usando filtro de Kalman B\'asico.}
+        \begin{table}
+        
+        \caption{Comparaci\'on de la memoria principal (en unidades de MB) usada durante la ejecuci\'on del programa para los tres filtros. A la izquierda, los resultados correspondientes al usar filtro de Kalman B\'asico. En el centro, memoria ocupada usando el filtro de Kalman de m\'axima correntrop\'ia. A la derecha, memoria ocupada usando filtro de Kalman unscented.}
+            \footnotesize
 \begin{tabular}{|l|r|}
 \hline
 \textbf{ID} & Memoria [MB]\\\hline\hline
@@ -178,8 +171,27 @@ SN14 & 2347,78\\\hline
 SN18 & 2254,93\\\hline
 SN80 & 2365,07\\\hline
 \end{tabular}
-\label{tab:mem3}
-\end{table}
+                \hfill
+\begin{tabular}{|l|r|}
+
+\hline
+\textbf{ID} & Memoria [MB]\\\hline\hline
+SN14 & 3359,54\\\hline
+SN18 & 3350,53\\\hline
+SN80 & 3330,93\\\hline
+\end{tabular}
+                \hfill
+\begin{tabular}{|l|r|}
+
+\hline
+\textbf{ID} & Memoria [MB]\\\hline\hline
+SN14 & 4827,82\\\hline
+SN18 & 4835,96\\\hline
+SN80 & 4821,89\\\hline
+\end{tabular}
+                \label{tab:mem3}
+            \end{table}
+
 
 
 \begin{figure}[h!]
@@ -191,21 +203,9 @@ SN80 & 2365,07\\\hline
 \label{fig:mem_new_mcc}
 \end{figure}
 
-De las series mostradas en la Figura \ref{fig:mem_new_mcc} se obtienen los m\'aximos alcanzados de memoria principal ocupada al utilizar el filtro de m\'axima correntrop\'ia listados en la Tabla \ref{tab:mem4}. 
+De las series mostradas en la Figura \ref{fig:mem_new_mcc} se obtienen los m\'aximos alcanzados de memoria principal ocupada al utilizar el filtro de m\'axima correntrop\'ia listados en la Tabla \ref{tab:mem3} (centro). 
 \bigskip
 
-\begin{table}[h!]
-\centering
-\caption{Memoria principal (en unidades de MB) usada durante la ejecuci\'on del programa refactorizado usando filtro de Kalman de m\'axima correntrop\'ia.}
-\begin{tabular}{|l|r|}
-\hline
-\textbf{ID} & Memoria [MB]\\\hline\hline
-SN14 & 3359,54\\\hline
-SN18 & 3350,53\\\hline
-SN80 & 3330,93\\\hline
-\end{tabular}
-\label{tab:mem4}
-\end{table}
 
 \begin{figure}[h!]
 \centering
@@ -216,26 +216,13 @@ SN80 & 3330,93\\\hline
 \label{fig:mem_ukf}
 \end{figure}
 
-Los m\'aximos de uso de memoria principal al emplear el filtro unscented, para cada conjunto de datos, se muestra en la Tabla \ref{tab:mem5}.
 
-\begin{table}[h!]
-\centering
-\caption{Memoria principal (en unidades de MB) usada durante la ejecuci\'on del programa refactorizado usando filtro de Kalman unscented.}
-\begin{tabular}{|l|r|}
-\hline
-\textbf{ID} & Memoria [MB]\\\hline\hline
-SN14 & 4827,82\\\hline
-SN18 & 4835,96\\\hline
-SN80 & 4821,89\\\hline
-\end{tabular}
-\label{tab:mem5}
-\end{table}
 
-Los resultados de memoria principal muestran un uso intensivo de esta al usar el filtro unscented. Esto puede ser debido a la serie de operaciones lineales que se debe realizar al momento de predecir y corregir. Tambi\'en se desprende que el uso de memoria es menor con el filtro b\'asico.
+Los resultados de memoria principal muestran un uso intensivo de esta al usar el filtro unscented (ver Tabla \ref{tab:mem3}, derecha). Esto puede ser debido a la serie de operaciones lineales que se debe realizar al momento de predecir y corregir. Tambi\'en se desprende que el uso de memoria es menor con el filtro b\'asico.
 \bigskip
  
 \section{Detecci\'on}
-En esta secci\'on se exponen los resultados obtenidos al procesar los datos de las 93 supernovas con los tres filtros implementados. En particular se muestran las cantidades de verdaderos positivos, falsos negativos, falsos positivos y el n\'umero de conjunto de datos que no pudieron ser procesados por no contar con alg\'un tipo de imagen o archivo necesario para su procesamiento (en este caso, fue la falta de im\'agenes de diferencia). Se considera como falso positivo todo aquello que no est\'e catalogado como supernova de acuerdo a HiTS; es decir, estrellas variables u otro tipo de objetos celestes, rayos c\'osmicos, junto a ruido en la intensidad de los p\'ixeles, etc.
+En esta secci\'on se exponen los resultados obtenidos al procesar los datos de las 93 supernovas con los tres filtros implementados en Leftraru. En particular se muestran las cantidades de verdaderos positivos, falsos negativos, falsos positivos y el n\'umero de conjunto de datos que no pudieron ser procesados por no contar con alg\'un tipo de imagen o archivo necesario para su procesamiento (en este caso, fue la falta de im\'agenes de diferencia). Se considera como falso positivo todo aquello que no est\'e catalogado como supernova de acuerdo a HiTS; es decir, estrellas variables u otro tipo de objetos celestes, rayos c\'osmicos, junto a ruido en la intensidad de los p\'ixeles, etc.
 \bigskip
 
 Los par\'ametros usados por cada filtro son los mismos descritos al inicio de este cap\'itulo.
@@ -260,16 +247,16 @@ M\'ax. Corr.             & 36          & 54          & 40  & 3 \\ \hline
 De la Tabla \ref{tab:tpfn_new} se obtiene que el filtro de m\'axima correntrop\'ia encuentra la misma cantida de supernovas conocidas que el filtro b\'asico, y detecta m\'as falsos positivos. Sin embargo cabe recalcar que para esta experiencia no se us\'o el m\'etodo de Silverman para estimar $\sigma$ en el proceso de correcci\'on, por lo que podr\'ia existir opciones de mejora.
 \bigskip
 
-De acuerdo a la Tabla \ref{ap:tab1}, Ap\'endice \ref{ap:pip_ref} varias de las detecciones ocurren despu\'es  del per\'iodo de alta cadencia (despu\'es de MJD 57075.00) y pr\'acticamente no hay diferencia entre ambos filtros. Lo primero puede deberse a que es necesario cumplir las condiciones mencionadas en el cap\'itulo \ref{ch:refactoring}, secci\'on \ref{sec:detec} en la clase \textsc{SourceFinder} por cuatro \'epocas consecutivas para emitir una alerta. Por otro lado otras detecciones realizadas por ambos filtros ocurrieron en un per\'iodo bastante alejado del intervalo de alta cadencia, por lo que el distanciamiento entre las observaciones puede haber favorecido a la detecci\'on.
+De acuerdo a la Tabla \ref{ap:tab1}, Ap\'endice \ref{ap:pip_ref} varias de las detecciones ocurren despu\'es  del per\'iodo de alta cadencia (despu\'es de MJD 57075,00) y pr\'acticamente no hay diferencia entre ambos filtros. Lo primero puede deberse a que es necesario cumplir las condiciones mencionadas en el Ap\'endice \ref{ap:sourcefinder} en los m\'etodos de la clase \textsc{SourceFinder} por cuatro \'epocas consecutivas para emitir una alerta. Por otro lado otras detecciones realizadas por ambos filtros ocurrieron en un per\'iodo bastante alejado del intervalo de alta cadencia, por lo que el distanciamiento entre las observaciones puede haber favorecido a la detecci\'on.
 \bigskip
   
 
 \subsection{Filtro unscented}
-Con el filtro unscented se realizaron dos pruebas. En ambos casos se asumi\'o la funci\'on $h(\cdot)$ como la funci\'on identidad. En cambio la funci\'on $f(\cdot)$ tom\'o dos formas no lineales en funci\'on de $\Delta t$: $f(\Delta t) = (\Delta t)^{1.5}$ y $f(\Delta t) = (\Delta t)^{2}$. Los resultados obtenidos para verdaderos positivos y falsos positivos y negativos se muestran en la Tabla \ref{tab:tpfn_ukf}.
+Con el filtro unscented se realizaron dos pruebas. En ambos casos se asumi\'o la funci\'on $h(\cdot)$ como la funci\'on identidad. En cambio la funci\'on $f(\cdot)$ tom\'o dos formas no lineales en funci\'on de $\Delta t$: $f(\Delta t) = (\Delta t)^{1.5}$ y $f(\Delta t) = (\Delta t)^{2}$. Los resultados obtenidos se muestran en la Tabla \ref{tab:tpfn_ukf}.
 
 \begin{table}[h!]
 \centering
-\caption{N\'umero de verdaderos positivos (TP), falsos negativos (FN) y falsos positivos (FP) encontrados usando el filtro unscented para dos tipos de funciones no lineales: $f(\Delta t) = (\Delta t)^{1.5}$ y $f(\Delta t) = (\Delta t)^{2}$. La tercera columna de valores muestra la cantidad de conjuntos de datos que no puedieron ser procesados.}
+\caption{N\'umero de verdaderos positivos (TP), falsos negativos (FN) y falsos positivos (FP) encontrados usando el filtro unscented para dos tipos de funciones no lineales: $f(\Delta t) = (\Delta t)^{1.5}$ y $f(\Delta t) = (\Delta t)^{2}$, sobre el dataset de HiTS. La tercera columna de valores muestra la cantidad de conjuntos de datos que no puedieron ser procesados.}
 \begin{tabular}{|l|r|r|r|r|}
 \hline
 \textbf{Filtro} & \textbf{TP} & \textbf{FN} & \textbf{FP} & \textbf{NaN}\\ \hline
@@ -288,14 +275,14 @@ Para observar si el filtro unscented est\'a trabajando como se espera, es posibl
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{/home/paloma/Documents/Memoria/results/RESULTS/lc_sem_15A_field_07_ccd_N2_obj_0.png}
-\caption{En la primera gr\'afica de arriba hacia abajo se muestra el comportamiento del flujo medido y el flujo predicho y estimado. En esta representaci\'on se observa que el flujo se dispara a partir de la fecha 57075. De la misma forma, se dispara las velocidades de flujo estimado y predicho de acuerdo al segundo gr\'afico. El siguiente siquiente esquema indica el crecimiento de flags de invalidez de los p\'ixeles  mientras que la \'ultima imagen da cuenta del r\'apido crecimiento de las varianzas y covarianzas de estimaci\'on y predicci\'on de las variables de estado. }
+\caption{En la primera gr\'afica de arriba hacia abajo se muestra el comportamiento del flujo medido y el flujo predicho y estimado. En esta representaci\'on se observa que el flujo se dispara a partir de la fecha 57075. De la misma forma, se dispara las velocidades de flujo estimado y predicho de acuerdo al segundo gr\'afico. El siguiente esquema indica el crecimiento de \textit{flags} de invalidez de los p\'ixeles  mientras que la \'ultima imagen da cuenta del r\'apido crecimiento de las varianzas y covarianzas de estimaci\'on y predicci\'on de las variables de estado. }
 \label{ukf_rlc}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{/home/paloma/Documents/Memoria/results/RESULTS/stamps_sem_15A_field_07_ccd_N2_obj_0.png}
-\caption{Representaci\'on en p\'ixeles de lo que sucede con el flujo observado, las estimaciones y los flags de los p\'ixeles. Se distingue la saturaci\'on sobre las matrices de flujo y velocidad estimada.}
+\caption{Representaci\'on en p\'ixeles de lo que sucede con el flujo observado, las estimaciones y los \textit{flags} de los p\'ixeles. Se distingue la saturaci\'on sobre las matrices de flujo y velocidad estimada.}
 \label{ukf_stamp}
 \end{figure}
 
@@ -309,7 +296,7 @@ Para observar si el filtro unscented est\'a trabajando como se espera, es posibl
 De acuerdo a las Figuras \ref{ukf_rlc}, \ref{ukf_stamp} y \ref{ukf_rss} uno de los problemas que adolece este filtro es el de crecimiento r\'apido, por lo que de alguna forma se debe contrarrestar esta gran alza trabajando,  tal vez, sobre la funci\'on de predicci\'on $f(\cdot)$.
 
 \section{Observaciones}
-Respecto de las detecciones obtenidas con los filtros b\'asico y de m\'axima correntrop\'ia tanto para esta versi\'on como para la original, se detectaron el mismo  n\'umero de supernovas: treinta y seis. Sin embargo disminuyeron notablemente los falsos positivos respecto de la versi\'on orignal. Esto \'ultimo se piensa puede deberse a un nuevo ordenamiento y filtrado m\'as precisos de los archivos necesarios para ejecutar la rutina.
+Respecto de las detecciones obtenidas con los filtros b\'asico y de m\'axima correntrop\'ia tanto para esta versi\'on como para la original, se detectaron el mismo  n\'umero de supernovas: treinta y seis. Sin embargo disminuyeron notablemente los falsos positivos respecto de la versi\'on orignal y adem\'as se encontraron tres supernovas m\'as de las confirmadas por HiTS. Esto \'ultimo se piensa puede deberse a un nuevo ordenamiento y filtrado m\'as precisos de los archivos necesarios para ejecutar la rutina.
 \bigskip
 
-Por otro lado en t\'erminos de desempe\~no, si bien la nueva versi\'on ha podido disminuir tiempos de ejecuci\'on, a\'un no se logra disminuir la cantidad de memoria principal usada respecto del programa antecesor.  
+Por otro lado en t\'erminos de desempe\~no, si bien la nueva versi\'on ha podido disminuir tiempos de ejecuci\'on, a\'un no se logra disminuir la cantidad de memoria principal usada respecto del programa antecesor al emplear los filtros b\'asico y de m\'axima correntrop\'ia.  

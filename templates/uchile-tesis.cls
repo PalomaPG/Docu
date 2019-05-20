@@ -14,6 +14,7 @@
 \usepackage{subfig}
 \usepackage{wrapfig}
 \usepackage{listings}
+\usepackage{lscape}
 % xspace - text macros
 \usepackage{xspace}
 \usepackage[toc]{glossaries}
@@ -197,7 +198,7 @@ subrefformat=parens} %<-----designing subcaption
         \renewcommand{\section}[1]{%
             \cleardoublepage
             \phantomsection
-            \addcontentsline{toc}{chapter}{##1}
+            %\addcontentsline{toc}{chapter}{##1}
             \chapter*{##1}
         }
 }{
@@ -264,7 +265,7 @@ subrefformat=parens} %<-----designing subcaption
 \newcommand{\dedicatoria}[1]{
     \newpage
     \thispagestyle{empty}
-    \subsubsection*{}
+    \section{}
     \vskip 5cm
     \begin{flushright}
         \emph{#1}

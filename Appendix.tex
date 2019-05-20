@@ -4,35 +4,11 @@
 %\end{additional}
 
 % Apéndices
-\begin{appendix} 
-\section{Glosario}
+\begin{appendix}
 
-\begin{enumerate}
-\item{\textbf{Etendue}}\\
-\label{a1:etendue}
-
-
-
-\item{\textbf{PSF}}\\
-\label{a1:psf}
-Corresponde a la respuesta instrumental a una fuente de luz puntual, cuya radiaci\'on debe atravesar la atm\'osfera terrestre y los lentes del telescopio. La distorsi\'on puede ser interpretada como la convoluci\'on de la imagen por un kernel. \cite{huentelemu}. Ver imagen \ref{fig:a1}
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=.5]{images/psf}
-\caption{Ejemplo de distorsi\'on de una fuente al aplicar un kernel de PSF espec\'ifico. El resultado se observa en el cuado \textit{Image}.}
-\label{fig:a1}
-\end{figure}
-
-\item{\textbf{Airmass}}\label{ap:airmass}\\
-Es el largo del camino de que le toma a los rayos de una cuerpo celeste atravesar la atm\'osfera. A medida que los rayos van penetrando la atm\'osfera estos se van atenuando por la absorci\'on y el proceso conocido como scattering. 
-\end{enumerate}
-\bigskip
-
-\section{Refactoring}
-\subsection{Librer\'ias usadas para el refactoring}
+\section{Librer\'ias usadas para el refactoring}
 \label{subs:a0}
-Versi\'on de Python: 3.5
+Versi\'on de Python: 3.6
 \begin{itemize}
 \item \textbf{\texttt{pandas}: 0.24.4}
 \item \textbf{\texttt{matplotlib}: 2.2.2}
@@ -40,14 +16,16 @@ Versi\'on de Python: 3.5
 \item \textbf{\texttt{mahotas}: 1.4.4}
 \item \textbf{\texttt{astropy}: 3.0.2}
 \end{itemize}
-\subsection{Rutas a directorios y expresiones regulares de archivos}
+\pagebreak
+
+\section{Rutas a directorios y expresiones regulares de archivos}
 \label{subs:des_rutas}
 Los campos se describen a continuaci\'on:
 \begin{itemize}
 \item \textbf{\texttt{maskDir}}: Directorio donde se almacenan las im\'agenes m\'ascara (im\'agenes que identifican p\'ixeles que no deben ser considerados).
 \item \textbf{\texttt{scienceDir}}: Directorio donde se almacenan las im\'agenes cient\'ificas (im\'agenes base ya preprocesadas).
 \item \textbf{\texttt{diffDir}}: Directorio donde se almacenan las im\'agenes de diferencia (resta entre las im\'agenes base y cient\'ifica).
-\item \textbf{\texttt{psfDir}}: Directorio donde se encuentran los modelos de psf (ap\'endice \ref{a1:psf}) usados para la determinaci\'on del flujo.
+\item \textbf{\texttt{psfDir}}: Directorio donde se encuentran los modelos de psf usados para la determinaci\'on del flujo.
 \item \textbf{\texttt{invDir}}: Directorio que guarda las im\'agenes correspondientes a la varianza inversa (\textit{peso} de cada pixel en t\'erminos de ruido: a menor peso, mayor ruido).
 \item \textbf{\texttt{afluxDir}}: Directorio que contiene los archivos de extensi\'on \texttt{NPY} dentro de los cuales se guarda el valor de la variable \texttt{aflux}.
 \item \textbf{\texttt{maskRegEx}}: Expresi\'on regular con la que es posible identificar el nombre de las im\'agenes m\'ascara en disco siguiendo el path \texttt{maskDir}.
@@ -62,13 +40,63 @@ Los campos se describen a continuaci\'on:
 \label{subs:a1}
 \VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/dirset_leftraru.txt}
 
+\pagebreak
+\section{Diccionario de par\'ametros y umbrales}
+\label{subs:a3}
 
-%\section{Nueva funcionalidad}
-%\subsection{Modelo de archivo de almacenamiento de resultados}
-\subsection{M\'etodos}
-\subsubsection{Lectura y preparaci\'on de im\'agenes}
+\begin{itemize}
+\item \texttt{imgHeight}: Altura de las im\'agenes cient\'ificas en p\'ixeles. Esta dimensi\'on se propaga al resto de im\'agenes y matrices. Las im\'agenes usadas en este trabajo poseen una altura de 4094 p\'ixeles. 
+\item \texttt{imgWidth}: Ancho de las im\'agenes cient\'ificas en p\'ixeles. Esta dimensi\'on se propaga al resto de im\'agenes y matrices, y en este trabajo las respectivas im\'agenes poseen un ancho de 2046.
+\item \texttt{filter}: Tipo de filtro (\texttt{basic}, \texttt{mcc} o \texttt{ukf}).
+\item \texttt{results}: Directorio de resultados (donde se guardan las coordenadas de los candidatos encontrados junto a lista de \'epocas en que fueron detectados) en formato NPZ.
+\item \texttt{init\_var}: Varianza inicial que tendr\'an las matrices de covarianza durante el proceso de estimaci\'on con los filtros de Kalman. 
+\item \texttt{flux\_thresh}: Umbral para estado de flujo obtenido con Kalman. Es un valor determinado por el usuario (en este trabajo se defini\'o como 200). 
+\item \texttt{flux\_rate\_thresh}: Umbral para la velocidad de flujo obtenido con Kalman. Es un valor establecido por el usuario (en este trabajo se defini\'o como 50).
+\item \texttt{rate\_satu}: Tasa de saturaci\'on en la velocidad de flujo. Para la realizaci\'on de este trabajo se fij\'o como 3000, a partir de pruebas en las que se buscaba minimizar los falsos positivos.
+\item \texttt{sigma\_a}: Varianza de la distribuci\'on de la componente de control ($u_k$) asumiendo normalidad. Es importante al emplear los filtros b\'asico y unscented, ya que corresponde a la desviaci\'on est\'andar de la distribuci\'on normal de la aceleraci\'on originada por cambios no esperados en el modelo (lo que se puede interpretar como ``fuerzas externas'') \cite{ian}.
+\item \texttt{epsilon}: Radio de error con que la estimaci\'on por filtro de Kalman de m\'axima correntrop\'ia disminuye la ganancia de Kalman. Corresponde a un criterio de detenci\'on y toma valores entre 0 y 1 (t\'ipicamente, $10^{-6}$)\cite{badong}.
+\item \texttt{max\_iter}: N\'umero de iteraciones m\'aximo para el proceso de correcci\'on al usar Kalman de m\'axima correntrop\'ia. 
+\item \texttt{silverman}: \textit{boolean}. Toma valor 1 (\textit{true}) en caso de considerarse, y 0 (\textit{false}) si no. Se establece si se usa o no la aproximaci\'on de Silverman para determinar ancho de banda del kernel al emplear el filtro de m\'axima correntrop\'ia.
+\item \texttt{std\_factor}: Factor de incremento de sigma al usar el m\'etodo de Silverman.
+\item \texttt{sigma}: Ancho de banda usado por defecto sin Silverman en la determinaci\'on del kernel durante el proceso de correcci\'on con el Filtro de Kalman de correntrop\'ia m\'axima .
+\item \texttt{beta}: Par\'ametro relacionado con la distribuci\'on del estado estimado ($x_k$). Toma valor de $\beta = 2$ para distribuciones normales.
+\item \texttt{kappa}: Participa en la regulaci\'on del rango de los valores de los puntos sigma y usualmente toma valores entre 1 y 3N-1 (N corresponde al n\'umero de dimensiones)\cite{wan}. Aporta incremento adicional (ver Ecuaci\'on \ref{eq:eq21}).
+\item \texttt{alpha}: Participa en la regulaci\'on del rango de los valores de los puntos sigma, y generalmente toma valores positivos menores o iguales a 1: $10^{-4} \leq \alpha \leq 1 $\cite{wan}. Incrementa el rango en un factor $\alpha$ (ver Ecuaci\'on \ref{eq:eq21}).
+\item \texttt{dim}: Cantidad de componentes de estado a medir (en este programa se miden dos: flujo y su velocidad).
+\end{itemize}
+\subsection{Archivo de entrada: par\'ametro y umbrales}
+\label{subs:settings_file}
+\VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/settings_example.txt}
+\pagebreak
+
+
+\section{Archivo de entrada: lista de campos, CCDs y semestres (incluye algunas coordenadas)}
+\label{subs:sn_list}
+\VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/hits15.csv}
+\pagebreak
+
+\section{M\'etodos de la clase \textsc{RoutineHandler}}
+\label{subs:a4}
+\begin{itemize}
+\item \texttt{process\_settings():}\\
+En este m\'etodo se lee el archivo de diccionario de umbrales y par\'ametros con los que se configurar\'a la toma de decisiones del programa.
+\bigskip
+
+\item \texttt{retrieve\_kalman\_filter(kalman\_string):}\\
+Corresponde a un m\'etodo auxiliar que es invocado desde \texttt{process\_settings} con el que se crea una instancia del filtro de Kalman a partir de la lectura del archivo de valores \texttt{settings\_file}. Los tres strings v\'alidos para la construcci\'on de una instancia son: `\texttt{basic}', `\texttt{mcc}' y `\texttt{ukf}'. Si se entrega otro tipo de string, se levanta un error.
+\bigskip
+  
+\item \texttt{iterate\_over\_sequences(check\_found\_objects):}\\
+Recorre la lista de campos, CCDs y semestres entregada al programa con la consiguiente llamada a \texttt{routine}. Recibe como par\'ametro el argumento \texttt{check\_found\_objects} con el cual se indica si se quiere analizar resultados obtenidos anteriormente (candidatos encontrados), y que es entregado al m\'etodo \texttt{routine} descrito a continuaci\'on.
+\bigskip
+
+\item \texttt{routine(semester, field, ccd, results\_path, check\_found\_objects, last\_mjd):}\\
+Comprende la rutina principal del programa, es decir, el an\'alisis de las observaciones de un semestre, campo y CCD espec\'ifico. El argumento \texttt{check\_found\_objects} es un boolean e indicar\'a el modo de ejecuci\'on del m\'etodo: si es falso, s\'olo guardar\'a las coordenadas de los candidatos encontrados (si no encontr\'o nada, entonces se guarda una lista vac\'ia) adem\'as de las \'epocas en que fueron detectados. Esta informaci\'on se guarda en un arreglo de diccionarios. Si \texttt{check\_found\_objects} es verdadero, entonces cargar\'a resultados anteriores del directorio de resultados (configurado en \texttt{process\_settings}) para estudiar la presencia de los candidatos encontrados en caso de existir.
+\end{itemize} 
+\pagebreak
+
+\section{M\'etodos de la clase \textsc{DataPicker}}
 \label{subs:a2}
-A continuaci\'on se enumeran los diferentes m\'etodos que intervienen en la recolecci\'on de los datos a ser le\'idos:
 
 \begin{itemize}
 \item \textbf{\texttt{config\_reg\_expressions(semester, field, ccd)}}\\
@@ -84,71 +112,115 @@ M\'etodo con el cual se recorren las rutas definidas en los pasos anteriores y s
 \bigskip
 
 \item \textbf{\texttt{filter\_science\_images()}}\\
-Filtra im\'agenes cient\'ificas de acuerdo a su airmass (Ap\'endice  \ref{ap:airmass}), seleccionando aquellas obtenidas en fechas cuyo valor de airmass calculado es menor a 1,7. De esta secuencia de im\'agenes cient\'ificas resultante se obtiene una lista de fechas que cumplen esta condici\'on, medidas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD) de tipo punto flotante. Estos valores son ordenados de forma creciente.%las fechas en que las observaciones fueron hechas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD) como variables de punto flotante.
+Filtra im\'agenes cient\'ificas de acuerdo a su airmass, seleccionando aquellas obtenidas en fechas cuyo valor es menor a 1,7. De esta secuencia de im\'agenes cient\'ificas resultante se obtiene una lista de fechas que cumplen esta condici\'on, medidas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD). Estos valores, de tipo punto flotante, son ordenados de forma creciente.
 \bigskip
 
 \item \textbf{\texttt{select\_fits(dir)}}\\
-Selecciona y ordena los elementos de la lista de im\'agenes de formato \textsc{fits} del directorio \texttt{dir} usando la lista de MJDs (guardada en la variable de instancia \texttt{mjd} de la clase) generada en \texttt{filter\_science\_images()} escogiendo s\'olo aquellas cuyas fechas correspondan a las fechas indicadas.  %cronol\'ogico (i.e. de acuerdo a la secuencia de MJD encontrada en \texttt{filter\_science\_images()}).
+Selecciona y ordena los elementos de la lista de im\'agenes de formato \textsc{fits} del directorio \texttt{dir} usando la lista de MJDs (guardada en la variable de instancia \texttt{mjd} de la clase) como resultado de \texttt{filter\_science\_images()} escogiendo s\'olo aquellas im\'agenes cuyas fechas correspondan a las fechas indicadas.
 \bigskip
 
 \item \textbf{\texttt{select\_npys(dir, ref\_dir, init\_index, n\_pos, rest\_len)}}:\\
-Debido a que los archivos de extensi\'on NPY no poseen la variable MJD en su estructura (en los archivos \textsc{fits} encontramos este valor en el header de la imagen) deben de filtrarse de forma diferente. Para este caso el filtrado de este tipo de archivos se lleva a cabo a trav\'es de la revisi\'on de sus nombres, ya que comparten patrones con los nombres de ciertas im\'agenes \textsc{fits}. Por ejemplo, los nombres de las im\'agenes de PSF, de formato NPY, poseen similitud con los nombres de las im\'agenes \textsc{fits} de diferencia; igualmente los archivos \texttt{aflux} de formato NPY poseen parecidos en sus nombres con las im\'agenes cient\'ificas. Esta similitud es medida a trav\'es de un substring diferente para cada tipo de archivo NPY, definido por la posici\'on inicial \texttt{init\_index}, en el nombre del archivo \textsc{fits} y largo \texttt{rest\_len}. \texttt{n\_pos} indica la posici\'on de un car\'acter espec\'ifico `` \_ '' en dicho substring para validar esta comparaci\'on.
+Debido a que los archivos de extensi\'on NPY no poseen la variable MJD en su estructura (en los archivos \textsc{fits} encontramos este valor en el header de la imagen) deben de filtrarse de forma diferente. Para este caso el filtrado de este tipo de archivos se lleva a cabo a trav\'es de la revisi\'on de sus nombres, ya que comparten patrones con los nombres de ciertas im\'agenes \textsc{fits}. Por ejemplo, los nombres de las im\'agenes de PSF, de formato NPY, poseen similitud con los nombres de las im\'agenes \textsc{fits} de diferencia; igualmente los archivos \texttt{aflux} de formato NPY poseen parecidos en sus nombres con las im\'agenes cient\'ificas. Esta similitud es medida a trav\'es de un substring diferente para cada tipo de archivo NPY, definido por la posici\'on inicial \texttt{init\_index}, en el nombre del archivo \textsc{fits} y largo \texttt{rest\_len}. \texttt{n\_pos} indica la posici\'on de un car\'acter espec\'ifico `\_ ' en dicho substring para validar esta comparaci\'on.
 
 \end{itemize}
+\pagebreak
 
 
-\subsection{Diccionario de par\'ametros y umbrales}
-\label{subs:a3}
-El diccionario de umbrales y par\'ametros de configuraci\'on contiene la siguiente lista de valores:
-
+\section{M\'etodos de la clase \textsc{SourceFinder}}
+\label{ap:sourcefinder}
 \begin{itemize}
-\item \texttt{imgHeight}: Altura de las im\'agenes cient\'ificas en p\'ixeles. Esta dimensi\'on se propaga al resto de im\'agenes y matrices. Las im\'agenes usadas en este trabajo poseen una altura de 4094 p\'ixeles. 
-\item \texttt{imgWidth}: Ancho de las im\'agenes cient\'ificas en p\'ixeles. Esta dimensi\'on se propaga al resto de im\'agenes y matrices, y en este trabajo las respectivas im\'agenes poseen un ancho de 2046.
-\item \texttt{filter}: Tipo de filtro (\texttt{basic}, \texttt{mcc} o \texttt{ukf}).
-\item \texttt{results}: Directorio de resultados (donde se guardan las coordenadas de los candidatos encontrados junto a lista de \'epocas en que fueron detectados) en formato NPZ.
-\item \texttt{init\_var}: Varianza inicial que tendr\'an las matrices de covarianza durante el proceso de estimaci\'on con los filtros de Kalman. 
-\item \texttt{flux\_thresh}: Umbral para estado de flujo obtenido con Kalman. Es un valor determinado por el usuario (en este trabajo se defini\'o como 200). 
-\item \texttt{flux\_rate\_thresh}: Umbral para la velocidad de flujo obtenido con Kalman. Es un valor establecido por el usuario (en este trabajo se defini\'o como 50).
-\item \texttt{rate\_satu}: Tasa de saturaci\'on.
-\item \texttt{sigma\_a}: Varianza de la distribuci\'on de la componente de control ($u_k$) asumiendo normalidad. Es importante al emplear los filtros b\'asico y unscented, ya que corresponde a la desviaci\'on est\'andar de la distribuci\'on normal de la aceleraci\'on originada por cambios no esperados en el modelo (lo que se puede interpretar como ``fuerzas externas'') \cite{ian}.
-\item \texttt{epsilon}: Radio de error con que la estimaci\'on por filtro de Kalman de m\'axima correntrop\'ia disminuye la ganancia de Kalman. Corresponde a un criterio de detenci\'on y toma valores entre 0 y 1 (t\'ipicamente, $10^{-6}$)\cite{badong}.
-\item \texttt{max\_iter}: N\'umero de iteraciones m\'aximo para el proceso de correcci\'on al usar Kalman de m\'axima correntrop\'ia. 
-\item \texttt{silverman}: \textit{Entero}. Toma valor 1 en caso de considerarse, y 0 si no. Se establece si se usa o no la aproximaci\'on de Silverman para determinar ancho de banda del kernel al emplear el filtro de m\'axima correntrop\'ia.
-\item \texttt{std\_factor}: Factor de incremento de sigma al usar el m\'etodo de Silverman.
-\item \texttt{sigma}: Sigma usado por defecto sin Silverman en la determinaci\'on del kernel durante el proceso de correcci\'on con el Filtro de Kalman de correntrop\'ia m\'axima .
-\item \texttt{beta}: Par\'ametro relacionado con la distribuci\'on del estado estimado ($x_k$). Toma valor de $\beta = 2$ para distribuciones normales.
-\item \texttt{kappa}: Participa en la regulaci\'on del rango de los valores de los puntos sigma y usualmente toma valores entre 1 y 3N-1 (N corresponde al n\'umero de dimensiones)\cite{wan}. Aporta incremento adicional (ver Ecuaci\'on \ref{eq:eq21}).
-\item \texttt{alpha}: Participa en la regulaci\'on del rango de los valores de los puntos sigma, y generalmente toma valores positivos menores o iguales a 1: $10^{-4} \leq \alpha \leq 1 $\cite{wan}. Incrementa el rango en un factor $\alpha$ (ver Ecuaci\'on \ref{eq:eq21}).
-\item \texttt{dim}: Cantidad de componentes de estado a medir (en este programa se miden dos: flujo y su velocidad).
+\item \texttt{pixel\_discard()}:\\
+M\'etodo en el que se realiza el descarte de p\'ixeles de forma individual, siguiendo los siguientes criterios:
+\begin{enumerate}
+\item Si el flujo estimado por el filtro de Kalman para un pixel es menor que el umbral dado.
+\item Si la velocidad de flujo estimada por el filtro de Kalman es menor que el umbral  de la velocidad de flujo multiplicado por la tasa de saturaci\'on en la velocidad de flujo.
+\item Si un pixel de la imagen cient\'ifica es menor a la mediana m\'as cierto delta (en este trabajo, siguiendo la l\'inea de desarrollo de P. Huentelemu \cite{huentelemu}, se consider\'o 5.0) es descartado.
+\item Si las varianzas de flujo son mayores a 150.0 (valor estimado por el autor del software original \cite{huentelemu}).
+\item Si las varianzas de la tasa de cambio de flujo (o velocidad de flujo) es mayor o igual a 150.0.
+\item Si los p\'ixeles no caen en etiquetas de invalidaci\'on dentro de la m\'ascara que ha sido procesada para marcar tambi\'en los p\'ixeles vecinos a los realmente defectuosos.
+\item Si los p\'ixeles no han ca\'ido dentro del descarte por superar la mediana estimada a partir de cuatro \'epocas. 
+\end{enumerate}
+\item \texttt{grouping\_pixels()}:\\
+Este m\'etodo trabaja con las etiquetas determinadas con el m\'etodo anterior, en un arreglo de matrices (\texttt{numpy array}) denominado \texttt{pixel\_flags} (variable de instancia). Adem\'as recibe el \'indice de MJD correspondiente a la observaci\'on de tal fecha.
+La agrupaci\'on de p\'ixeles se realiza gracias a funciones brindadas por la librer\'ia Mahotas, usando el m\'etodo \texttt{label} para encontrar dominios cerrados en el mapa de p\'ixeles validados.
+\bigskip
+
+\item \texttt{filter\_groups(science, flux, var\_flux, state, base\_mask)}:\\
+Este m\'etodo recibe la imagen cient\'ifica, el flujo y su varianza, el estado determinado por el filtro de Kalman y la m\'ascara correspondiente a una \'epoca espec\'ifica. 
+El filtrado de grupos de p\'ixeles se lleva a cabo bajo las siguientes reglas de descarte: 
+
+\begin{enumerate}
+\item Descarte de grupo por contener posible mala resta alrededor (valores negativos).  
+\item	Si no hay m\'aximos locales dentro del grupo de p\'ixeles encontrados dentro de la imagen cient\'ifica.
+\item	Si no hay m\'aximos locales dentro del grupo de p\'ixeles encontrados en la matriz de flujo (calculado por \texttt{calc\_fluxes}).
+\item	Si no hay m\'aximos locales dentro del grupo de p\'ixeles encontrados en la matriz velocidad de flujo.
+\item 	Si los valores de los p\'ixeles superan la mediana local en imagen cient\'ifica.
+\item	Si el grupo posee alg\'un pixel que doble el valor del flujo o de la imagen cient\'ifica.
+\item	Si el centro del grupo se encuentra etiquetado como defectuoso dentro de la m\'ascara.
+\item	Si el pixel del centro del grupo se encuentra rechazado al ser superior a la mediana de los p\'ixeles de cuatro observaciones consecutivas.
+\item	Si la varianza del flujo del pixel del centro del grupo es mayor al determinado por el umbral.
+\end{enumerate} 
+\item \texttt{update\_candidates(mjd):}\\
+En la estructura \texttt{CandData} se van registrando fechas (MJD) en que se han detectado candidatos previamente o se han detectado por primera vez. Es una estrutura tipo lista en la que se van guardando diccionarios que contienen, cada uno, las coordenadas de un objeto, las \'epocas en las que ha sido detectado y si corresponde o no a una supernova conocida.
+
+\item \texttt{check\_candidates(SN\_index, SN\_pos):}\\
+Verifica que dado un \'indice de supernova (\texttt{SN\_index}) y sus coordenadas \texttt{SN\_pos} se ha detectado dentro de los candidatos encontrados. 
+
+\item \texttt{draw\_complying\_pixel\_groups(science, state, state\_cov, base\_mask, dil\_mask, flux, var\_flux, mjd)}:\\
+Este m\'etodo es el que llama a \texttt{pixel\_discard} para etiquetar p\'ixeles para el descarte y no ser considerados en el paso de agrupamiento al llamar a \texttt{grouping\_pixels}. Luego se invoca el m\'etodo \texttt{filter\_groups} para hacer el descarte a nivel grupal y obtener candidatos. La \'ultima llamada es para el m\'etodo \texttt{update\_candidates} para actualizar lista de candidatos encontrados en la variable de instancia \texttt{CandData}.
+\bigskip
+
+Como argumentos recibe todos los elementos necesarios para ejecutar los m\'etodos que llama.
+%\texttt{save\_data} que se encuentra en clase \textsc{DataContent}. 
+
 \end{itemize}
-\subsection{Archivo de entrada: par\'ametro y umbrales}
-\label{subs:settings_file}
-\VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/settings_example.txt}
-\subsection{Archivo de entrada: lista de campos, CCDs y semestres (incluye algunas coordenadas)}
-\label{subs:sn_list}
-\VerbatimInput{/home/paloma/Documents/Memoria/Code/sif2/inputs/hits15.csv}
+\pagebreak
 
-\subsection{M\'etodos de la clase \textsc{RoutineHandler}}
-\label{subs:a4}
+\section{M\'etodos en \texttt{utils}}
+\label{ap:utils}
 \begin{itemize}
-\item \texttt{process\_settings():}\\
-En este m\'etodo se lee el archivo de diccionario de umbrales y par\'ametros con los que se configurar\'a la toma de decisiones del programa.
+\item \textbf{\texttt{naylor\_photometry(invvar, diff, psf)}:}\\
+Calcula el producto del flujo por su varianza. Retorna el producto y la varianza. Para esto obtiene el flujo a partir de la imagen PSF entregada (\texttt{psf}) y del producto entre la imagen diferencia y la de varianza inversa (\texttt{diff} y \texttt{invvar} respectivamente)\cite{naylor}.
 \bigskip
 
-\item \texttt{retrieve\_kalman\_filter(kalman\_string):}\\
-Corresponde a un m\'etodo auxiliar que es invocado desde \texttt{process\_settings} con el que se crea una instancia del filtro de Kalman a partir de la lectura del archivo de valores, de acuerdo al valor definido por el usuario. Los tres strings v\'alidos para la construcci\'on de una instancia son: `basic', `mcc' y `ukf'. Si se entrega otro tipo de string, se levanta un error.
-\bigskip
-  
-\item \texttt{iterate\_over\_sequences(check\_found\_objects):}\\
-Recorre la lista de campos, CCDs y semestres entregada al programa con la consiguiente llamada a \texttt{routine}. Recibe como par\'ametro el argumento \texttt{check\_found\_objects} con el cual se indica si se quiere analizar resultados obtenidos anteriormente (candidatos encontrados), y que es entregado al m\'etodo \texttt{routine} descrito a continuaci\'on.
+
+\item \textbf{\texttt{calc\_fluxes(diff, psf, invvar, aflux)}:}\\
+Calcula el flujo y su varianza gestionando la entrada y la salida de \texttt{naylor\_photometry(invvar, diff, psf)}. Los valores NaN son transformados a valor constante 0.001.
 \bigskip
 
-\item \texttt{routine(semester, field, ccd, results\_path, check\_found\_objects, last\_mjd):}\\
-Comprende la rutina principal del programa, es decir, el an\'alisis de las observaciones de un semestre, campo y CCD espec\'ifico. El argumento \texttt{check\_found\_objects} es un boolean e indicar\'a el modo de ejecuci\'on del m\'etodo: si es falso, s\'olo guardar\'a las coordenadas de los candidatos encontrados (si no encontr\'o nada, entonces se guarda una lista vac\'ia) adem\'as de las \'epocas en que fueron detectados. Esta informaci\'on se guarda en un arreglo de diccionarios. Si \texttt{check\_found\_objects} es verdadero, entonces cargar\'a resultados anteriores del directorio de resultados (configurado en \texttt{process\_settings}) para estudiar la presencia de los candidatos encontrados en caso de existir.
-\end{itemize}  
+\item \texttt{subsampled\_median(image, image\_size, sampling):}\\
+Extrae un n\'umero de \texttt{sampling} muestras de la imagen \texttt{image} con las cuales se estima su mediana. 
 \bigskip
-%\section{Unit-tests}
-%\subsection{Refactoring}
+
+\item \texttt{cholesky(P):}\\
+Calcula la descomposici\'on de Cholesky de una estructura matricial de profundidad 3, en particular para operar sobre covarianzas.
+\bigskip
+
+\item \texttt{mask\_and\_dilation(mask\_path):}\\
+Aplica una funci\'on sobre la m\'ascara (ubicada en la ruta \texttt{mask\_path}) para amplificar la zona de invalidez en torno a los p\'ixeles que han sido marcados como defectuosos.
+\bigskip
+
+\item \texttt{•}\\
+\bigskip
+
+\item \texttt{•}\\
+
+\end{itemize} 
+\pagebreak
+
+\section{M\'etodos en \texttt{unscented\_utils}}
+\label{ap:unsutils}
+Se desarrollaron diferentes funciones auxiliares para apoyar el c\'alculo de las matrices:
+\begin{itemize}
+\item \texttt{sigma\_points(mean\_, cov\_, lambda\_, N):}\\
+Funci\'on con la cual se calculan los puntos sigma a partir de la media de las variables de estado, la covarianza, el valor de $\lambda$ y el n\'umero de variables de estado, N. Utiliza para esta finalidad, la descomposici\'on de Cholesky.
+\item \texttt{unscent\_weights(kappa, alpha, beta, N):}\\
+M\'etodo con el que se calculan los pesos a partir de los valores de $\kappa$, $\alpha$, $\beta$ y N (n\'umero de variables de estado). 
+\item \texttt{perform(func, *args):}\\
+Funci\'on auxiliar con la cual se recibe un puntero a otra funci\'on vectorial (destinada a ser aplicada sobre un conjunto de puntos sigma) y un n\'umero arbitrario de argumentos, dependiendo de la necesidad de la misma funci\'on.
+\item \texttt{propagate\_func(func, Wm, Wc, Xs, *args, N):}\\
+Funci\'on con la que se propaga la funci\'on \texttt{func} sobre el conjunto de puntos sigma \texttt{Xs} usando los pesos de media y covarianza \texttt{Wm} y \texttt{Wc}, respectivamente, adem\'as del n\'umero de variables de estado, N. Adem\'as, recibe el argumento \texttt{args} que corresponde a una tupla de entradas propias de la funci\'on \texttt{func}. 
+\end{itemize}
 \pagebreak
 
 \section{Detecci\'on usando pipeline original}
@@ -487,6 +559,26 @@ Comprende la rutina principal del programa, es decir, el an\'alisis de las obser
 \end{tabular}
 \label{ap:tab3}
 \end{table}
+\pagebreak
+\begin{landscape}
+\section{Diagrama de clases de programa original}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=.25]{/home/paloma/Documents/Memoria/Code/sif2/sif/sif.png}
+\caption{Diagrama de clases del programa original. Se listan cada uno de m\'etodos y variables de cada clase.}
+\label{fig:sif_class}
+\end{figure}
+\end{landscape}
 
+\pagebreak
+\begin{landscape}
+\section{Diagrama de clases del programa refactorizado}
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Code/sif2/sif2_class}
+\caption{Diagrama de clases del programa refactorizado. Se muestra la relaci\'on entre las clases resultantes del proceso de refactoring. Se ha obviado la familia de filtros de Kalman por razones de dimensionalidad de imagen.}
+\label{fig:class_sif2}
+\end{figure}
+\end{landscape}
 \end{appendix}
 

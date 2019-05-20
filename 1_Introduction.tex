@@ -15,10 +15,8 @@ Al d\'ia de hoy se han elaborado sondeos como el High Cadence Transient Survey (
 \bigskip
 
 
-El trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.), propone el uso de los filtros cl\'asico (o b\'asico) \cite{kalman} y de m\'axima correntrop\'ia \cite{chen} en el reconocimiento de supernovas j\'ovenes (o en su fase de crecimiento de luminosidad) de tipo II, por lo que se plantea la posibilidad de dise\~nar alg\'un otro criterio de filtrado y de estudiar la variaci\'on de los resultados.
+El trabajo desarrollado por Pablo Huentelemu~\cite{huentelemu} (M.Sc.), propone el uso de los filtros cl\'asico (o b\'asico) \cite{kalman} y de m\'axima correntrop\'ia \cite{chen} en el reconocimiento de supernovas j\'ovenes (o en su fase de crecimiento de luminosidad) de tipo II, pero que a pesar de acertar en algunas detecciones (es decir, supernovas confirmadas), se busca mejorar su resultado. Por lo que se plantea la posibilidad de dise\~nar alg\'un otro criterio de filtrado y de estudiar la variaci\'on de los resultados.
 \bigskip
-
-%En el presente trabajo se pretende desarrollar un nuevo m\'odulo de filtro de Kalman que sea robusto a sistemas no-lineales para la detecci\'on de potenciales candidatos a supernova, para posteriormente ser embebido en un programa que pueda funcionar en l\'inea generando alarmas de detecci\'on. Por otro lado se busca implementar un software que contenga los m\'etodos de filtrados originales (versiones cl\'asica y de m\'axima correntrop\'ia del filtro de Kalman) a trav\'es de un refactoring del programa  base. Paralelamente, se desea encontrar rangos apropiados para los umbrales requeridos para el filtrado.
 
 
 \section{Objetivos}
@@ -51,19 +49,16 @@ El objetivo de esta tesis comprende la reestructuraci\'on y extensi\'on de un pr
 Este documento contiene los siguientes cap\'itulos: en el Cap\'itulo \ref{ch:background} se describe en qu\'e consiste una supernova, el proyecto HiTS  as\'i como el background matem\'atico de los m\'etodos de filtrado usados en el trabajo original (filtros de Kalman b\'asico y de m\'axima correntrop\'ia) y el filtro a implementar (filtro de Kalman unscented).%la relevancia de la linealidad de un sistema (y su impacto en la estad\'istica del mismo en la aplicaci\'on de un m\'etodo de filtrado como el filtro de Kalman)%
 \bigskip
 
-%El siguiente cap\'itulo, \ref{ch:linear} est\'a destinado para explicitar la relevancia de la linealidad de un modelo y que ocurre en casos de que este no sea, al aplicar un filtro de Kalman.
-%\bigskip
-
-En el Cap\'itulo \ref{ch:prev_work}, se estudian tanto el desempe\~no como los resultados obtenidos con el c\'odigo original del programa sobre el cual se trabajar\'a, estableci\'endose una breve discusi\'on sobre estos resultados. 
+En el Cap\'itulo \ref{ch:prev_work}, se describen aspectos generales del programa original y se estudian los resultados de desempe\~no obtenidos con \'el, estableci\'endose una breve discusi\'on. 
 \bigskip
 
-Posteriormente, en el Cap\'itulo \ref{ch:refactoring} se describe el refactoring del programa  del c\'odigo original: se enlistan nuevos m\'etodos para el manejo de archivos y cambios realizados en la implementaci\'on de los m\'etodos iniciales. 
+Posteriormente, en el Cap\'itulo \ref{ch:refactoring} se describe el refactoring del programa  del c\'odigo original y se detalla la construcci\'on de la familia de m\'etodos de filtros de Kalman usando el patr\'on Strategy y del redise\~no de las funciones de visualizaci\'on, incluyendo la generaci\'on de la curva de estados.
 \bigskip
 
-En el Cap\'itulo \ref{ch:news} se exponen los pasos para desarrollar el nuevo filtro, adem\'as de la nueva funcionalidad relacionada con la carga de resultados previamente guardados.
+Luego, en el Cap\'itulo \ref{ch:news} se detalla la implementaci\'on del nuevo filtro de aproximaci\'on no lineal.
 \bigskip
 
-Posteriormente, en el Cap\'itulo \ref{ch:resultados}, se exponen los resultados obtenidos para el desempe\~no de la nueva versi\'on del programa (para los dos filtros originales) incluyendo la cantidad de supernovas redescubiertas y el per\'iodo en que se detectaron. El cap\'itulo concluye con el an\'alisis de los resultados y una comparaci\'on con aquellos obtenidos en el Cap\'itulo \ref{ch:prev_work}.
+A continuaci\'on, en el Cap\'itulo \ref{ch:resultados}, se exponen los resultados obtenidos para el desempe\~no de la nueva versi\'on del programa (para los dos filtros originales) incluyendo la cantidad de supernovas redescubiertas y el per\'iodo en que se detectaron. El cap\'itulo concluye con el an\'alisis de los resultados y una comparaci\'on con aquellos obtenidos en el Cap\'itulo \ref{ch:prev_work}.
 \bigskip
 
 Finalmente en el Cap\'itulo \ref{ch:conclusion} se presentan las conclusiones de este trabajo y se propone el trabajo a futuro a realizar.
