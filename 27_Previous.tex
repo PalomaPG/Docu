@@ -7,7 +7,7 @@ A continuaci\'on se ofrece una breve descripci\'on de la rutina original y se ex
 
 \section{El programa}
 
-La pipeline original est\'a estructurada por un proceso que puede dividirse en dos bloques: el primero est\'a destinado a buscar una supernova confirmada por HiTS (cuya coordenada es conocida) y encontrar nuevos candidatos; mientras que el segundo bloque, con la lista de coordenadas de nuevos candidatos, est\'a destinado a obtener la informaci\'on\footnote{Con informaci\'on se refiere a extraer muestras o estampillas desde las im\'agenes (de flujo, cient\'ifica, etc) como tambi\'en de las estructuras matriciales (matrices de estado, covarianza asociada, etc.) centradas en la coordernada del respectivo candidato.} de estos. El proceso general se inicializa con una instancia de \textsc{RunData}, la cual posee objetos de clases como \textsc{KalmanFilter} y \textsc{SNDetectos} (con los cuales se configurar\'a la rutina), y con la cual se establecer\'an los par\'ametros a emplear a trav\'es de \textit{hardcoding}. Posterior a la configuraci\'on de par\'ametros se tiene una instancia de \textsc{FITSHandler}, para preparar las im\'agenes y el resto de archivos que ser\'an usados para el proceso iterativo que se describe a continuaci\'on:
+La pipeline original est\'a estructurada por un proceso que puede dividirse en dos bloques: el primero est\'a destinado a buscar una supernova confirmada por HiTS (cuya coordenada es conocida) y encontrar nuevos candidatos; mientras que el segundo bloque, con la lista de coordenadas de nuevos candidatos, est\'a destinado a obtener la informaci\'on\footnote{Con informaci\'on se refiere a extraer muestras o estampillas desde las im\'agenes (de flujo, cient\'ifica, etc) como tambi\'en de las estructuras matriciales (matrices de estado, covarianza asociada, etc.) centradas en la coordernada del respectivo candidato.} de estos. El proceso general se inicializa con una instancia de \textsc{RunData}, la cual posee objetos de clases como \textsc{KalmanFilter} y \textsc{SNDetector} (con los cuales se configurar\'a la rutina), y con la cual se establecer\'an los par\'ametros a emplear a trav\'es de \textit{hard-coding}. Posterior a la configuraci\'on de par\'ametros se tiene una instancia de \textsc{FITSHandler}, para preparar las im\'agenes y el resto de archivos que ser\'an usados para el proceso iterativo que se describe a continuaci\'on:
 \bigskip
 
 
@@ -38,7 +38,7 @@ Si en el proceso anterior se encuentran candidatos, se procede a repetir los pas
 \end{enumerate}
 
 
-El diagrama de la Figura \ref{fig:des_sif} entrega una perspectiva general de la secuencia de pasos que realiza el programa. Sin embargo, nos encontramos con el primer problema de implementaci\'on: la existencia de c\'odigo duplicado. Ya que ambos bloques est\'an repitiendo los mismos pasos salvo el \'ultimo en el que se diferencian en el registro de los resultados: en uno se guarda la informaci\'on de la supernova conocida (s\'olo si la detecta) y en el segundo, s\'olo si hay nuevos candidatos, guarda la informaci\'on de estos.
+El diagrama de la Figura \ref{fig:des_sif} entrega una perspectiva general de la secuencia de pasos que realiza el programa. Sin embargo, nos encontramos con otro problema de implementaci\'on: la existencia de c\'odigo duplicado. Ya que ambos bloques est\'an repitiendo los mismos pasos salvo el \'ultimo en el que se diferencian en el registro de los resultados: en uno se guarda la informaci\'on de la supernova conocida (s\'olo si la detecta) y en el segundo, s\'olo si hay nuevos candidatos, guarda la informaci\'on de estos.
 \bigskip
 
 Cabe destacar que durante el proceso de estudio del programa original se encontr\'o que la lista de archivos, que debe ser procesada en orden cronol\'ogico, de acuerdo a la \'epoca (o fecha de observaci\'on), no est\'a siendo bien filtrada durante el proceso de selecci\'on de im\'agenes cient\'ificas en la clase \textsc{FITSHandler}, lo que puede involucrar imprecisiones en la detecci\'on de candidatos.
@@ -48,13 +48,13 @@ Cabe destacar que durante el proceso de estudio del programa original se encontr
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=.5]{/home/paloma/Documents/Memoria/Code/sif2/sif_act}
-\caption{Diagrama de flujo del programa original. Se aprec\'ian dos ciclos principales: el primero est\'a destinado a la b\'usqueda de una supernova de HiTS, y el segundo a la revisi\'on de la lista de posibles candidatos encontrados en el primer bloque del proceso, para el guardado de la informaci\'on (extracci\'on de estampillas, desde cada matriz, centradas en sus coordenadas) de estos candidatos. Notar que hay pasos que se repiten en la realizaci\'on de ambos an\'alisis.}
+\caption{Diagrama de flujo del programa original. Se aprec\'ian dos ciclos principales: el primero est\'a destinado a la b\'usqueda de una supernova en una coordenada dada y la revisi\'on de nuevos candidatos; y el segundo a la revisi\'on de la lista de candidatos encontrados en el primer bloque del proceso, para el guardado de la informaci\'on (extracci\'on de estampillas, desde cada matriz, centradas en sus coordenadas) de estos candidatos. Notar que hay pasos que se repiten en la realizaci\'on de ambos an\'alisis.}
 \label{fig:des_sif}
 \end{figure}
 
 \section{Estructura de datos}
 \label{des:struct}
-Debido a la naturaleza de la informaci\'on de entrada (im\'agenes) se debe trabajar en p\'ixeles, por lo que la estructura de datos que representen las variables de estado debe considerar la dimensi\'on de las im\'agenes (teniendo en cuenta que por cada p\'ixel se debe modelar las variables de estado flujo y velocidad de flujo, y covarianza asociada). Debido a esto, en el trabajo de Pablo Huentelemu \cite{huentelemu} se dise\~naron \textit{hiperrect\'angulos} para modelar las variables de estado y covarianza de todos los p\'ixeles de una imagen. Los datasets contienen im\'agenes de dimensi\'on  $2046 \times 4094$. La Figura \ref{fig:data_scheme} muestra el esquema de sistema de matrices o \textit{hiperrect\'angulos} usada para representar el estado de cada p\'ixel y su respectiva covarianza.
+Debido a la naturaleza de la informaci\'on de entrada (im\'agenes) se debe trabajar en p\'ixeles, por lo que la estructura de datos que representen las variables de estado debe considerar la dimensi\'on de las im\'agenes (teniendo en cuenta que por cada p\'ixel se debe modelar las variables de estado flujo y velocidad de flujo, y covarianza asociada). Debido a esto, en el trabajo de Pablo Huentelemu \cite{huentelemu} se dise\~naron \textit{hiperrect\'angulos} para modelar las variables de estado y covarianza de todos los p\'ixeles de una imagen. Los datasets contienen im\'agenes de dimensi\'on  $4094 \times 2046$. La Figura \ref{fig:data_scheme} muestra el esquema de sistema de matrices o \textit{hiperrect\'angulos} usada para representar el estado de cada p\'ixel y su respectiva covarianza.
 \bigskip  
 
 \begin{figure}
@@ -170,8 +170,8 @@ SN80 & 260,83 & 0,00 & 260,83 \\\hline\hline
 \textbf{ID} & \textbf{B\'usqueda SN [s]} & \textbf{Revisi\'on candidatos [s]} & \textbf{Tiempo total [s]} \\ \hline
 \hline
 SN14 & 1217,39 & 1053,98 & 2068,80\\\hline
-SN18 & 888,49 & 0,00 & 0,00\\\hline
-SN80 & 666,85 & 0,00& 0,00\\\hline \hline
+SN18 & 888,49 & 0,00 & 888,49\\\hline
+SN80 & 666,85 & 0,00& 666,85\\\hline \hline
  $\bar{t}/Obs. $& 40,83 & -- & --\\\hline 
 \end{tabular}
 \label{tab:t6}
@@ -242,7 +242,7 @@ Se realizaron las pruebas de detecci\'on sobre los conjuntos de datos de las 93 
 
 \begin{table}[h!]
 \centering
-\caption{N\'umero de verdaderos positivos (TP), falsos negativos (FN) y falsos positivos (FP) (objetos no considerados por HiTS como supernova) encontrados usando cada uno de los filtros. La cuarta columna, \textbf{NaN} indica el n\'umero conjunto de datos que no se pudieron procesar por falta de alg\'un(os) archivo(s). No se observan diferencias sustanciales entre los resultados de cada filtro. Con el filtro MCC se encontr\'o un falso positivo menos.}
+\caption{N\'umero de verdaderos positivos (TP), falsos negativos (FN) y falsos positivos (FP) (objetos no considerados por HiTS como supernova) encontrados usando cada uno de los filtros. La cuarta columna, \textbf{NaN} indica el n\'umero conjunto de datos que no se pudieron procesar por falta de alg\'un(os) archivo(s). No se observan diferencias sustanciales entre los resultados de cada filtro. Con el filtro de m\'axima correntrop\'ia se encontr\'o un falso positivo menos.}
 \begin{tabular}{|l|r|r|r|r|}
 \hline
 \textbf{Filtro} & \textbf{TP} & \textbf{FN} & \textbf{FP}  & \textbf{NaN}\\ \hline

@@ -17,13 +17,13 @@
 \usepackage{lscape}
 % xspace - text macros
 \usepackage{xspace}
-\usepackage[toc]{glossaries}
+\usepackage[toc, nopostdot,nonumberlist]{glossaries}
 % inputec, babel, blindtext ::  Español + UTF8
 \usepackage[utf8x]{inputenc}
 \usepackage{comment}
 \usepackage[spanish, es-tabla]{babel}
 \selectlanguage{spanish}
-
+\usepackage{xurl}
 \usepackage{titlesec, blindtext, color}
 \definecolor{gray75}{gray}{0.75}
 \newcommand{\hsp}{\hspace{20pt}}

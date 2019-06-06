@@ -112,7 +112,7 @@ M\'etodo con el cual se recorren las rutas definidas en los pasos anteriores y s
 \bigskip
 
 \item \textbf{\texttt{filter\_science\_images()}}\\
-Filtra im\'agenes cient\'ificas de acuerdo a su airmass, seleccionando aquellas obtenidas en fechas cuyo valor es menor a 1,7. De esta secuencia de im\'agenes cient\'ificas resultante se obtiene una lista de fechas que cumplen esta condici\'on, medidas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD). Estos valores, de tipo punto flotante, son ordenados de forma creciente.
+Filtra im\'agenes cient\'ificas de acuerdo a su \gls{airmass}, seleccionando aquellas obtenidas en fechas cuyo valor es menor a 1,7. De esta secuencia de im\'agenes cient\'ificas resultante se obtiene una lista de fechas que cumplen esta condici\'on, medidas en t\'erminos de \textit{d\'ia juliano modificado} o \textit{Modified Julian Date} (MJD). Estos valores, de tipo punto flotante, son ordenados de forma creciente.
 \bigskip
 
 \item \textbf{\texttt{select\_fits(dir)}}\\
@@ -199,11 +199,6 @@ Calcula la descomposici\'on de Cholesky de una estructura matricial de profundid
 \item \texttt{mask\_and\_dilation(mask\_path):}\\
 Aplica una funci\'on sobre la m\'ascara (ubicada en la ruta \texttt{mask\_path}) para amplificar la zona de invalidez en torno a los p\'ixeles que han sido marcados como defectuosos.
 \bigskip
-
-\item \texttt{•}\\
-\bigskip
-
-\item \texttt{•}\\
 
 \end{itemize} 
 \pagebreak

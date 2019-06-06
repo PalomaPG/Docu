@@ -35,7 +35,7 @@ El m\'etodo m\'as importante de esta clase es \texttt{routine}, el cual implemen
 Todas las im\'agenes de entrada son manipuladas y servidas por la clase \textsc{DataPicker}. Esta clase se inicializa recibiendo un \textit{path} hacia el archivo de configuraci\'on \texttt{routes\_templates} que contiene tanto las rutas a los archivos as\'i como los nombres de estos en t\'erminos de expresiones regulares; semestre a los que corresponde la secuencia de observaciones (los dos \'ultimos d\'igitos del a\~no concatenados con la letra A en caso de corresponder al primer semestre o B al segundo); el campo (representado como un n\'umero de dos d\'igitos, comenzando con cero para valores menores a 10) y el detector CCD (cadena de tres car\'acteres donde el primero de ellos describe a que grupo de detectores corresponde: N o S (ver Figura \ref{fig:f4}); adem\'as de un n\'umero entero que va de 1 a 36) como strings (para m\'as detalles, ver Ap\'endice, secci\'on \ref{subs:des_rutas}). 
 \bigskip
 
-Es en \textsc{DataPicker} donde se realiza el proceso de filtrado de las im\'agenes y su posterior ordenamiento, esta vez considerando un filtrado m\'as minucioso, considerando la correspondencia de las fechas MJD contenidas en los header de cada archivo FITS. Para ver los detalles de este proceso de listado de im\'agenes y filtrado, revisar el Ap\'endice, secci\'on \ref{subs:a2}.
+Es en \textsc{DataPicker} donde se realiza el proceso de filtrado de las im\'agenes (descarte por \gls{airmass}) y su posterior ordenamiento, esta vez considerando un filtrado m\'as minucioso, considerando la correspondencia de las fechas MJD contenidas en los header de cada archivo FITS. Para ver los detalles de este proceso de listado de im\'agenes y filtrado, revisar el Ap\'endice, secci\'on \ref{subs:a2}.
 
 \section{Determinaci\'on de flujos}
 El c\'alculo del flujo, en este refactoring, se independiz\'o del manejo de archivos (en el programa original estaba alojado en la clase \textsc{FITSHandler}) y se implement\'o en el script \texttt{utils} pensado como librer\'ia (una descripci\'on detallada de los m\'etodos se encuentra en el Ap\'endice, secci\'on \ref{ap:utils}).
@@ -134,8 +134,7 @@ Recibe lista de candidatos (coordenadas) \texttt{cand\_data} y crea lista de dic
 \bigskip
 
 \item \texttt{look\_candData(cand\_data, pred\_state, pred\_state\_cov, kalman\_gain, state, state\_cov, time\_mjd, flux, var\_flux, science, diff, psf, base\_mask, dil\_base\_mask, pixel\_flags, pixel\_group\_flags, mjd\_idx):}\\
-
-Con el espacio generado en la estructura \texttt{objects}, se procede a ejecutar la pipeline principal (c\'alculo de flujo, generaci\'on de estimaciones con filtro de Kalman y proceso de detecci\'on) para, en esta ocasi\'on, ir guardando resultados de los candidatos en \texttt{cand\_data} en su diccionario respectivo por cada \'epoca (cuyo \'indice est\'a representado por el argumento \texttt{mjd\_idx}). Por tanto recibe como argumentos las matrices de estados y covarianzas predichos (\texttt{pred\_state} y \texttt{pred\_state\_cov} respectivamente), las matrices de estados y covarianzas estimados (\texttt{state} y \texttt{state\_cov}) la matriz de ganancia de Kalman (\texttt{kalman\_gain}), matriz de flujo calculado y varianza asociada (\texttt{flux} y \texttt{var\_flux}), imagen cient\'ifica (\texttt{science}) y de diferencia (\texttt{diff}), imagen de la PSF usada (\texttt{psf}), matrices de etiquetas de p\'ixeles (\texttt{pixel\_flags} y \texttt{pixel\_group\_flags}) e imagen de la m\'ascara usada (\texttt{base\_mask}) junto a su versi\'on post-proceso de dilataci\'on (\texttt{dil\_base\_mask}).
+Con el espacio generado en la estructura \texttt{objects}, se procede a ejecutar la pipeline principal (c\'alculo de flujo, generaci\'on de estimaciones con filtro de Kalman y proceso de detecci\'on) para, en esta ocasi\'on, ir guardando resultados de los candidatos en \texttt{cand\_data} en su diccionario respectivo por cada \'epoca (cuyo \'indice est\'a representado por el argumento \texttt{mjd\_idx}). Por tanto recibe como argumentos las matrices de estados y covarianzas predichos (\texttt{pred\_state} y \texttt{pred\_state\_cov} respectivamente), las matrices de estados y covarianzas estimados (\texttt{state} y \texttt{state\_cov}) la matriz de ganancia de Kalman (\texttt{kalman\_gain}), matriz de flujo calculado y varianza asociada (\texttt{flux} y \texttt{var\_flux}), imagen cient\'ifica (\texttt{science}) y de diferencia (\texttt{diff}), imagen de la \gls{psf} usada (\texttt{psf}), matrices de etiquetas de p\'ixeles (\texttt{pixel\_flags} y \texttt{pixel\_group\_flags}) e imagen de la m\'ascara usada (\texttt{base\_mask}) junto a su versi\'on post-proceso de dilataci\'on (\texttt{dil\_base\_mask}).
 
 
 \item \texttt{plot\_results(semester, field, ccd, plots\_path)}\\
@@ -150,7 +149,7 @@ La clase \textsc{Visualizer} permite la obtenci\'on de tres tipos de gr\'aficas 
 Esta gr\'afica contiene cuatro series de tiempo cuyos datos se obtienen a partir del pixel ubicado justo en el centro del objeto considerado candidato. La primera serie de tiempo corresponde al flujo estimado y predicho por Kalman junto al flujo observado o medido. La segunda serie de tiempo corresponde a la componente de velocidad de flujo estimada y predicha de los estados obtenidos por Kalman. La tercera serie de tiempo corresponde a la evoluci\'on de las etiquetas (criterios que no satisface el pixel). Finalmente, la cuarta serie de tiempo, muestra la evolución de las varianzas de cada elemento de estado estimado y predicho, además del correspondiente a la medición.
   
 \item \textbf{Estampillas}\\ 
-Muestra el comportamiento de los p\'ixeles en las estampillas de dimensi\'on $21 \times 21$ de las siguientes estructuras: imagen cient\'ifica, PSF, flujos observado y su varianza, estados de flujo y su velocidad estimados por filtro de Kalman, etiquetas grupales e individuales de p\'ixeles.
+Muestra el comportamiento de los p\'ixeles en las estampillas de dimensi\'on $21 \times 21$ de las siguientes estructuras: imagen cient\'ifica, \gls{psf}, flujos observado y su varianza, estados de flujo y su velocidad estimados por filtro de Kalman, etiquetas grupales e individuales de p\'ixeles.
 \item \textbf{Curva de estado}\\
  Esta curva se logra a partir de los valores estimados de flujo y de la velocidad de esta obtenidos por el filtro de Kalman. Esta gr\'afica muestra la complejidad de la curva visualizada calculando su entrop\'ia \cite{balestrino}.
 \end{itemize}
@@ -159,7 +158,6 @@ Estas gr\'aficas son generadas gracias a los siguientes m\'etodos de \textsc{Vis
 
 \begin{itemize}
 \item \texttt{print\_lightcurve(obj, obs\_rad, height, width, save\_filename):}\\
-
 Este m\'etodo est\'a destinado a crear series de tiempo, para contrastar, de diferentes variables de inter\'es tales como el flujo observado, estimado y predicho (medidos en el pixel central del candidato) visualizados en la misma gr\'afica. Del mismo modo, en un gr\'afico dispuesto bajo el primero, se dibujan las series de tiempo de las velocidades estimadas y predichas. Posteriormente se grafica la evoluci\'on de las etiquetas de p\'ixeles individuales y grupales, y el \'ultimo gr\'afico generado corresponde a la serie de tiempo de las varianzas y covarianzas de las diferentes variables como flujo, estimaciones de flujo y sus predicciones obtenidas con el filtro de Kalman, etc.
 \bigskip
 
@@ -172,7 +170,8 @@ Recibe como entrada un diccionario de la lista de objetos almacenados por una in
 
 Los valores \texttt{height} y \texttt{width} corresponden a la dimensi\'on de la imagen resultante. El argumento \texttt{save\_filename} indica el nombre con el que se quiere guardar el documento (de formato PNG) en disco. 
 
-\item \texttt{print\_space\_states(obj, obs\_rad, height, width, flux\_thresh, rate\_flux\_thresh, save\_filename):}\\
+\item \texttt{print\_space\_states(obj, obs\_rad, height, width, flux\_thresh, rate\_flux\_thresh,}\\
+\texttt{save\_filename):}\\
 Esta funci\'on es la encargada de graficar la curva de estados por los que pasa un candidato (cuya informaci\'on est\'a contenida en el diccionario \texttt{objects}). Se visualizan los estados en su detecci\'on y tres \'epocas anteriores previas a su confirmaci\'on (durantes las alertas). Estos estados est\'an definidos por el flujo y la velocidad de flujo estimados por el filtro de Kalman. Adem\'as en la misma imagen, se indica el nivel de complejidad de la curva en t\'erminos de entrop\'ia \cite{balestrino}.
 \bigskip
 

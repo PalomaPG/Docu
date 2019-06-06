@@ -3,7 +3,7 @@
 En el presente Cap\'itulo se exponen conceptos cruciales para la comprensi\'on y desarrollo de este trabajo. Se describen en particular los objetos de inter\'es que estimularon el desarrollo del survey HiTS: las supernovas de tipo II y el evento de shock-breakout asociado a \'estas y una breve descripci\'on de los datos obtenidos por este proyecto durante el a\~no 2015. De la misma forma, se describe la base matem\'atica en la que se basan las diferentes versiones del filtro de Kalman implementadas en el software original, es decir, los filtros de Kalman \textit{b\'asico} y de \textit{m\'axima correntrop\'ia} as\'i como una nueva versi\'on del m\'etodo conocida como \textit{unscented} que permitir\'ia la introducci\'on de modelos no lineales en el proceso de filtrado.  
 
 \section{Supernova tipo II}\label{sec:sn}
-Una supernova de tipo II corresponde a un evento estelar con el que finaliza la vida de una estrella masiva (aquellas que en su proceso de formaci\'on poseen una masa superior a 10 masas solares \footnote{$M_{\odot} = (1.98847 \pm 0.00007) \times 10^{30}$ Kg}). Al no contar con combustible necesario para llevar a cabo reacciones nucleares que puedan contrarrestar su propia gravedad (su n\'ucleo ya no puede formar elementos m\'as pesados que el hierro o el n\'iquel, los cuales caen al n\'ucleo de la estrella por su propio peso. Ver Figura \ref{fig:f0}.), y si la presi\'on degenerada\footnote{presi\'on que viene del principio de exclusi\'on de Pauli} de los electrones del plasma de la estrella no es suficiente para soportar este peso, la estrella se contrae abruptamente incrementando la temperatura de su centro a $10^{10}$ K.
+Una supernova de tipo II corresponde a un evento estelar con el que finaliza la vida de una estrella masiva (aquellas que en su proceso de formaci\'on poseen una masa superior a 10 masas solares \footnote{$M_{\odot} = (1.98847 \pm 0.00007) \times 10^{30}$ Kg}). Al no contar con combustible necesario para llevar a cabo reacciones nucleares que puedan contrarrestar su propia gravedad (su n\'ucleo ya no puede formar elementos m\'as pesados que el hierro o el n\'iquel, los cuales caen al n\'ucleo de la estrella por su propio peso. Ver Figura \ref{fig:f0}.), y si la presi\'on degenerada\footnote{presi\'on que viene del principio de exclusi\'on de Pauli} de los electrones del plasma de la estrella no es suficiente para soportar este peso, la estrella se contrae abruptamente incrementando la temperatura de su centro a, aproximadamente, $10^{10}$ K.
 \bigskip
 
 \begin{figure}[h!]
@@ -20,7 +20,7 @@ Debido al aumento de temperatura, los electrones del n\'ucleo adquieren energ\'i
 En general la variaci\'on de la luminosidad de una supernova corresponde a una curva que crece r\'apidamente los primeros d\'ias (u horas), alcanzando un m\'aximo, para luego decaer. Cabe destacar que existen otros tipos de supernova, c\'omo las de tipo Ia que corresponden a otro fen\'omeno en donde participa una clase de estrella denominada enana blanca junto a otra estrella de cualquier otro tipo. La primera, al poseer una gravedad tan alta en su superficie es capaz de tomar material de su compa\~nera con lo que al superar las 1.44 $M_{\odot}$ se desencadenar\'ia la explosi\'on de una supernova. 
 \bigskip
 
-Las supernovas de tipo Ia presentan un decaimiento casi continuo una vez alcanzado el m\'aximo, mientras que las de tipo II presentan dos ca\'idas: una inmediatamente despu\'es de su m\'aximo y otra una vez finalizado un per\'iodo de decaimiento suavizado (ver Figura ~\ref{fig:f1}). Otra forma de diferenciarlas es la presencia de trazas de hidr\'ogeno en los espectros de \'estas: las supernovas de tipo Ia pr\'acticamente no presentan hidr\'ogeno (l\'ineas de absorci\'on distintivas) a diferencia de las de tipo II.\bigskip
+Las supernovas de tipo Ia presentan un decaimiento casi continuo una vez alcanzado el m\'aximo, mientras que las de tipo II presentan dos ca\'idas: una inmediatamente despu\'es de su m\'aximo y otra una vez finalizado un per\'iodo de decaimiento suavizado (ver Figura \ref{fig:f1}). Otra forma de diferenciarlas es la presencia de trazas de hidr\'ogeno en los espectros de \'estas: las supernovas de tipo Ia pr\'acticamente no presentan hidr\'ogeno (l\'ineas de absorci\'on distintivas) a diferencia de las de tipo II.\bigskip
 
 \begin{figure}[h!]
 \centering
@@ -54,7 +54,7 @@ HiTS utiliza la Dark Energy Camera (DECam, ver Figura \ref{fig:f3}) para la obte
 \label{fig:f3}
 \end{figure}
 
-Durante el proyecto HiTS se realizaron tres campa\~nas de observaci\'on en los a\~nos 2013, 2014 y 2015 durante el primer semestre de cada a\~no. Se escogieron 40 campos y 4 \'epocas por noche (tambi\'en por campo) para observaciones realizadas en el 2013 y el 2014. Para la campa\~na del a\~no 2015 se escogieron 50 campos. En estas campa\~nas se obtuvieron m\'as de 120 candidatos a supernova. Sin embargo, no se logr\'o encontrar en estas rastros de SBO (Figura \ref{fig:f2}) evento que comprendi\'o uno de los principales objetivos de HiTS. La distribuci\'on de los campos observados, por a\~no, se describe en la Figura \ref{fig:fields}. 
+Durante el proyecto HiTS se realizaron tres campa\~nas de observaci\'on en los a\~nos 2013, 2014 y 2015 durante el primer semestre de cada a\~no. Se escogieron 40 campos y 4 \'epocas por noche (tambi\'en por campo) para observaciones realizadas en el 2013 y el 2014. Para la campa\~na del a\~no 2015 se escogieron 50 campos. En estas campa\~nas se obtuvieron m\'as de 120 candidatos a supernova. Sin embargo, no se logr\'o encontrar en estas rastros de SBO, evento que comprendi\'o uno de los principales objetivos de HiTS. La distribuci\'on de los campos observados, por a\~no, se describe en la Figura \ref{fig:fields}. 
 
 \begin{figure}[h!]
 \centering
@@ -74,7 +74,7 @@ Durante el proyecto HiTS se realizaron tres campa\~nas de observaci\'on en los a
 Como se mencion\'o anteriormente, la campa\~na del a\~no 2015 tuvo lugar el primer semestre de ese a\~no. El per\'iodo en que se llev\'o a cabo fue durante los meses de febrero y marzo; espec\'ificamente entre los d\'ias 17 de febrero y 14 de marzo.
 \bigskip
 
-El per\'iodo comprendido por los d\'ias 17 a 22 de febrero fue el de mayor latencia, obteni\'endose cinco \'epocas (observaciones) por noche por cada campo. Posteriormente la toma de observaciones cesa y se reanuda a partir del 24 de febrero con una latencia de a lo m\'as tres \'epocas por noche y campo, con interrupciones de hasta nueve d\'ias finalizando el 14 de marzo (ver Figura \ref{fig:cadencia}). 
+El per\'iodo comprendido por los d\'ias 17 a 22 de febrero fue el de mayor latencia, obteni\'endose hasta cinco \'epocas (observaciones) por noche por cada campo. Posteriormente la toma de observaciones cesa y se reanuda a partir del 25 de febrero con una latencia de a lo m\'as tres \'epocas por noche y campo, con interrupciones de hasta nueve d\'ias finalizando el 14 de marzo (ver Figura \ref{fig:cadencia}). 
 
 \begin{figure}
 \centering
@@ -277,7 +277,7 @@ Con este sistema, podemos modelar el filtro y usar las siguientes condiciones in
 \hat{x}_{0|0} &= \begin{bmatrix}
 0\\
 0
-\end{bmatrix}
+\end{bmatrix},
 \label{eq:init_state} 
 \end{align} 
 
@@ -285,7 +285,7 @@ Con este sistema, podemos modelar el filtro y usar las siguientes condiciones in
 P_{0|0} &= \begin{bmatrix}
 \sigma_{x}^2 & 0\\
 0 & \sigma_{\dot{x}}^2
-\end{bmatrix}
+\end{bmatrix}.
 \label{eq:init_cov} 
 \end{align} 
 
@@ -312,7 +312,7 @@ V(X,Z) = E[\kappa(X,Z)] = \int \kappa(x,z) dF_{XZ} (x,z),
 \label{eq:eqcorr}
 \end{equation}
 \noindent
-donde $E$ representa al operador de esperanza y $\kappa(\cdot,\cdot)$ corresponde a un kernel Mercer invariante a desplazamientos (teorema de Mercer \cite{mercer}). Para este filtro se emplea una funci\'on de kernel Gaussiana, dado por
+donde $E$ representa al operador de esperanza y $\kappa(\cdot,\cdot)$ corresponde a un \gls{kernel} Mercer invariante a desplazamientos (teorema de Mercer \cite{mercer}). Para este filtro se emplea una funci\'on de kernel Gaussiana (que satisface la condici\'on de Mercer), dado por
 
 \begin{equation}
 \kappa(x, z) = G_{\sigma} (e) = exp \left(-\dfrac{e^2}{2\sigma^2} \right),
@@ -325,7 +325,7 @@ donde $e=x-z$ es el error.
 Usualmente, en situaciones pr\'acticas, s\'olo se dispone de una cantidad limitada de datos y la distribuci\'on conjunta $F_{XZ}$ podr\'ia ser desconocida, por lo que es posible estimar la correntrop\'ia usando un estimador del promedio sobre la muestra:
 
 \begin{equation}
-\hat{V}(X,Z) = \dfrac{1}{M} \sum_{i=1}^N G_{\sigma} (e_i),
+\hat{V}(X,Z) = \dfrac{1}{M} \sum_{i=1}^M G_{\sigma} (e_i),
 \label{eq:eqcoor_est}
 \end{equation} 
 
@@ -582,7 +582,7 @@ En esta versi\'on del filtro \cite{ukf} ya no se habla de matrices de transici\'
 
 \begin{figure}[h!]
 \includegraphics[scale=.5]{images/ukf}
-\caption{Representaci\'on del funcionamiento del filtro UKF. En esta oportunidad se hace uso de la funci\'on $f$ y $h$ para obtener las transformaciones $x_{k-1}\rightarrow x_k$ y $x_{k}\rightarrow z_k$. Esto se logra con la evaluaci\'on de los 2N+1 \textit{puntos sigma} generados durante la etapa de predicci\'on (y posteriormente en la etapa de correcci\'on). \textit{E. Matsinos, 2016. The Kalman Filter: a didactical overview.}}
+\caption{Representaci\'on del funcionamiento del filtro UKF. En esta oportunidad se hace uso de la funci\'on $f$ y $h$ para obtener la predicci\'on y la correcci\'on. Esto se logra con la evaluaci\'on de los 2N+1 \textit{puntos sigma} generados durante la etapa de predicci\'on (y posteriormente en la etapa de correcci\'on). \textit{E. Matsinos, 2016. The Kalman Filter: a didactical overview.}}
 \label{fig:fukf} 
 \end{figure}
 

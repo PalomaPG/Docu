@@ -4,7 +4,7 @@ En este cap\'itulo se describe la estructura y detalles importantes del nuevo mi
 
 
 \section{\textsc{Dise\~no}}
-El dise\~no de la nueva clase de filtro se realiz\'o continuando con la arquitectura del patr\'on Strategy, definiendo los m\'etodos de predicci\'on y correcci\'on en instancias de clases que implementen las interfaces \textsc{IPredict} e \textsc{ICorrect} respectivamente: \textsc{UnscentPredict} y \textsc{UnscentCorrect}.
+El dise\~no de la nueva clase de filtro se realiz\'o continuando con la arquitectura del patr\'on Strategy, definiendo los m\'etodos de predicci\'on y correcci\'on en instancias de clases que implementen las interfaces \textsc{IPredict} e \textsc{ICorrect} respectivamente: \textsc{UnscentedPredict} y \textsc{UnscentedCorrect}.
 \bigskip
 
 El filtro unscented se desarroll\'o en la clase \textsc{UnscentedKalman}, la cual encierra los m\'etodos de predicci\'on y correcci\'on (descritos en el Cap\'itulo \ref{ch:background}, subsecci\'on \ref{ssec:ukf}) implementados en \texttt{predict} y \texttt{correct}.
